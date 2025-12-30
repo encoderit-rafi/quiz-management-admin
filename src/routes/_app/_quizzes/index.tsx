@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { PenSquare, Trash2, Plus, Eye } from "lucide-react";
+import { PenSquare, Trash2, Plus, Eye, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -121,6 +121,12 @@ export default function RouteComponent() {
                 <Link to="/quizzes/edit/$id" params={{ id: quizId }}>
                   <PenSquare className="mr-2 h-4 w-4" />
                   Edit
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/quizzes/settings/$id" params={{ id: quizId }}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem

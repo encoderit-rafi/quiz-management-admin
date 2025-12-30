@@ -3,5 +3,8 @@ export * from "./form-input";
 export * from "./form-password-input";
 export * from "./form-textarea";
 export * from "./form-tiptap";
+export * from "./form-checkbox";
+export * from "./form-toggle";
+export * from "./form-switch";
 export * from "./image-preview";
 export * from "./form-color-picker";
