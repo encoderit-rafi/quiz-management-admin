@@ -14,7 +14,9 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthResetPasswordIndexRouteImport } from './routes/_auth/reset-password/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as AuthForgotPasswordIndexRouteImport } from './routes/_auth/forgot-password/index'
+import { Route as AppStatisticsIndexRouteImport } from './routes/_app/statistics/index'
 import { Route as AppResultPagesIndexRouteImport } from './routes/_app/result-pages/index'
+import { Route as AppLeadsIndexRouteImport } from './routes/_app/leads/index'
 import { Route as AppQuizzesIndexRouteImport } from './routes/_app/_quizzes/index'
 import { Route as AppResultPagesCreateIndexRouteImport } from './routes/_app/result-pages/create/index'
 import { Route as AppResultPagesViewIdRouteImport } from './routes/_app/result-pages/view/$id'
@@ -48,9 +50,19 @@ const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexRouteImport.update({
   path: '/forgot-password/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AppStatisticsIndexRoute = AppStatisticsIndexRouteImport.update({
+  id: '/statistics/',
+  path: '/statistics/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppResultPagesIndexRoute = AppResultPagesIndexRouteImport.update({
   id: '/result-pages/',
   path: '/result-pages/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppLeadsIndexRoute = AppLeadsIndexRouteImport.update({
+  id: '/leads/',
+  path: '/leads/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppQuizzesIndexRoute = AppQuizzesIndexRouteImport.update({
@@ -105,7 +117,9 @@ const AppQuizzesQuizzesEditIdRoute = AppQuizzesQuizzesEditIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppQuizzesIndexRoute
+  '/leads': typeof AppLeadsIndexRoute
   '/result-pages': typeof AppResultPagesIndexRoute
+  '/statistics': typeof AppStatisticsIndexRoute
   '/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/login': typeof AuthLoginIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
@@ -120,7 +134,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AppQuizzesIndexRoute
+  '/leads': typeof AppLeadsIndexRoute
   '/result-pages': typeof AppResultPagesIndexRoute
+  '/statistics': typeof AppStatisticsIndexRoute
   '/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/login': typeof AuthLoginIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
@@ -138,7 +154,9 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_app/_quizzes/': typeof AppQuizzesIndexRoute
+  '/_app/leads/': typeof AppLeadsIndexRoute
   '/_app/result-pages/': typeof AppResultPagesIndexRoute
+  '/_app/statistics/': typeof AppStatisticsIndexRoute
   '/_auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/reset-password/': typeof AuthResetPasswordIndexRoute
@@ -155,7 +173,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/leads'
     | '/result-pages'
+    | '/statistics'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
@@ -170,7 +190,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/leads'
     | '/result-pages'
+    | '/statistics'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
@@ -187,7 +209,9 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_auth'
     | '/_app/_quizzes/'
+    | '/_app/leads/'
     | '/_app/result-pages/'
+    | '/_app/statistics/'
     | '/_auth/forgot-password/'
     | '/_auth/login/'
     | '/_auth/reset-password/'
@@ -243,11 +267,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_app/statistics/': {
+      id: '/_app/statistics/'
+      path: '/statistics'
+      fullPath: '/statistics'
+      preLoaderRoute: typeof AppStatisticsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/result-pages/': {
       id: '/_app/result-pages/'
       path: '/result-pages'
       fullPath: '/result-pages'
       preLoaderRoute: typeof AppResultPagesIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/leads/': {
+      id: '/_app/leads/'
+      path: '/leads'
+      fullPath: '/leads'
+      preLoaderRoute: typeof AppLeadsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/_quizzes/': {
@@ -318,7 +356,9 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppQuizzesIndexRoute: typeof AppQuizzesIndexRoute
+  AppLeadsIndexRoute: typeof AppLeadsIndexRoute
   AppResultPagesIndexRoute: typeof AppResultPagesIndexRoute
+  AppStatisticsIndexRoute: typeof AppStatisticsIndexRoute
   AppResultPagesEditIdRoute: typeof AppResultPagesEditIdRoute
   AppResultPagesViewIdRoute: typeof AppResultPagesViewIdRoute
   AppResultPagesCreateIndexRoute: typeof AppResultPagesCreateIndexRoute
@@ -331,7 +371,9 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppQuizzesIndexRoute: AppQuizzesIndexRoute,
+  AppLeadsIndexRoute: AppLeadsIndexRoute,
   AppResultPagesIndexRoute: AppResultPagesIndexRoute,
+  AppStatisticsIndexRoute: AppStatisticsIndexRoute,
   AppResultPagesEditIdRoute: AppResultPagesEditIdRoute,
   AppResultPagesViewIdRoute: AppResultPagesViewIdRoute,
   AppResultPagesCreateIndexRoute: AppResultPagesCreateIndexRoute,
