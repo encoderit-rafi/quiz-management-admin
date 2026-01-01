@@ -16,6 +16,7 @@ export const QuizSchema = z.object({
   primary_color: z.string().optional(),
   secondary_color: z.string().optional(),
   is_active: z.boolean().optional(),
+  questions: z.array(z.any()).optional(),
 });
 
 // Type inference

@@ -2,6 +2,18 @@ import { z } from "zod";
 
 const FileSchema = typeof File !== "undefined" ? z.instanceof(File) : z.any();
 
+export const OptionSchema = z.object({
+  label: z.string().min(1, { message: "Option label is required" }),
+  points: z.number().min(0, { message: "Points must be at least 0" }),
+});
+
+export const QuestionSchema = z.object({
+  name: z.string().min(1, { message: "Question name is required" }),
+  options: z
+    .array(OptionSchema)
+    .min(1, { message: "At least one option is required" }),
+});
+
 export const QuizFormSchema = z.object({
   id: z.union([z.string(), z.number()]).optional(),
   title: z.string().min(1, { message: "Title is required" }),
@@ -25,4 +37,9 @@ export const QuizFormSchema = z.object({
   is_active: z.boolean(),
 });
 
+export const QuizQuestionsSchema = z.object({
+  questions: z.array(QuestionSchema),
+});
+
 export type TQuizFormSchema = z.infer<typeof QuizFormSchema>;
+export type TQuizQuestionsSchema = z.infer<typeof QuizQuestionsSchema>;

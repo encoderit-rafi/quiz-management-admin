@@ -28,7 +28,7 @@ type TProps = {
 export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   const { id, type } = form_data;
 
-  // Fetch existing quiz using new pattern
+  // Fetch existing quiz
   const { data: quiz } = useQuery({
     ...useGetQuiz(id),
     enabled: !!id && type === "update",
@@ -82,8 +82,6 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   const { mutate: createQuiz, isPending: isPendingCreate } = useCreateQuiz();
   const { mutate: updateQuiz, isPending: isPendingUpdate } = useUpdateQuiz();
 
-  // Handle file selection
-
   // Submit
   const onSubmit = (data: TQuizFormSchema) => {
     if (type === "update") {
@@ -108,10 +106,11 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
       <CardContent className="flex-1 flex flex-col overflow-hidden">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6 flex-1 overflow-y-auto"
+          className="space-y-6 flex-1 overflow-y-auto pr-2"
         >
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h3 className="text-lg font-semibold">General Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-lg bg-muted/5">
               <FormInput
                 name="quiz_name"
                 control={control}
@@ -153,7 +152,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-lg bg-muted/5">
               <FormColorPicker
                 control={control}
                 name="primary_color"

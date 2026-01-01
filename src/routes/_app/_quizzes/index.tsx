@@ -129,6 +129,12 @@ export default function RouteComponent() {
                   Settings
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/quizzes/questions/$id" params={{ id: quizId }}>
+                  <PenSquare className="mr-2 h-4 w-4" />
+                  Questions
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() =>
