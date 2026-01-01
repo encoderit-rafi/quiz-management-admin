@@ -1,205 +1,244 @@
-import { useFieldArray, useForm, type Control } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { QuizQuestionsSchema, type TQuizQuestionsSchema } from "../-types";
-import { FormInput } from "@/components/form";
-import { CardAction, CardContent } from "@/components/ui/card";
-import { Plus, Trash2 } from "lucide-react";
+import { CardContent } from "@/components/ui/card";
+import { Plus, Pencil, Trash2, MoreHorizontal } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { FormQuestion } from "./form-question";
+import type { TQuestionSchema, TQuizQuestionsSchema } from "../-types";
 
 interface FormQuizQuestionsProps {
-  initialData?: any;
+  initialData?: { questions: TQuestionSchema[] };
   onSubmit: (data: TQuizQuestionsSchema) => void;
-  onCancel: () => void;
+  onCancel: () => void; // Used for "Back" navigation
   isLoading?: boolean;
 }
-
-const QuestionField = ({
-  questionIndex,
-  control,
-  removeQuestion,
-}: {
-  questionIndex: number;
-  control: Control<TQuizQuestionsSchema>;
-  removeQuestion: (index: number) => void;
-}) => {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `questions.${questionIndex}.options` as const,
-  });
-
-  return (
-    <div className="border rounded-lg p-4 space-y-4 bg-muted/10 relative">
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="absolute top-2 right-2 text-destructive hover:text-destructive hover:bg-destructive/10"
-        onClick={() => removeQuestion(questionIndex)}
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
-
-      <div className="grid grid-cols-1 gap-4">
-        <FormInput
-          name={`questions.${questionIndex}.name`}
-          control={control}
-          label={`Question ${questionIndex + 1}`}
-          placeholder="Enter question name"
-        />
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">Options</label>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => append({ label: "", points: 0 })}
-          >
-            <Plus className="h-3 w-3 mr-1" /> Add Option
-          </Button>
-        </div>
-
-        <div className="space-y-2">
-          {fields.map((field, optionIndex) => (
-            <div key={field.id} className="flex gap-2 items-start">
-              <div className="flex-1">
-                <FormInput
-                  name={`questions.${questionIndex}.options.${optionIndex}.label`}
-                  control={control}
-                  placeholder="Option label"
-                />
-              </div>
-              <div className="w-24">
-                <FormInput
-                  name={`questions.${questionIndex}.options.${optionIndex}.points`}
-                  control={control}
-                  type="number"
-                  placeholder="Points"
-                />
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="mt-1 text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={() => remove(optionIndex)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const FormQuizQuestions = ({
   initialData,
   onSubmit,
-  onCancel,
+  onCancel, // Keeps the back button functionality
   isLoading,
 }: FormQuizQuestionsProps) => {
-  const form = useForm<TQuizQuestionsSchema>({
-    resolver: zodResolver(QuizQuestionsSchema),
-    defaultValues: {
-      questions: initialData?.questions || [],
-    },
-  });
+  const [questions, setQuestions] = useState<TQuestionSchema[]>(
+    initialData?.questions || []
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
-  const { control, handleSubmit } = form;
+  // Sync internal state if initialData changes (e.g. refetch)
+  // useEffect(() => {
+  //   if (initialData?.questions) {
+  //     setQuestions(initialData.questions);
+  //   }
+  // }, [initialData]);
 
-  const {
-    fields: questionFields,
-    append: appendQuestion,
-    remove: removeQuestion,
-  } = useFieldArray({
-    control,
-    name: "questions",
-  });
+  // Handle Create/Update Question
+  const handleSaveQuestion = (data: TQuestionSchema) => {
+    let newQuestions = [...questions];
+    if (editingIndex !== null) {
+      newQuestions[editingIndex] = data;
+    } else {
+      newQuestions.push(data);
+    }
+    setQuestions(newQuestions);
+    setEditingIndex(null);
+    setIsDialogOpen(false);
 
-  const handleFormSubmit = (data: TQuizQuestionsSchema) => {
-    // Ensure points are numbers
-    const processedData = {
-      questions: data.questions.map((q) => ({
-        ...q,
-        options: q.options.map((o) => ({
-          ...o,
-          points: Number(o.points),
-        })),
-      })),
-    };
-    onSubmit(processedData);
+    // Call API immediately
+    onSubmit({ questions: newQuestions });
+  };
+
+  const handleDeleteQuestion = () => {
+    if (deletingIndex !== null) {
+      const newQuestions = questions.filter((_, i) => i !== deletingIndex);
+      setQuestions(newQuestions);
+      setDeletingIndex(null);
+
+      // Call API immediately
+      onSubmit({ questions: newQuestions });
+    }
+  };
+
+  const openCreateDialog = () => {
+    setEditingIndex(null);
+    setIsDialogOpen(true);
+  };
+
+  const openEditDialog = (index: number) => {
+    setEditingIndex(index);
+    setIsDialogOpen(true);
   };
 
   return (
     <>
-      <CardContent className="flex-1 flex flex-col overflow-hidden">
-        <form
-          onSubmit={handleSubmit(handleFormSubmit)}
-          className="space-y-6 flex-1 overflow-y-auto pr-2"
-        >
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Questions</h3>
-                <p className="text-sm text-muted-foreground">
-                  Build your quiz by adding questions and their options.
-                </p>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() =>
-                  appendQuestion({
-                    name: "",
-                    options: [{ label: "", points: 0 }],
-                  })
-                }
-              >
-                <Plus className="h-4 w-4 mr-2" /> Add Question
+      <CardContent className="flex-1 flex flex-col overflow-hidden p-6 gap-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Questions List</h3>
+            <p className="text-sm text-muted-foreground">
+              Manage all questions for this quiz.
+            </p>
+          </div>
+          <Button onClick={openCreateDialog}>
+            <Plus className="mr-2 h-4 w-4" /> Add Question
+          </Button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto border rounded-lg">
+          {questions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full p-8 text-muted-foreground gap-2">
+              <p>No questions added yet.</p>
+              <Button variant="outline" onClick={openCreateDialog}>
+                Add your first question
               </Button>
             </div>
-
-            <div className="space-y-6">
-              {questionFields.length === 0 && (
-                <div className="text-center py-12 border-2 border-dashed rounded-lg text-muted-foreground">
-                  No questions added yet. Click "Add Question" to start.
-                </div>
-              )}
-              {questionFields.map((field, index) => (
-                <QuestionField
-                  key={field.id}
-                  questionIndex={index}
-                  control={control}
-                  removeQuestion={removeQuestion}
-                />
+          ) : (
+            <Accordion type="multiple" className="w-full">
+              {questions.map((question, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  className="px-4 border-b last:border-0"
+                >
+                  <div className="flex items-center gap-4 py-4">
+                    <AccordionTrigger className="hover:no-underline py-0 flex-1">
+                      <span className="flex items-center gap-2 text-left">
+                        <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                          {index + 1}
+                        </span>
+                        <span className="font-medium line-clamp-1">
+                          {question.name}
+                        </span>
+                      </span>
+                    </AccordionTrigger>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="mr-2">
+                        {question.options.length} Options
+                      </Badge>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => openEditDialog(index)}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive"
+                            onClick={() => setDeletingIndex(index)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+                  <AccordionContent className="pk-4 pb-4">
+                    <div className="pl-8 space-y-2">
+                      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        Options
+                      </div>
+                      <div className="grid gap-2">
+                        {question.options.map((option, optIdx) => (
+                          <div
+                            key={optIdx}
+                            className="flex items-center justify-between p-2 rounded-md bg-muted/30"
+                          >
+                            <span className="text-sm">{option.label}</span>
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-xs"
+                            >
+                              {option.points} pts
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
-          </div>
-        </form>
-        <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            className="min-w-36"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            className="min-w-36"
-            onClick={handleSubmit(handleFormSubmit)}
-            loading={isLoading}
-          >
-            Save Questions
-          </Button>
-        </CardAction>
+            </Accordion>
+          )}
+        </div>
       </CardContent>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {editingIndex !== null ? "Edit Question" : "Add Question"}
+            </DialogTitle>
+          </DialogHeader>
+          <FormQuestion
+            initialData={
+              editingIndex !== null ? questions[editingIndex] : undefined
+            }
+            onSubmit={handleSaveQuestion}
+            onCancel={() => setIsDialogOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={deletingIndex !== null}
+        onOpenChange={(open) => !open && setDeletingIndex(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the question and its options.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteQuestion}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

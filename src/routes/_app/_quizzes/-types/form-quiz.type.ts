@@ -43,3 +43,4 @@ export const QuizQuestionsSchema = z.object({
 
 export type TQuizFormSchema = z.infer<typeof QuizFormSchema>;
 export type TQuizQuestionsSchema = z.infer<typeof QuizQuestionsSchema>;
+export type TQuestionSchema = z.infer<typeof QuestionSchema>;
