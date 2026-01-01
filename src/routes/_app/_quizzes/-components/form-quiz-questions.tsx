@@ -44,8 +44,8 @@ interface FormQuizQuestionsProps {
 export const FormQuizQuestions = ({
   initialData,
   onSubmit,
-  onCancel, // Keeps the back button functionality
-  isLoading,
+  // onCancel, // Keeps the back button functionality
+  // isLoading,
 }: FormQuizQuestionsProps) => {
   const [questions, setQuestions] = useState<TQuestionSchema[]>(
     initialData?.questions || []
@@ -101,17 +101,17 @@ export const FormQuizQuestions = ({
   return (
     <>
       <CardContent className="flex-1 flex flex-col overflow-hidden p-6 gap-6">
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold">Questions List</h3>
             <p className="text-sm text-muted-foreground">
               Manage all questions for this quiz.
             </p>
           </div>
-          <Button onClick={openCreateDialog}>
-            <Plus className="mr-2 h-4 w-4" /> Add Question
-          </Button>
-        </div>
+        </div> */}
+        <Button onClick={openCreateDialog} className="w-fit">
+          <Plus className="mr-2 h-4 w-4" /> Add Question
+        </Button>
 
         <div className="flex-1 overflow-y-auto border rounded-lg">
           {questions.length === 0 ? (

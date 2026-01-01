@@ -14,7 +14,11 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthResetPasswordIndexRouteImport } from './routes/_auth/reset-password/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as AuthForgotPasswordIndexRouteImport } from './routes/_auth/forgot-password/index'
+import { Route as AppResultPagesIndexRouteImport } from './routes/_app/result-pages/index'
 import { Route as AppQuizzesIndexRouteImport } from './routes/_app/_quizzes/index'
+import { Route as AppResultPagesCreateIndexRouteImport } from './routes/_app/result-pages/create/index'
+import { Route as AppResultPagesViewIdRouteImport } from './routes/_app/result-pages/view/$id'
+import { Route as AppResultPagesEditIdRouteImport } from './routes/_app/result-pages/edit/$id'
 import { Route as AppQuizzesQuizzesCreateIndexRouteImport } from './routes/_app/_quizzes/quizzes/create/index'
 import { Route as AppQuizzesQuizzesViewIdRouteImport } from './routes/_app/_quizzes/quizzes/view/$id'
 import { Route as AppQuizzesQuizzesSettingsIdRouteImport } from './routes/_app/_quizzes/quizzes/settings/$id'
@@ -44,9 +48,30 @@ const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexRouteImport.update({
   path: '/forgot-password/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AppResultPagesIndexRoute = AppResultPagesIndexRouteImport.update({
+  id: '/result-pages/',
+  path: '/result-pages/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppQuizzesIndexRoute = AppQuizzesIndexRouteImport.update({
   id: '/_quizzes/',
   path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppResultPagesCreateIndexRoute =
+  AppResultPagesCreateIndexRouteImport.update({
+    id: '/result-pages/create/',
+    path: '/result-pages/create/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppResultPagesViewIdRoute = AppResultPagesViewIdRouteImport.update({
+  id: '/result-pages/view/$id',
+  path: '/result-pages/view/$id',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppResultPagesEditIdRoute = AppResultPagesEditIdRouteImport.update({
+  id: '/result-pages/edit/$id',
+  path: '/result-pages/edit/$id',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppQuizzesQuizzesCreateIndexRoute =
@@ -80,9 +105,13 @@ const AppQuizzesQuizzesEditIdRoute = AppQuizzesQuizzesEditIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppQuizzesIndexRoute
+  '/result-pages': typeof AppResultPagesIndexRoute
   '/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/login': typeof AuthLoginIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
+  '/result-pages/edit/$id': typeof AppResultPagesEditIdRoute
+  '/result-pages/view/$id': typeof AppResultPagesViewIdRoute
+  '/result-pages/create': typeof AppResultPagesCreateIndexRoute
   '/quizzes/edit/$id': typeof AppQuizzesQuizzesEditIdRoute
   '/quizzes/questions/$id': typeof AppQuizzesQuizzesQuestionsIdRoute
   '/quizzes/settings/$id': typeof AppQuizzesQuizzesSettingsIdRoute
@@ -91,9 +120,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AppQuizzesIndexRoute
+  '/result-pages': typeof AppResultPagesIndexRoute
   '/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/login': typeof AuthLoginIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
+  '/result-pages/edit/$id': typeof AppResultPagesEditIdRoute
+  '/result-pages/view/$id': typeof AppResultPagesViewIdRoute
+  '/result-pages/create': typeof AppResultPagesCreateIndexRoute
   '/quizzes/edit/$id': typeof AppQuizzesQuizzesEditIdRoute
   '/quizzes/questions/$id': typeof AppQuizzesQuizzesQuestionsIdRoute
   '/quizzes/settings/$id': typeof AppQuizzesQuizzesSettingsIdRoute
@@ -105,9 +138,13 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_app/_quizzes/': typeof AppQuizzesIndexRoute
+  '/_app/result-pages/': typeof AppResultPagesIndexRoute
   '/_auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/reset-password/': typeof AuthResetPasswordIndexRoute
+  '/_app/result-pages/edit/$id': typeof AppResultPagesEditIdRoute
+  '/_app/result-pages/view/$id': typeof AppResultPagesViewIdRoute
+  '/_app/result-pages/create/': typeof AppResultPagesCreateIndexRoute
   '/_app/_quizzes/quizzes/edit/$id': typeof AppQuizzesQuizzesEditIdRoute
   '/_app/_quizzes/quizzes/questions/$id': typeof AppQuizzesQuizzesQuestionsIdRoute
   '/_app/_quizzes/quizzes/settings/$id': typeof AppQuizzesQuizzesSettingsIdRoute
@@ -118,9 +155,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/result-pages'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/result-pages/edit/$id'
+    | '/result-pages/view/$id'
+    | '/result-pages/create'
     | '/quizzes/edit/$id'
     | '/quizzes/questions/$id'
     | '/quizzes/settings/$id'
@@ -129,9 +170,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/result-pages'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/result-pages/edit/$id'
+    | '/result-pages/view/$id'
+    | '/result-pages/create'
     | '/quizzes/edit/$id'
     | '/quizzes/questions/$id'
     | '/quizzes/settings/$id'
@@ -142,9 +187,13 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_auth'
     | '/_app/_quizzes/'
+    | '/_app/result-pages/'
     | '/_auth/forgot-password/'
     | '/_auth/login/'
     | '/_auth/reset-password/'
+    | '/_app/result-pages/edit/$id'
+    | '/_app/result-pages/view/$id'
+    | '/_app/result-pages/create/'
     | '/_app/_quizzes/quizzes/edit/$id'
     | '/_app/_quizzes/quizzes/questions/$id'
     | '/_app/_quizzes/quizzes/settings/$id'
@@ -194,11 +243,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_app/result-pages/': {
+      id: '/_app/result-pages/'
+      path: '/result-pages'
+      fullPath: '/result-pages'
+      preLoaderRoute: typeof AppResultPagesIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/_quizzes/': {
       id: '/_app/_quizzes/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AppQuizzesIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/result-pages/create/': {
+      id: '/_app/result-pages/create/'
+      path: '/result-pages/create'
+      fullPath: '/result-pages/create'
+      preLoaderRoute: typeof AppResultPagesCreateIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/result-pages/view/$id': {
+      id: '/_app/result-pages/view/$id'
+      path: '/result-pages/view/$id'
+      fullPath: '/result-pages/view/$id'
+      preLoaderRoute: typeof AppResultPagesViewIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/result-pages/edit/$id': {
+      id: '/_app/result-pages/edit/$id'
+      path: '/result-pages/edit/$id'
+      fullPath: '/result-pages/edit/$id'
+      preLoaderRoute: typeof AppResultPagesEditIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/_quizzes/quizzes/create/': {
@@ -241,6 +318,10 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppQuizzesIndexRoute: typeof AppQuizzesIndexRoute
+  AppResultPagesIndexRoute: typeof AppResultPagesIndexRoute
+  AppResultPagesEditIdRoute: typeof AppResultPagesEditIdRoute
+  AppResultPagesViewIdRoute: typeof AppResultPagesViewIdRoute
+  AppResultPagesCreateIndexRoute: typeof AppResultPagesCreateIndexRoute
   AppQuizzesQuizzesEditIdRoute: typeof AppQuizzesQuizzesEditIdRoute
   AppQuizzesQuizzesQuestionsIdRoute: typeof AppQuizzesQuizzesQuestionsIdRoute
   AppQuizzesQuizzesSettingsIdRoute: typeof AppQuizzesQuizzesSettingsIdRoute
@@ -250,6 +331,10 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppQuizzesIndexRoute: AppQuizzesIndexRoute,
+  AppResultPagesIndexRoute: AppResultPagesIndexRoute,
+  AppResultPagesEditIdRoute: AppResultPagesEditIdRoute,
+  AppResultPagesViewIdRoute: AppResultPagesViewIdRoute,
+  AppResultPagesCreateIndexRoute: AppResultPagesCreateIndexRoute,
   AppQuizzesQuizzesEditIdRoute: AppQuizzesQuizzesEditIdRoute,
   AppQuizzesQuizzesQuestionsIdRoute: AppQuizzesQuizzesQuestionsIdRoute,
   AppQuizzesQuizzesSettingsIdRoute: AppQuizzesQuizzesSettingsIdRoute,

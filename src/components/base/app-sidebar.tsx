@@ -1,4 +1,4 @@
-import { MessageCircleQuestionMark } from "lucide-react";
+import { MessageCircleQuestionMark, FileText } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarRail } from "@/components/ui/sidebar";
 import type { TPtah, TRoute } from "@/types";
 import { useRouterState } from "@tanstack/react-router";
@@ -18,6 +18,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       url: "/",
       icon: MessageCircleQuestionMark,
       isActive: isActiveLink(["/"]),
+      isVisible: true,
+    },
+    {
+      name: "Result Pages",
+      url: "/result-pages",
+      icon: FileText,
+      isActive: isActiveLink(["/result-pages"]),
       isVisible: true,
     },
   ];
