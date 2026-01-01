@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { PenSquare, Trash2, Plus, Eye, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogCancel,
+  AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { FORM_DATA } from "@/data/form";
 import type { TQuizSchema } from "./-types";
@@ -23,8 +24,11 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import AppTable from "@/components/base/app-table";
+import AppSearch from "@/components/base/app-search";
+import AppPagination from "@/components/base/app-pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useGetAllQuizzes } from "./-apis";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export const Route = createFileRoute("/_app/_quizzes/")({
   component: RouteComponent,
@@ -33,6 +37,7 @@ export const Route = createFileRoute("/_app/_quizzes/")({
 
 // Demo data (fallback)
 const DEMO_QUIZZES: TQuizSchema[] = [
+  // ... (keeping demo data same as before, assuming it's used when API fails)
   {
     id: 1,
     title: "JavaScript Fundamentals",
@@ -66,10 +71,13 @@ const DEMO_QUIZZES: TQuizSchema[] = [
 ];
 
 export default function RouteComponent() {
+  const navigate = useNavigate({ from: Route.fullPath });
+  const search = Route.useSearch();
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
   // Use the new queryOptions pattern
-  const { data: quizzes = DEMO_QUIZZES } = useQuery(useGetAllQuizzes());
+  const { data: quizzes = { data: DEMO_QUIZZES, meta: { total: 0 } } } =
+    useQuery(useGetAllQuizzes(search));
 
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
@@ -159,18 +167,49 @@ export default function RouteComponent() {
 
   return (
     <div className="space-y-4 p-4">
-      {/* Header with Create Button */}
-      <div className="flex items-center justify-end">
-        <Button size={"sm"} asChild>
-          <Link to="/quizzes/create">
-            <Plus className="mr-2 h-4 w-4" /> Add Quiz
-          </Link>
-        </Button>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold tracking-tight">Quizzes</h1>
+        <div className="flex items-center gap-2">
+          <AppSearch
+            props={{
+              input: {
+                placeholder: "Search quiz...",
+                value: search.q,
+                onChange: (e) => {
+                  navigate({
+                    search: { ...search, q: e.target.value },
+                    replace: true,
+                  });
+                },
+              },
+            }}
+          />
+          <Button asChild>
+            <Link to="/quizzes/create">
+              <Plus className="mr-2 h-4 w-4" /> Add Quiz
+            </Link>
+          </Button>
+        </div>
       </div>
 
-      {/* Table */}
-      <AppTable data={quizzes} columns={columns} />
+      <div className="rounded-md border">
+        <AppTable data={quizzes?.data || DEMO_QUIZZES} columns={columns} />
+      </div>
 
+      <AppPagination
+        total={quizzes?.meta?.total || 0}
+        perPage={search.per_page}
+        page={search.page}
+        onPageChange={(page) =>
+          navigate({ search: { ...search, page }, replace: true })
+        }
+        onPerPageChange={(per_page) =>
+          navigate({
+            search: { ...search, per_page: Number(per_page), page: 1 },
+            replace: true,
+          })
+        }
+      />
       {/* Delete Dialog */}
       <AlertDialog
         open={deleteForm.type === "delete"}

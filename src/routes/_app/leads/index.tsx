@@ -73,13 +73,7 @@ function LeadsListPage() {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Leads & Results</h1>
-          <p className="text-muted-foreground">
-            View submissions and export data.
-          </p>
-        </div>
+      <div className="flex items-center justify-end">
         <Button onClick={exportLeads}>
           <Download className="mr-2 h-4 w-4" /> Export CSV
         </Button>

@@ -72,14 +72,7 @@ function StatisticsPage() {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Statistics</h1>
-          <p className="text-muted-foreground">
-            Monitor tour quiz performance and engagement.
-          </p>
-        </div>
-
+      <div className="flex items-center justify-end">
         <div className="w-full sm:w-[250px]">
           {isLoadingQuizzes ? (
             <Skeleton className="h-10 w-full" />

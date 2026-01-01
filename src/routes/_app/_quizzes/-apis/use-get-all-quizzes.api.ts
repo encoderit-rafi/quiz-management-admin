@@ -1,11 +1,12 @@
 import { api } from "@/axios";
 import { queryOptions } from "@tanstack/react-query";
 
-export const useGetAllQuizzes = () => {
+export const useGetAllQuizzes = (params?: any) => {
   return queryOptions({
-    queryKey: ["get-all-quizzes"],
+    queryKey: ["get-all-quizzes", params],
     queryFn: async () => {
-      return (await api.get("/quizzes")).data?.data;
+      const { data } = await api.get("/quizzes", { params });
+      return data; // Return full response object to access pagination
     },
   });
 };

@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const SearchSchema = z.object({
+export const ResultPageSearchSchema = z.object({
   page: z.number().catch(1),
   per_page: z.number().catch(15),
   q: z.string().optional().catch(""),
 });
 
-export type TSearchSchema = z.infer<typeof SearchSchema>;
+export type TResultPageSearchSchema = z.infer<typeof ResultPageSearchSchema>;
