@@ -1,6 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { PenSquare, Trash2, Plus, Eye, Settings } from "lucide-react";
+import {
+  PenSquare,
+  Trash2,
+  Plus,
+  Eye,
+  Settings,
+  MoreHorizontal,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -10,7 +17,6 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogCancel,
-  AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { FORM_DATA } from "@/data/form";
 import type { TQuizSchema } from "./-types";
@@ -21,14 +27,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import AppTable from "@/components/base/app-table";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useGetAllQuizzes } from "./-apis";
-import { useDebounce } from "@/hooks/use-debounce";
 
 export const Route = createFileRoute("/_app/_quizzes/")({
   component: RouteComponent,
@@ -120,26 +124,26 @@ export default function RouteComponent() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/view/$id" params={{ id: quizId }}>
-                  <Eye className="mr-2 h-4 w-4" />
+                <Link to="/quizzes/$id/view" params={{ id: quizId }}>
+                  <Eye className="size-4" />
                   View
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/edit/$id" params={{ id: quizId }}>
-                  <PenSquare className="mr-2 h-4 w-4" />
+                <Link to="/quizzes/$id/edit" params={{ id: quizId }}>
+                  <PenSquare className="size-4" />
                   Edit
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/settings/$id" params={{ id: quizId }}>
-                  <Settings className="mr-2 h-4 w-4" />
+                <Link to="/quizzes/$id/settings" params={{ id: quizId }}>
+                  <Settings className="size-4" />
                   Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/questions/$id" params={{ id: quizId }}>
-                  <PenSquare className="mr-2 h-4 w-4" />
+                <Link to="/quizzes/$id/questions" params={{ id: quizId }}>
+                  <PenSquare className="size-4" />
                   Questions
                 </Link>
               </DropdownMenuItem>
@@ -154,7 +158,7 @@ export default function RouteComponent() {
                   })
                 }
               >
-                <Trash2 className="mr-2 h-4 w-4" />
+                <Trash2 className="size-4" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -167,29 +171,27 @@ export default function RouteComponent() {
 
   return (
     <div className="space-y-4 p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Quizzes</h1>
-        <div className="flex items-center gap-2">
-          <AppSearch
-            props={{
-              input: {
-                placeholder: "Search quiz...",
-                value: search.q,
-                onChange: (e) => {
-                  navigate({
-                    search: { ...search, q: e.target.value },
-                    replace: true,
-                  });
-                },
+      <div className="flex items-center justify-between gap-4">
+        <AppSearch
+          props={{
+            input: {
+              placeholder: "Search quiz...",
+              value: search.q,
+              onChange: (e) => {
+                navigate({
+                  search: { ...search, q: e.target.value },
+                  replace: true,
+                });
               },
-            }}
-          />
-          <Button asChild>
-            <Link to="/quizzes/create">
-              <Plus className="mr-2 h-4 w-4" /> Add Quiz
-            </Link>
-          </Button>
-        </div>
+            },
+          }}
+        />
+        <Button asChild>
+          <Link to="/quizzes/create" className="flex items-center">
+            <Plus className="size-4" />
+            <span className="hidden md:block">Add Quiz</span>
+          </Link>
+        </Button>
       </div>
 
       <div className="rounded-md border">

@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { CardQuiz } from "../../-components";
+// import { CardQuiz } from "../../-components";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Edit } from "lucide-react";
+import { CardQuiz } from "../../../-components";
 
-export const Route = createFileRoute("/_app/_quizzes/quizzes/view/$id")({
+export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/view/")({
   component: ViewQuizPage,
 });
 
@@ -29,7 +30,7 @@ function ViewQuizPage() {
           </div>
         </div>
         <Button asChild variant="outline">
-          <Link to="/quizzes/edit/$id" params={{ id }}>
+          <Link to="/quizzes/$id/edit" params={{ id }}>
             <Edit className="mr-2 h-4 w-4" />
             Edit Quiz
           </Link>

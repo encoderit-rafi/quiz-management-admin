@@ -1,8 +1,12 @@
 import { useEditorState } from "@tiptap/react";
 import { BoldIcon } from "lucide-react";
-import { Toggle } from "../../../ui/toggle";
+import { Toggle } from "@/components/ui/toggle";
 import { useTiptap } from "../context";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Bold = () => {
   const { editor } = useTiptap();

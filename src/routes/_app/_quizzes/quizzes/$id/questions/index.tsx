@@ -36,7 +36,7 @@ const DEMO_QUESTIONS = [
   },
 ];
 
-export const Route = createFileRoute("/_app/_quizzes/quizzes/questions/$id")({
+export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
 });
 

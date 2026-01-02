@@ -59,7 +59,6 @@ export const FormImageUpload = <
                   "flex flex-col gap-4 items-center justify-center text-muted-foreground w-full h-full aspect-video rounded-md cursor-pointer hover:bg-accent/50 transition-colors overflow-hidden",
                   {
                     "border-dashed border": !previewUrl,
-                    // "border": previewUrl,
                   }
                 )}
               >
@@ -84,7 +83,6 @@ export const FormImageUpload = <
                     "
                       onClick={() => onChange(null)}
                     >
-                      {/* <X className="h-4 w-4" /> */}
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -99,9 +97,6 @@ export const FormImageUpload = <
               </label>
             </div>
 
-            {/* {Boolean(description) && !invalid && (
-              <FieldDescription>{description}</FieldDescription>
-            )} */}
             {invalid && <FieldError errors={[error]} />}
           </Field>
         );

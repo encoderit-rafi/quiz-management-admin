@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
-export const Route = createFileRoute("/_app/_quizzes/quizzes/settings/$id")({
+export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/settings/")({
   component: QuizSettingsPage,
 });
 

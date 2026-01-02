@@ -1,8 +1,12 @@
 import { useEditorState } from "@tiptap/react";
 import { Redo2Icon } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Button } from "@/components/ui/button";
 import { useTiptap } from "../context";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Redo = () => {
   const { editor } = useTiptap();

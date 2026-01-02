@@ -1,8 +1,12 @@
 import { useEditorState } from "@tiptap/react";
 import { QuoteIcon } from "lucide-react";
-import { Toggle } from "../../../ui/toggle";
 import { useTiptap } from "../context";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Toggle } from "@/components/ui/toggle";
 
 export const Blockquote = () => {
   const { editor } = useTiptap();

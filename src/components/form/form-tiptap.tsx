@@ -14,7 +14,7 @@ import {
   Heading3,
   Undo,
   Redo,
-} from "../base/tiptap";
+} from "../tiptap";
 
 type TFormTiptapProps<
   TFieldValues extends FieldValues = FieldValues,

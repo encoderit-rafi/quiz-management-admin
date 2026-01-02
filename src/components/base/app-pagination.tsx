@@ -1,10 +1,5 @@
 import { useId } from "react";
-import {
-  ChevronFirstIcon,
-  ChevronLastIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import {
@@ -104,26 +99,11 @@ const AppPagination = ({
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                onPageChange(1);
-              }}
-              aria-label="Go to first page"
-              size="icon"
-              isActive={page === 1}
-              className={`rounded-full ${page === 1 ? "pointer-events-none opacity-50" : ""}`}
-            >
-              <ChevronFirstIcon className="size-4" />
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
                 if (page > 1) onPageChange(page - 1);
               }}
               aria-label="Go to previous page"
               size="icon"
-              className={`rounded-full ${page === 1 ? "pointer-events-none opacity-50" : ""}`}
+              className={`rounded-md ${page === 1 ? "pointer-events-none opacity-50" : ""}`}
             >
               <ChevronLeftIcon className="size-4" />
             </PaginationLink>
@@ -141,7 +121,7 @@ const AppPagination = ({
                     onPageChange(pageNumber as number);
                   }}
                   isActive={page === pageNumber}
-                  className="rounded-full"
+                  className="rounded-md"
                 >
                   {pageNumber}
                 </PaginationLink>
@@ -158,23 +138,9 @@ const AppPagination = ({
               }}
               aria-label="Go to next page"
               size="icon"
-              className={`rounded-full ${page === totalPages ? "pointer-events-none opacity-50" : ""}`}
+              className={`rounded-md ${page === totalPages ? "pointer-events-none opacity-50" : ""}`}
             >
               <ChevronRightIcon className="size-4" />
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onPageChange(totalPages);
-              }}
-              aria-label="Go to last page"
-              size="icon"
-              className={`rounded-full ${page === totalPages ? "pointer-events-none opacity-50" : ""}`}
-            >
-              <ChevronLastIcon className="size-4" />
             </PaginationLink>
           </PaginationItem>
         </PaginationContent>
