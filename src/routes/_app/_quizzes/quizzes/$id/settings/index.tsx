@@ -2,14 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardAction,
-} from "@/components/ui/card";
+import { CardHeader, CardContent, CardAction } from "@/components/ui/card";
 import { useGetQuizSettings, useUpdateQuizSettings } from "../../../-apis";
 // import { FormQuizSettings } from "../../../-components";
 import { FormCheckbox, FormSwitch } from "@/components/form";
@@ -21,7 +14,6 @@ import { useEffect } from "react";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import {
   FieldContent,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLegend,
@@ -74,9 +66,6 @@ function QuizSettingsPage() {
     });
   };
 
-  // const handleCancel = () => {
-  //   navigate({ to: "/", search: { page: 1, per_page: 15 } });
-  // };
   useEffect(() => {
     if (settings) {
       reset(settings);
@@ -132,42 +121,7 @@ function QuizSettingsPage() {
                   })}
                 </FieldGroup>
               </FieldSet>
-              {/* <section className="space-y-4">
-              <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold">Lead Form</h2>
-                <p className="text-sm text-muted-foreground">
-                  Configure the lead form for this quiz.
-                </p>
-              </div>
-              <div className="grid gap-4 border rounded-lg p-4 bg-muted/30">
-                <div className="grid grid-cols-[1fr_auto_auto] gap-4 font-medium px-2 text-sm text-muted-foreground">
-                  <span>Field Name</span>
-                  <span>Enabled</span>
-                  <span>Requirement</span>
-                </div>
-                {leadFormFields.map((field) => {
-                  const isEnabled = watch(`lead_form.${field.name}.enabled`);
-                  return (
-                    <div
-                      key={field.name}
-                      className="grid grid-cols-[1fr_auto_auto] gap-4 items-center p-2 rounded-md hover:bg-muted/50 transition-colors"
-                    >
-                      <span className="font-medium">{field.label}</span>
-                      <FormCheckbox
-                        control={control}
-                        name={`lead_form.${field.name}.enabled`}
-                      />
-                      <FormSwitch
-                        control={control}
-                        name={`lead_form.${field.name}.required`}
-                        label="Required"
-                        disabled={!isEnabled}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </section> */}
+
               <FieldSeparator />
               {/* Result Delivery Section */}
               <FieldSet>
@@ -185,49 +139,14 @@ function QuizSettingsPage() {
                           name={`result_delivery.${field.name}`}
                           label={field.label}
                         />
-                        {/* <FormSwitch
-                        control={control}
-                        name={`lead_form.${field.name}.required`}
-                        label="Required"
-                        disabled={!isEnabled}
-                      /> */}
                       </div>
                     );
                   })}
                 </FieldGroup>
               </FieldSet>
             </FieldGroup>
-            {/* <section className="space-y-4">
-              <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold">Result Delivery</h2>
-                
-              </div>
-              <div className="grid gap-4 border rounded-lg p-4 bg-muted/30">
-                {resultDeliveryFields.map((field) => (
-                  <div
-                    key={field.name}
-                    className="flex items-center gap-2 p-2 w-fit rounded-md hover:bg-muted/50 transition-colors"
-                  >
-                    <FormCheckbox
-                      control={control}
-                      name={`result_delivery.${field.name}`}
-                    />
-                    <span className="font-medium ">{field.label}</span>
-                  </div>
-                ))}
-              </div>
-            </section> */}
           </form>
           <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
-            {/* <Button
-              type="button"
-              variant="outline"
-              className="min-w-36"
-              // onClick={onCancel}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button> */}
             <Button
               type="button"
               className="min-w-36"
