@@ -128,7 +128,6 @@ export default function RouteComponent() {
               <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
                   <Eye />
-                  {/* <AppButtonText>View</AppButtonText> */}
                   View
                 </Link>
               </DropdownMenuItem>
@@ -191,8 +190,7 @@ export default function RouteComponent() {
         />
         <Button asChild>
           <Link to="/quizzes/create" className="flex items-center">
-            <Plus className="size-4" />
-            {/* <span className="hidden md:block">Add Quiz</span> */}
+            <Plus />
             <AppButtonText>Add Quiz</AppButtonText>
           </Link>
         </Button>

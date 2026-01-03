@@ -2,15 +2,50 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus } from "lucide-react";
-import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  ArrowLeft,
+  GripVertical,
+  MoreHorizontalIcon,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { useGetQuizQuestions, useUpdateQuizQuestions } from "../../../-apis";
 import { FormQuizQuestion } from "../../../-components";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import AppButtonText from "@/components/base/app-button-text";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { closestCorners, DndContext } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 const DEMO_QUESTIONS = [
   {
+    id: 1,
     name: "What is the capital of France?",
     options: [
       { label: "London", points: 0 },
@@ -20,6 +55,7 @@ const DEMO_QUESTIONS = [
     ],
   },
   {
+    id: 2,
     name: "Which planet is known as the Red Planet?",
     options: [
       { label: "Mars", points: 10 },
@@ -29,6 +65,7 @@ const DEMO_QUESTIONS = [
     ],
   },
   {
+    id: 3,
     name: "Who wrote 'Romeo and Juliet'?",
     options: [
       { label: "Charles Dickens", points: 0 },
@@ -42,44 +79,129 @@ const DEMO_QUESTIONS = [
 export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
 });
+function Question({ question, index }: { question: any; index: number }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: question.id });
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+  return (
+    <AccordionItem
+      ref={setNodeRef}
+      style={style}
+      key={index}
+      value={`item-${index}`}
+      className="px-4 border-b last:border-0"
+    >
+      <div className="flex items-center gap-2 py-4">
+        {/* Drag Handle */}
+        <button
+          className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-muted rounded"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="h-4 w-4 text-muted-foreground" />
+        </button>
 
-function QuizQuestionsPage() {
-  const { id } = Route.useParams();
-  const navigate = useNavigate();
+        <AccordionTrigger className="hover:no-underline py-0 flex-1">
+          <span className="flex items-center gap-2 text-left">
+            <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+              {index + 1}
+            </span>
+            <span className="font-medium line-clamp-1">{question.name}</span>
+          </span>
+        </AccordionTrigger>
 
-  const { data: questions, isLoading: isFetching } = useQuery(
-    useGetQuizQuestions(id)
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="mr-2">
+            {question.options.length} Options
+          </Badge>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+              // onClick={() => openEditDialog(index)}
+              >
+                <Pencil className="mr-2 h-4 w-4" /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-destructive"
+                // onClick={() => setDeletingIndex(index)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" /> Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      <AccordionContent className="pk-4 pb-4">
+        <div className="pl-8 space-y-2">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            Options
+          </div>
+          <div className="grid gap-2">
+            {question.options.map((option, optIdx) => (
+              <div
+                key={optIdx}
+                className="flex items-center justify-between p-2 rounded-md bg-muted/30"
+              >
+                <span className="text-sm">{option.label}</span>
+                <Badge variant="outline" className="font-mono text-xs">
+                  {option.points} pts
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </div>
+      </AccordionContent>
+    </AccordionItem>
   );
-
-  const { mutate: updateQuestions, isPending: isUpdating } =
-    useUpdateQuizQuestions(id);
-
-  const handleSubmit = (data: any) => {
-    updateQuestions(data, {
-      onSuccess: () => {
-        navigate({ to: "/", search: { page: 1, per_page: 15 } });
-      },
+}
+function QuizQuestionsPage() {
+  const [questions, setQuestions] = useState(DEMO_QUESTIONS);
+  const getQuestionPosition = (id: number) => {
+    return questions.findIndex((q: any) => q.id === id);
+  };
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    console.log("👉 ~ handleDragEnd ~ active, over:", active, over);
+    if (active.id === over.id) return;
+    setQuestions((questions) => {
+      const oldPosition = getQuestionPosition(active.id);
+      const newPosition = getQuestionPosition(over.id);
+      return arrayMove(questions, oldPosition, newPosition);
     });
   };
+  // const { id } = Route.useParams();
+  // const navigate = useNavigate();
 
-  const handleCancel = () => {
-    navigate({ to: "/", search: { page: 1, per_page: 15 } });
-  };
+  // const { data: questions, isLoading: isFetching } = useQuery(
+  //   useGetQuizQuestions(id)
+  // );
+
+  // const { mutate: updateQuestions, isPending: isUpdating } =
+  //   useUpdateQuizQuestions(id);
+
+  // const handleSubmit = (data: any) => {
+  //   updateQuestions(data, {
+  //     onSuccess: () => {
+  //       navigate({ to: "/", search: { page: 1, per_page: 15 } });
+  //     },
+  //   });
+  // };
+
+  // const handleCancel = () => {
+  //   navigate({ to: "/", search: { page: 1, per_page: 15 } });
+  // };
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex items-center justify-between gap-4">
-        {/* <div className="flex-1 flex items-center gap-2 ">
-          <Button variant="outline" size="icon" onClick={handleCancel}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div className="flex flex-col flex-1">
-            <CardTitle>Quiz Questions</CardTitle>
-            <CardDescription>
-              Manage questions, options, and points for this quiz.
-            </CardDescription>
-          </div>
-        </div> */}
         <AppCardHeaderWithBackButton
           title="Quiz Questions"
           description="Manage questions, options, and points for this quiz."
@@ -90,24 +212,93 @@ function QuizQuestionsPage() {
         </Button>
       </CardHeader>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {!isFetching && (
-          <FormQuizQuestion
-          // initialData={{
-          //   questions:
-          //     questions && questions.length > 0 ? questions : DEMO_QUESTIONS,
-          // }}
-          // onSubmit={handleSubmit}
-          // onCancel={handleCancel}
-          // isLoading={isUpdating}
-          />
-        )}
-        {isFetching && (
-          <div className="flex items-center justify-center p-12">
-            <p className="text-muted-foreground">Loading questions...</p>
-          </div>
-        )}
-      </div>
+      <CardContent>
+        <Accordion type="multiple" className="w-full">
+          <DndContext
+            onDragEnd={handleDragEnd}
+            collisionDetection={closestCorners}
+          >
+            <SortableContext
+              items={questions}
+              strategy={verticalListSortingStrategy}
+            >
+              {questions.map((question, index) => (
+                // <AccordionItem
+                //   key={index}
+                //   value={`item-${index}`}
+                //   className="px-4 border-b last:border-0"
+                // >
+                //   <div className="flex items-center gap-4 py-4">
+                //     <AccordionTrigger className="hover:no-underline py-0 flex-1">
+                //       <span className="flex items-center gap-2 text-left">
+                //         <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                //           {index + 1}
+                //         </span>
+                //         <span className="font-medium line-clamp-1">
+                //           {question.name}
+                //         </span>
+                //       </span>
+                //     </AccordionTrigger>
+                //     <div className="flex items-center gap-2">
+                //       <Badge variant="secondary" className="mr-2">
+                //         {question.options.length} Options
+                //       </Badge>
+                //       <DropdownMenu>
+                //         <DropdownMenuTrigger asChild>
+                //           <Button
+                //             variant="ghost"
+                //             size="icon"
+                //             className="h-8 w-8"
+                //           >
+                //             <MoreHorizontalIcon className="h-4 w-4" />
+                //           </Button>
+                //         </DropdownMenuTrigger>
+                //         <DropdownMenuContent align="end">
+                //           <DropdownMenuItem
+                //           // onClick={() => openEditDialog(index)}
+                //           >
+                //             <Pencil className="mr-2 h-4 w-4" /> Edit
+                //           </DropdownMenuItem>
+                //           <DropdownMenuItem
+                //             className="text-destructive"
+                //             // onClick={() => setDeletingIndex(index)}
+                //           >
+                //             <Trash2 className="mr-2 h-4 w-4" /> Delete
+                //           </DropdownMenuItem>
+                //         </DropdownMenuContent>
+                //       </DropdownMenu>
+                //     </div>
+                //   </div>
+                //   <AccordionContent className="pk-4 pb-4">
+                //     <div className="pl-8 space-y-2">
+                //       <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                //         Options
+                //       </div>
+                //       <div className="grid gap-2">
+                //         {question.options.map((option, optIdx) => (
+                //           <div
+                //             key={optIdx}
+                //             className="flex items-center justify-between p-2 rounded-md bg-muted/30"
+                //           >
+                //             <span className="text-sm">{option.label}</span>
+                //             <Badge
+                //               variant="outline"
+                //               className="font-mono text-xs"
+                //             >
+                //               {option.points} pts
+                //             </Badge>
+                //           </div>
+                //         ))}
+                //       </div>
+                //     </div>
+                //   </AccordionContent>
+                // </AccordionItem>
+                <Question question={question} index={index} />
+              ))}
+            </SortableContext>
+          </DndContext>
+        </Accordion>
+      </CardContent>
     </div>
   );
 }
