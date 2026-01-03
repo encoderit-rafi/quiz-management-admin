@@ -38,13 +38,13 @@ export const FormSwitch = <
           <Field
             data-invalid={invalid}
             orientation="horizontal"
-            className="items-center"
+            className="w-fit"
           >
-            {Boolean(label) && (
+            {/* {Boolean(label) && (
               <FieldLabel htmlFor={fieldName} className="cursor-pointer">
                 {label}
               </FieldLabel>
-            )}
+            )} */}
             <Switch
               id={fieldName}
               checked={value}
@@ -52,10 +52,10 @@ export const FormSwitch = <
               disabled={disabled}
               aria-invalid={invalid}
             />
-            {Boolean(description) && !invalid && (
+            {/* {Boolean(description) && !invalid && (
               <FieldDescription>{description}</FieldDescription>
             )}
-            {invalid && <FieldError errors={[error]} />}
+            {invalid && <FieldError errors={[error]} />} */}
           </Field>
         );
       }}

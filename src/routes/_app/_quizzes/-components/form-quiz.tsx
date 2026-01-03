@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   QuizFormSchema,
   type TQuizFormSchema,
-  type TQuizSchema,
+  // type TQuizSchema,
 } from "../-types";
 import { useCreateQuiz, useGetQuiz, useUpdateQuiz } from "../-apis";
 
@@ -18,6 +18,7 @@ import {
   FormTextarea,
 } from "@/components/form";
 import { CardAction, CardContent } from "@/components/ui/card";
+import { DEFAULT_QUIZ_DATA } from "../-data";
 
 type TProps = {
   form_data: { id: string | number; type: string };
@@ -37,44 +38,31 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   // Form Setup
   const form = useForm<TQuizFormSchema>({
     resolver: zodResolver(QuizFormSchema),
-    defaultValues: {
-      title: "",
-      quiz_name: "",
-      heading: "",
-      cta_text: "",
-      footer_text: "",
-      description: "",
-      logo: null,
-      background_image: null,
-      primary_color: "#3b82f6",
-      secondary_color: "#8b5cf6",
-      is_active: true,
-    },
+    defaultValues: DEFAULT_QUIZ_DATA,
   });
 
   const { reset, control, handleSubmit } = form;
 
   // Format API Data
-  const formatter = (data: TQuizSchema): TQuizFormSchema => ({
-    id: data.id ?? undefined,
-    title: data.title ?? "",
-    quiz_name: data.quiz_name ?? "",
-    heading: data.heading ?? "",
-    cta_text: data.cta_text ?? "",
-    footer_text: data.footer_text ?? "",
-    description: data.description ?? "",
-    logo: data.logo ?? null,
-    background_image: data.background_image ?? null,
-    primary_color: data.primary_color ?? "#3b82f6",
-    secondary_color: data.secondary_color ?? "#8b5cf6",
-    is_active: data.is_active ?? true,
-  });
+  // const formatter = (data: TQuizSchema): TQuizFormSchema => ({
+  //   id: data.id ?? undefined,
+  //   title: data.title ?? "",
+  //   quiz_name: data.quiz_name ?? "",
+  //   heading: data.heading ?? "",
+  //   cta_text: data.cta_text ?? "",
+  //   footer_text: data.footer_text ?? "",
+  //   description: data.description ?? "",
+  //   logo: data.logo ?? null,
+  //   background_image: data.background_image ?? null,
+  //   primary_color: data.primary_color ?? "#ffffff",
+  //   secondary_color: data.secondary_color ?? "#ffffff",
+  //   is_active: data.is_active ?? true,
+  // });
 
-  // Reset form when updating
   useEffect(() => {
     if (type === "update" && quiz) {
-      const formattedData = formatter(quiz);
-      reset(formattedData);
+      // const formattedData = formatter(quiz);
+      reset(quiz);
     }
   }, [quiz, type, reset]);
 
@@ -106,11 +94,10 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
       <CardContent className="flex-1 flex flex-col overflow-hidden">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6 flex-1 overflow-y-auto pr-2"
+          className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
         >
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">General Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-lg bg-muted/5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
               <FormInput
                 name="quiz_name"
                 control={control}
@@ -152,7 +139,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-lg bg-muted/5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
               <FormColorPicker
                 control={control}
                 name="primary_color"
@@ -172,6 +159,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
               name="description"
               control={control}
               label="Description"
+              placeholder="Enter description"
             />
             <FormTiptap
               name="footer_text"

@@ -7,6 +7,7 @@ import {
   Eye,
   Settings,
   MoreHorizontal,
+  FileQuestionMark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useGetAllQuizzes } from "./-apis";
+import AppButtonText from "@/components/base/app-button-text";
 
 export const Route = createFileRoute("/_app/_quizzes/")({
   component: RouteComponent,
@@ -125,25 +127,26 @@ export default function RouteComponent() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
-                  <Eye className="size-4" />
+                  <Eye />
+                  {/* <AppButtonText>View</AppButtonText> */}
                   View
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/edit" params={{ id: quizId }}>
-                  <PenSquare className="size-4" />
+                  <PenSquare />
                   Edit
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/settings" params={{ id: quizId }}>
-                  <Settings className="size-4" />
+                  <Settings />
                   Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/questions" params={{ id: quizId }}>
-                  <PenSquare className="size-4" />
+                  <FileQuestionMark />
                   Questions
                 </Link>
               </DropdownMenuItem>
@@ -158,7 +161,7 @@ export default function RouteComponent() {
                   })
                 }
               >
-                <Trash2 className="size-4" />
+                <Trash2 />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -189,7 +192,8 @@ export default function RouteComponent() {
         <Button asChild>
           <Link to="/quizzes/create" className="flex items-center">
             <Plus className="size-4" />
-            <span className="hidden md:block">Add Quiz</span>
+            {/* <span className="hidden md:block">Add Quiz</span> */}
+            <AppButtonText>Add Quiz</AppButtonText>
           </Link>
         </Button>
       </div>

@@ -1,114 +1,108 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { CardContent } from "@/components/ui/card";
-import { Plus, Pencil, Trash2, MoreHorizontal } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { FormQuestion } from "./form-question";
-import type { TQuestionSchema, TQuizQuestionsSchema } from "../-types";
+// import { useState } from "react";
+// import { Button } from "@/components/ui/button";
+// import { CardContent } from "@/components/ui/card";
+// import { Plus, Pencil, Trash2, MoreHorizontal } from "lucide-react";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
+// import { Badge } from "@/components/ui/badge";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+// } from "@/components/ui/dialog";
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+// } from "@/components/ui/alert-dialog";
+// import { FormQuestion } from "./form-question";
+// import type { TQuestionSchema, TQuizQuestionsSchema } from "../-types";
 
-interface FormQuizQuestionsProps {
-  initialData?: { questions: TQuestionSchema[] };
-  onSubmit: (data: TQuizQuestionsSchema) => void;
-  onCancel: () => void; // Used for "Back" navigation
-  isLoading?: boolean;
-}
+// interface FormQuizQuestionsProps {
+//   initialData?: { questions: TQuestionSchema[] };
+//   onSubmit: (data: TQuizQuestionsSchema) => void;
+//   onCancel: () => void; // Used for "Back" navigation
+//   isLoading?: boolean;
+// }
 
-export const FormQuizQuestions = ({
-  initialData,
-  onSubmit,
-  // onCancel, // Keeps the back button functionality
-  // isLoading,
-}: FormQuizQuestionsProps) => {
-  const [questions, setQuestions] = useState<TQuestionSchema[]>(
-    initialData?.questions || []
-  );
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+// {
+//   initialData,
+//   onSubmit,
+//   // onCancel, // Keeps the back button functionality
+//   // isLoading,
+// }: FormQuizQuestionsProps
+export const FormQuizQuestion = () => {
+  // const [questions, setQuestions] = useState<TQuestionSchema[]>(
+  //   initialData?.questions || []
+  // );
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  // const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
-  // Sync internal state if initialData changes (e.g. refetch)
-  // useEffect(() => {
-  //   if (initialData?.questions) {
-  //     setQuestions(initialData.questions);
+  // // Sync internal state if initialData changes (e.g. refetch)
+  // // useEffect(() => {
+  // //   if (initialData?.questions) {
+  // //     setQuestions(initialData.questions);
+  // //   }
+  // // }, [initialData]);
+
+  // // Handle Create/Update Question
+  // const handleSaveQuestion = (data: TQuestionSchema) => {
+  //   let newQuestions = [...questions];
+  //   if (editingIndex !== null) {
+  //     newQuestions[editingIndex] = data;
+  //   } else {
+  //     newQuestions.push(data);
   //   }
-  // }, [initialData]);
+  //   setQuestions(newQuestions);
+  //   setEditingIndex(null);
+  //   setIsDialogOpen(false);
 
-  // Handle Create/Update Question
-  const handleSaveQuestion = (data: TQuestionSchema) => {
-    let newQuestions = [...questions];
-    if (editingIndex !== null) {
-      newQuestions[editingIndex] = data;
-    } else {
-      newQuestions.push(data);
-    }
-    setQuestions(newQuestions);
-    setEditingIndex(null);
-    setIsDialogOpen(false);
+  //   // Call API immediately
+  //   onSubmit({ questions: newQuestions });
+  // };
 
-    // Call API immediately
-    onSubmit({ questions: newQuestions });
-  };
+  // const handleDeleteQuestion = () => {
+  //   if (deletingIndex !== null) {
+  //     const newQuestions = questions.filter((_, i) => i !== deletingIndex);
+  //     setQuestions(newQuestions);
+  //     setDeletingIndex(null);
 
-  const handleDeleteQuestion = () => {
-    if (deletingIndex !== null) {
-      const newQuestions = questions.filter((_, i) => i !== deletingIndex);
-      setQuestions(newQuestions);
-      setDeletingIndex(null);
+  //     // Call API immediately
+  //     onSubmit({ questions: newQuestions });
+  //   }
+  // };
 
-      // Call API immediately
-      onSubmit({ questions: newQuestions });
-    }
-  };
+  // const openCreateDialog = () => {
+  //   setEditingIndex(null);
+  //   setIsDialogOpen(true);
+  // };
 
-  const openCreateDialog = () => {
-    setEditingIndex(null);
-    setIsDialogOpen(true);
-  };
-
-  const openEditDialog = (index: number) => {
-    setEditingIndex(index);
-    setIsDialogOpen(true);
-  };
+  // const openEditDialog = (index: number) => {
+  //   setEditingIndex(index);
+  //   setIsDialogOpen(true);
+  // };
 
   return (
     <>
-      <CardContent className="flex-1 flex flex-col overflow-hidden p-6 gap-6">
-        {/* <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">Questions List</h3>
-            <p className="text-sm text-muted-foreground">
-              Manage all questions for this quiz.
-            </p>
-          </div>
-        </div> */}
+      {/* <CardContent className="flex-1 flex flex-col overflow-hidden p-6 gap-6">
+
         <Button onClick={openCreateDialog} className="w-fit">
           <Plus className="mr-2 h-4 w-4" /> Add Question
         </Button>
@@ -238,7 +232,8 @@ export const FormQuizQuestions = ({
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog> */}
+      CODE...
     </>
   );
 };

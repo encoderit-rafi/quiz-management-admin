@@ -4,6 +4,7 @@ import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Edit } from "lucide-react";
 import { CardQuiz } from "../../../-components";
+import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
 export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/view/")({
   component: ViewQuizPage,
@@ -11,25 +12,20 @@ export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/view/")({
 
 function ViewQuizPage() {
   const { id } = Route.useParams();
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleBack = () => {
-    router.history.back();
-  };
+  // const handleBack = () => {
+  //   router.history.back();
+  // };
 
   return (
     <>
       <CardHeader className="flex items-center gap-2">
-        <div className="flex-1 flex items-start gap-2 ">
-          <Button variant="outline" size={"icon"} onClick={handleBack}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div className="flex flex-col flex-1">
-            <CardTitle>Quiz Details</CardTitle>
-            <CardDescription>View quiz information and details</CardDescription>
-          </div>
-        </div>
-        <Button asChild variant="outline">
+        <AppCardHeaderWithBackButton
+          title="Quiz Details"
+          description="View quiz information and details"
+        />
+        <Button asChild>
           <Link to="/quizzes/$id/edit" params={{ id }}>
             <Edit className="mr-2 h-4 w-4" />
             Edit Quiz

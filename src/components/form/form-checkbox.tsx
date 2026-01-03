@@ -1,7 +1,13 @@
 import { Controller } from "react-hook-form";
 import type { FieldPath, FieldValues } from "react-hook-form";
 
-import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "../ui/field";
 import { Checkbox } from "../ui/checkbox";
 
 import type { TFormController } from "@/types";
@@ -38,7 +44,7 @@ export const FormCheckbox = <
           <Field
             data-invalid={invalid}
             orientation="horizontal"
-            className="items-center"
+            className="w-fit"
           >
             <Checkbox
               id={fieldName}
@@ -48,9 +54,12 @@ export const FormCheckbox = <
               aria-invalid={invalid}
               disabled={disabled}
             />
-            <div className="flex flex-col gap-1">
+            <FieldContent>
               {Boolean(label) && (
-                <FieldLabel htmlFor={fieldName} className="cursor-pointer">
+                <FieldLabel
+                  htmlFor={fieldName}
+                  className="cursor-pointer whitespace-nowrap"
+                >
                   {label}
                 </FieldLabel>
               )}
@@ -58,7 +67,7 @@ export const FormCheckbox = <
                 <FieldDescription>{description}</FieldDescription>
               )}
               {invalid && <FieldError errors={[error]} />}
-            </div>
+            </FieldContent>
           </Field>
         );
       }}
