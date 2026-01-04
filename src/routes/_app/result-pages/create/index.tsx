@@ -3,6 +3,7 @@ import { FormResultPage } from "../-components";
 import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
 export const Route = createFileRoute("/_app/result-pages/create/")({
   component: CreateResultPage,
@@ -11,29 +12,21 @@ export const Route = createFileRoute("/_app/result-pages/create/")({
 function CreateResultPage() {
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate({ to: "/result-pages" });
-  };
+  // const handleBack = () => {
+  //   navigate({ to: "/result-pages" });
+  // };
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex items-start gap-2">
-        <Button variant="outline" size="icon" onClick={handleBack}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div className="flex flex-col">
-          <CardTitle>Create Result Page</CardTitle>
-          <CardDescription>
-            Define the content shown to users based on their quiz score.
-          </CardDescription>
-        </div>
+        <AppCardHeaderWithBackButton
+          title="Create Result Page"
+          description="Define the content shown to users based on their quiz score."
+          // onBack={() => navigate({ to: "/result-pages" })}
+        />
       </CardHeader>
 
-      <FormResultPage
-        type="create"
-        onSuccess={handleBack}
-        onCancel={handleBack}
-      />
+      <FormResultPage type="create" onSuccess={() => {}} onCancel={() => {}} />
     </div>
   );
 }

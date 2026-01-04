@@ -127,6 +127,7 @@ export default function FormQuizQuestion({ type, id }: TProps) {
   return (
     <CardContent className="flex-1 flex flex-col overflow-hidden">
       <form
+        id="quiz-question-form"
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
@@ -175,9 +176,9 @@ export default function FormQuizQuestion({ type, id }: TProps) {
       </form>
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
         <Button
-          type="button"
+          type="submit"
           className="min-w-36"
-          onClick={handleSubmit(onSubmit)}
+          form="quiz-question-form"
           // loading={isPendingCreate || isPendingUpdate}
         >
           {type === "update" ? "Update" : "Create"}

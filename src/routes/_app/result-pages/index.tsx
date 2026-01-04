@@ -26,6 +26,8 @@ import { ResultPageSearchSchema } from "./-types";
 import { useState } from "react";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
+import AppButtonText from "@/components/base/app-button-text";
+import AppDeleteDialog from "@/components/base/app-delete-dialog";
 
 export const Route = createFileRoute("/_app/result-pages/")({
   component: RouteComponent,
@@ -116,7 +118,7 @@ export default function RouteComponent() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="text-destructive"
+                variant="destructive"
                 onClick={() => setDeleteId(page.id!)} // Just setting ID for now
               >
                 <Trash2 className="mr-2 h-4 w-4" /> Delete
@@ -130,29 +132,27 @@ export default function RouteComponent() {
 
   return (
     <div className="space-y-4 p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Result Pages</h1>
-        <div className="flex items-center gap-2">
-          <AppSearch
-            props={{
-              input: {
-                placeholder: "Search result pages...",
-                value: search.q,
-                onChange: (e) => {
-                  navigate({
-                    search: { ...search, q: e.target.value },
-                    replace: true,
-                  });
-                },
+      <div className="flex items-center justify-between gap-4">
+        <AppSearch
+          props={{
+            input: {
+              placeholder: "Search quiz...",
+              value: search.q,
+              onChange: (e) => {
+                navigate({
+                  search: { ...search, q: e.target.value },
+                  replace: true,
+                });
               },
-            }}
-          />
-          <Button asChild>
-            <Link to="/result-pages/create">
-              <Plus className="mr-2 h-4 w-4" /> Add Result Page
-            </Link>
-          </Button>
-        </div>
+            },
+          }}
+        />
+        <Button asChild>
+          <Link to="/result-pages/create" className="flex items-center">
+            <Plus />
+            <AppButtonText>Add Result Page</AppButtonText>
+          </Link>
+        </Button>
       </div>
 
       <AppTable
@@ -175,29 +175,13 @@ export default function RouteComponent() {
         }
       />
 
-      <AlertDialog
+      <AppDeleteDialog
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              result page.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={handleDelete}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        item_name="Result Page"
+        loading={false}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

@@ -27,7 +27,7 @@ function ViewQuizPage() {
         />
         <Button asChild>
           <Link to="/quizzes/$id/edit" params={{ id }}>
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit />
             Edit Quiz
           </Link>
         </Button>
