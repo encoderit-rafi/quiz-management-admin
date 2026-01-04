@@ -1,7 +1,7 @@
 import { Controller } from "react-hook-form";
 import type { FieldPath, FieldValues } from "react-hook-form";
 
-import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
+import { Field } from "../ui/field";
 import { Switch } from "../ui/switch";
 
 import type { TFormController } from "@/types";
@@ -23,8 +23,6 @@ export const FormSwitch = <
 >({
   name,
   control,
-  label = "",
-  description = "",
   disabled = false,
 }: TFormSwitchProps<TFieldValues, TName, TTransformedValues>) => {
   return (
@@ -33,18 +31,13 @@ export const FormSwitch = <
       name={name}
       render={({ field, fieldState }) => {
         const { value, onChange, name: fieldName } = field;
-        const { invalid, error } = fieldState;
+        const { invalid } = fieldState;
         return (
           <Field
             data-invalid={invalid}
             orientation="horizontal"
             className="w-fit"
           >
-            {/* {Boolean(label) && (
-              <FieldLabel htmlFor={fieldName} className="cursor-pointer">
-                {label}
-              </FieldLabel>
-            )} */}
             <Switch
               id={fieldName}
               checked={value}
@@ -52,10 +45,6 @@ export const FormSwitch = <
               disabled={disabled}
               aria-invalid={invalid}
             />
-            {/* {Boolean(description) && !invalid && (
-              <FieldDescription>{description}</FieldDescription>
-            )}
-            {invalid && <FieldError errors={[error]} />} */}
           </Field>
         );
       }}

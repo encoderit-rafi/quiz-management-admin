@@ -1,8 +1,7 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-// import { CardQuiz } from "../../-components";
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Edit } from "lucide-react";
+import { Edit } from "lucide-react";
 import { CardQuiz } from "../../../-components";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
@@ -12,11 +11,6 @@ export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/view/")({
 
 function ViewQuizPage() {
   const { id } = Route.useParams();
-  // const router = useRouter();
-
-  // const handleBack = () => {
-  //   router.history.back();
-  // };
 
   return (
     <>
