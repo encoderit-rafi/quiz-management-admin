@@ -43,30 +43,30 @@ const DEMO_QUESTIONS = [
     id: 1,
     name: "What is the capital of France?",
     options: [
-      { label: "London", points: 0 },
-      { label: "Berlin", points: 0 },
-      { label: "Paris", points: 10 },
-      { label: "Madrid", points: 0 },
+      { id: "opt-1-1", label: "London", points: 0 },
+      { id: "opt-1-2", label: "Berlin", points: 0 },
+      { id: "opt-1-3", label: "Paris", points: 10 },
+      { id: "opt-1-4", label: "Madrid", points: 0 },
     ],
   },
   {
     id: 2,
     name: "Which planet is known as the Red Planet?",
     options: [
-      { label: "Mars", points: 10 },
-      { label: "Venus", points: 0 },
-      { label: "Jupiter", points: 0 },
-      { label: "Saturn", points: 0 },
+      { id: "opt-2-1", label: "Mars", points: 10 },
+      { id: "opt-2-2", label: "Venus", points: 0 },
+      { id: "opt-2-3", label: "Jupiter", points: 0 },
+      { id: "opt-2-4", label: "Saturn", points: 0 },
     ],
   },
   {
     id: 3,
     name: "Who wrote 'Romeo and Juliet'?",
     options: [
-      { label: "Charles Dickens", points: 0 },
-      { label: "William Shakespeare", points: 10 },
-      { label: "Jane Austen", points: 0 },
-      { label: "Mark Twain", points: 0 },
+      { id: "opt-3-1", label: "Charles Dickens", points: 0 },
+      { id: "opt-3-2", label: "William Shakespeare", points: 10 },
+      { id: "opt-3-3", label: "Jane Austen", points: 0 },
+      { id: "opt-3-4", label: "Mark Twain", points: 0 },
     ],
   },
 ];
@@ -113,6 +113,45 @@ function QuizQuestionsPage() {
   // const handleCancel = () => {
   //   navigate({ to: "/", search: { page: 1, per_page: 15 } });
   // };
+
+  function SortableOption({ option }: { option: any }) {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id: option.id });
+
+    const style = {
+      transition,
+      transform: CSS.Transform.toString(transform),
+      opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex items-center gap-2 p-2 rounded-md bg-muted/30"
+      >
+        <button
+          type="button"
+          className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-muted rounded"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="h-3 w-3 text-muted-foreground" />
+        </button>
+        <span className="text-sm flex-1">{option.label}</span>
+        <Badge variant="outline" className="font-mono text-xs">
+          {option.points} pts
+        </Badge>
+      </div>
+    );
+  }
+
   function Question({ question, index }: { question: any; index: number }) {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: question.id });
@@ -120,6 +159,35 @@ function QuizQuestionsPage() {
       transition,
       transform: CSS.Transform.toString(transform),
     };
+
+    const handleOptionDragEnd = (event: any) => {
+      const { active, over } = event;
+      if (!over || active.id === over.id) return;
+
+      setQuestions((currentQuestions) => {
+        const updatedQuestions = [...currentQuestions];
+        const questionToUpdate = updatedQuestions.find(
+          (q) => q.id === question.id
+        );
+
+        if (questionToUpdate) {
+          const oldIndex = questionToUpdate.options.findIndex(
+            (opt: any) => opt.id === active.id
+          );
+          const newIndex = questionToUpdate.options.findIndex(
+            (opt: any) => opt.id === over.id
+          );
+
+          const newOptions = [...questionToUpdate.options];
+          const [movedOption] = newOptions.splice(oldIndex, 1);
+          newOptions.splice(newIndex, 0, movedOption);
+          questionToUpdate.options = newOptions;
+        }
+
+        return updatedQuestions;
+      });
+    };
+
     return (
       <AccordionItem
         ref={setNodeRef}
@@ -169,7 +237,6 @@ function QuizQuestionsPage() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
-                  // onClick={() => setDeletingIndex(index)}
                   onClick={() => {
                     setDeleteForm({
                       type: "delete",
@@ -189,17 +256,19 @@ function QuizQuestionsPage() {
         <AccordionContent className="pk-4 pb-4">
           <div className="pl-8 space-y-2">
             <div className="grid gap-2">
-              {question.options.map((option, optIdx) => (
-                <div
-                  key={optIdx}
-                  className="flex items-center justify-between p-2 rounded-md bg-muted/30"
+              <DndContext
+                onDragEnd={handleOptionDragEnd}
+                collisionDetection={closestCorners}
+              >
+                <SortableContext
+                  items={question.options}
+                  strategy={verticalListSortingStrategy}
                 >
-                  <span className="text-sm">{option.label}</span>
-                  <Badge variant="outline" className="font-mono text-xs">
-                    {option.points} pts
-                  </Badge>
-                </div>
-              ))}
+                  {question.options.map((option: any) => (
+                    <SortableOption key={option.id} option={option} />
+                  ))}
+                </SortableContext>
+              </DndContext>
             </div>
           </div>
         </AccordionContent>
