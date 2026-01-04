@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useGetResultPage } from "../-apis"; // Fixed import
 import type { TResultPageSchema } from "../-types"; // Added type import
@@ -39,9 +39,8 @@ const DEMO_RESULT_PAGES: TResultPageSchema[] = [
 
 function ViewResultPage() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
 
-  const { data, isLoading } = useQuery({
+  const { isLoading } = useQuery({
     ...useGetResultPage(id),
     select: (data: any) => {
       if (data) return data as TResultPageSchema;
@@ -50,10 +49,6 @@ function ViewResultPage() {
     },
   });
 
-  // const handleBack = () => {
-  //   navigate({ to: "/result-pages" });
-  // };
-
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -61,17 +56,6 @@ function ViewResultPage() {
       </div>
     );
   }
-
-  // if (!resultPage) {
-  //   return (
-  //     <div className="flex h-full flex-col items-center justify-center gap-4">
-  //       <p className="text-muted-foreground">Result page not found.</p>
-  //       <Button variant="outline" onClick={handleBack}>
-  //         Go Back
-  //       </Button>
-  //     </div>
-  //   );
-  // }
 
   return (
     <>

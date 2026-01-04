@@ -1,10 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { FormResultPage } from "../-components";
 import { useGetResultPage } from "../-apis";
-import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { CardHeader } from "@/components/ui/card";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
 export const Route = createFileRoute("/_app/result-pages/edit/$id")({
@@ -13,21 +11,8 @@ export const Route = createFileRoute("/_app/result-pages/edit/$id")({
 
 function EditResultPage() {
   const { id } = Route.useParams();
-  const navigate = useNavigate();
 
-  const { data: resultPage, isLoading } = useQuery(useGetResultPage(id));
-
-  // const handleBack = () => {
-  //   navigate({ to: "/result-pages" });
-  // };
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex h-full items-center justify-center">
-  //       <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-  //     </div>
-  //   );
-  // }
+  const { data: resultPage } = useQuery(useGetResultPage(id));
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
@@ -35,7 +20,6 @@ function EditResultPage() {
         <AppCardHeaderWithBackButton
           title="Edit Result Page"
           description="Modify the content and score range for this result page."
-          // onBack={() => navigate({ to: "/result-pages" })}
         />
       </CardHeader>
 

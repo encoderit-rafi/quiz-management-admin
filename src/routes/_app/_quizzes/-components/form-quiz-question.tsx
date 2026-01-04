@@ -175,12 +175,7 @@ export default function FormQuizQuestion({ type, id }: TProps) {
         </div>
       </form>
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
-        <Button
-          type="submit"
-          className="min-w-36"
-          form="quiz-question-form"
-          // loading={isPendingCreate || isPendingUpdate}
-        >
+        <Button type="submit" className="min-w-36" form="quiz-question-form">
           {type === "update" ? "Update" : "Create"}
         </Button>
       </CardAction>

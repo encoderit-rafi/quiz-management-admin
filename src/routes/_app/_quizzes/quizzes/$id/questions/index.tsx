@@ -2,10 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import {
-  Eye,
   GripVertical,
   MoreHorizontalIcon,
-  Pencil,
   PenSquare,
   Plus,
   Trash2,
@@ -92,27 +90,6 @@ function QuizQuestionsPage() {
       return arrayMove(questions, oldPosition, newPosition);
     });
   };
-  // const { id } = Route.useParams();
-  // const navigate = useNavigate();
-
-  // const { data: questions, isLoading: isFetching } = useQuery(
-  //   useGetQuizQuestions(id)
-  // );
-
-  // const { mutate: updateQuestions, isPending: isUpdating } =
-  //   useUpdateQuizQuestions(id);
-
-  // const handleSubmit = (data: any) => {
-  //   updateQuestions(data, {
-  //     onSuccess: () => {
-  //       navigate({ to: "/", search: { page: 1, per_page: 15 } });
-  //     },
-  //   });
-  // };
-
-  // const handleCancel = () => {
-  //   navigate({ to: "/", search: { page: 1, per_page: 15 } });
-  // };
 
   function SortableOption({ option }: { option: any }) {
     const {
