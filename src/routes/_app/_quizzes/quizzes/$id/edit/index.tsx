@@ -1,8 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { CardHeader } from "@/components/ui/card";
 import { FormQuiz } from "../../../-components";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 

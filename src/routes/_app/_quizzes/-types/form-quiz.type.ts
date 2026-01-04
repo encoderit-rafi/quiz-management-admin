@@ -15,7 +15,7 @@ import { z } from "zod";
 //     .min(1, { message: "At least one option is required" }),
 // });
 
-export const QuizFormSchema = z.object({
+export const FormQuizSchema = z.object({
   id: z.union([z.string(), z.number()]).optional(),
   title: z.string().min(1, { message: "Title is required" }),
   quiz_name: z.string().min(1, { message: "Quiz name is required" }),
@@ -38,7 +38,7 @@ export const QuizFormSchema = z.object({
   is_active: z.boolean(),
 });
 
-export type TQuizFormSchema = z.infer<typeof QuizFormSchema>;
+export type TFormQuizSchema = z.infer<typeof FormQuizSchema>;
 
 // export const QuizQuestionsSchema = z.object({
 //   questions: z.array(QuestionSchema),

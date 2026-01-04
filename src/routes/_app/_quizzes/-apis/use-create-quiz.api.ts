@@ -2,7 +2,7 @@ import { api } from "@/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
-import type { TQuizFormSchema } from "../-types";
+import type { TFormQuizSchema } from "../-types";
 
 const toFormData = (data: Record<string, any>): FormData => {
   const formData = new FormData();
@@ -32,7 +32,7 @@ export const useCreateQuiz = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["create-quiz"],
-    mutationFn: (body: TQuizFormSchema | FormData) => {
+    mutationFn: (body: TFormQuizSchema | FormData) => {
       // If body already is FormData, send directly
       if (body instanceof FormData) {
         return api.post("/quizzes", body, {

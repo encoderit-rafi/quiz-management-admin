@@ -1,23 +1,16 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import {
-  ArrowLeft,
+  Eye,
   GripVertical,
   MoreHorizontalIcon,
   Pencil,
+  PenSquare,
   Plus,
   Trash2,
 } from "lucide-react";
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { useGetQuizQuestions, useUpdateQuizQuestions } from "../../../-apis";
-import { FormQuizQuestion } from "../../../-components";
+import { CardHeader, CardContent } from "@/components/ui/card";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import AppButtonText from "@/components/base/app-button-text";
 import {
@@ -42,6 +35,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
+import AppDeleteDialog from "@/components/base/app-delete-dialog";
+import { FORM_DATA } from "@/data";
 
 const DEMO_QUESTIONS = [
   {
@@ -79,90 +74,10 @@ const DEMO_QUESTIONS = [
 export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
 });
-function Question({ question, index }: { question: any; index: number }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: question.id });
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  };
-  return (
-    <AccordionItem
-      ref={setNodeRef}
-      style={style}
-      key={index}
-      value={`item-${index}`}
-      className="px-4 border-b last:border-0"
-    >
-      <div className="flex items-center gap-2 py-4">
-        {/* Drag Handle */}
-        <button
-          className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-muted rounded"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
-        </button>
 
-        <AccordionTrigger className="hover:no-underline py-0 flex-1">
-          <span className="flex items-center gap-2 text-left">
-            <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
-              {index + 1}
-            </span>
-            <span className="font-medium line-clamp-1">{question.name}</span>
-          </span>
-        </AccordionTrigger>
-
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="mr-2">
-            {question.options.length} Options
-          </Badge>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-              // onClick={() => openEditDialog(index)}
-              >
-                <Pencil className="mr-2 h-4 w-4" /> Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-destructive"
-                // onClick={() => setDeletingIndex(index)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-      <AccordionContent className="pk-4 pb-4">
-        <div className="pl-8 space-y-2">
-          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Options
-          </div>
-          <div className="grid gap-2">
-            {question.options.map((option, optIdx) => (
-              <div
-                key={optIdx}
-                className="flex items-center justify-between p-2 rounded-md bg-muted/30"
-              >
-                <span className="text-sm">{option.label}</span>
-                <Badge variant="outline" className="font-mono text-xs">
-                  {option.points} pts
-                </Badge>
-              </div>
-            ))}
-          </div>
-        </div>
-      </AccordionContent>
-    </AccordionItem>
-  );
-}
 function QuizQuestionsPage() {
+  const [deleteForm, setDeleteForm] = useState(FORM_DATA);
+
   const [questions, setQuestions] = useState(DEMO_QUESTIONS);
   const getQuestionPosition = (id: number) => {
     return questions.findIndex((q: any) => q.id === id);
@@ -198,7 +113,99 @@ function QuizQuestionsPage() {
   // const handleCancel = () => {
   //   navigate({ to: "/", search: { page: 1, per_page: 15 } });
   // };
+  function Question({ question, index }: { question: any; index: number }) {
+    const { attributes, listeners, setNodeRef, transform, transition } =
+      useSortable({ id: question.id });
+    const style = {
+      transition,
+      transform: CSS.Transform.toString(transform),
+    };
+    return (
+      <AccordionItem
+        ref={setNodeRef}
+        style={style}
+        key={index}
+        value={`item-${index}`}
+        className="px-4 border-b last:border-0"
+      >
+        <div className="flex items-center gap-2 py-4">
+          {/* Drag Handle */}
+          <button
+            className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-muted rounded"
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
+          </button>
 
+          <AccordionTrigger className="hover:no-underline py-0 flex-1">
+            <span className="flex items-center gap-2 text-left">
+              <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                {index + 1}
+              </span>
+              <span className="font-medium line-clamp-1">{question.name}</span>
+            </span>
+          </AccordionTrigger>
+
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="mr-2">
+              {question.options.length} Options
+            </Badge>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreHorizontalIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/quizzes/$id/questions/$questionID/edit"
+                    params={{ id: "1", questionID: "1" }}
+                  >
+                    <PenSquare />
+                    Edit
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  variant="destructive"
+                  // onClick={() => setDeletingIndex(index)}
+                  onClick={() => {
+                    setDeleteForm({
+                      type: "delete",
+                      title: "Delete Question",
+                      description:
+                        "Are you sure you want to delete this question?",
+                      id: question.id,
+                    });
+                  }}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+        <AccordionContent className="pk-4 pb-4">
+          <div className="pl-8 space-y-2">
+            <div className="grid gap-2">
+              {question.options.map((option, optIdx) => (
+                <div
+                  key={optIdx}
+                  className="flex items-center justify-between p-2 rounded-md bg-muted/30"
+                >
+                  <span className="text-sm">{option.label}</span>
+                  <Badge variant="outline" className="font-mono text-xs">
+                    {option.points} pts
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    );
+  }
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex items-center justify-between gap-4">
@@ -206,9 +213,11 @@ function QuizQuestionsPage() {
           title="Quiz Questions"
           description="Manage questions, options, and points for this quiz."
         />
-        <Button className="flex items-center">
-          <Plus />
-          <AppButtonText>Add Question</AppButtonText>
+        <Button asChild>
+          <Link to="/quizzes/$id/questions/create" params={{ id: "1" }}>
+            <Plus />
+            <AppButtonText>Add Question</AppButtonText>
+          </Link>
         </Button>
       </CardHeader>
 
@@ -223,81 +232,18 @@ function QuizQuestionsPage() {
               strategy={verticalListSortingStrategy}
             >
               {questions.map((question, index) => (
-                // <AccordionItem
-                //   key={index}
-                //   value={`item-${index}`}
-                //   className="px-4 border-b last:border-0"
-                // >
-                //   <div className="flex items-center gap-4 py-4">
-                //     <AccordionTrigger className="hover:no-underline py-0 flex-1">
-                //       <span className="flex items-center gap-2 text-left">
-                //         <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
-                //           {index + 1}
-                //         </span>
-                //         <span className="font-medium line-clamp-1">
-                //           {question.name}
-                //         </span>
-                //       </span>
-                //     </AccordionTrigger>
-                //     <div className="flex items-center gap-2">
-                //       <Badge variant="secondary" className="mr-2">
-                //         {question.options.length} Options
-                //       </Badge>
-                //       <DropdownMenu>
-                //         <DropdownMenuTrigger asChild>
-                //           <Button
-                //             variant="ghost"
-                //             size="icon"
-                //             className="h-8 w-8"
-                //           >
-                //             <MoreHorizontalIcon className="h-4 w-4" />
-                //           </Button>
-                //         </DropdownMenuTrigger>
-                //         <DropdownMenuContent align="end">
-                //           <DropdownMenuItem
-                //           // onClick={() => openEditDialog(index)}
-                //           >
-                //             <Pencil className="mr-2 h-4 w-4" /> Edit
-                //           </DropdownMenuItem>
-                //           <DropdownMenuItem
-                //             className="text-destructive"
-                //             // onClick={() => setDeletingIndex(index)}
-                //           >
-                //             <Trash2 className="mr-2 h-4 w-4" /> Delete
-                //           </DropdownMenuItem>
-                //         </DropdownMenuContent>
-                //       </DropdownMenu>
-                //     </div>
-                //   </div>
-                //   <AccordionContent className="pk-4 pb-4">
-                //     <div className="pl-8 space-y-2">
-                //       <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                //         Options
-                //       </div>
-                //       <div className="grid gap-2">
-                //         {question.options.map((option, optIdx) => (
-                //           <div
-                //             key={optIdx}
-                //             className="flex items-center justify-between p-2 rounded-md bg-muted/30"
-                //           >
-                //             <span className="text-sm">{option.label}</span>
-                //             <Badge
-                //               variant="outline"
-                //               className="font-mono text-xs"
-                //             >
-                //               {option.points} pts
-                //             </Badge>
-                //           </div>
-                //         ))}
-                //       </div>
-                //     </div>
-                //   </AccordionContent>
-                // </AccordionItem>
                 <Question question={question} index={index} />
               ))}
             </SortableContext>
           </DndContext>
         </Accordion>
+        <AppDeleteDialog
+          open={deleteForm.type === "delete"}
+          onOpenChange={() => setDeleteForm(FORM_DATA)}
+          onConfirm={() => {}}
+          item_name={deleteForm.title}
+          loading={false}
+        />
       </CardContent>
     </div>
   );

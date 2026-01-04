@@ -1,8 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { FormQuiz } from "../../-components";
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { CardHeader } from "@/components/ui/card";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
 export const Route = createFileRoute("/_app/_quizzes/quizzes/create/")({
@@ -23,15 +21,6 @@ function CreateQuizPage() {
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex items-start gap-2">
-        {/* <Button variant="outline" size={"icon"} onClick={handleCancel}>
-          <ArrowLeft />
-        </Button>
-        <div className="flex flex-col">
-          <CardTitle>Create Quiz</CardTitle>
-          <CardDescription>
-            Create a new quiz to start adding questions.
-          </CardDescription>
-        </div> */}
         <AppCardHeaderWithBackButton
           title="Create Quiz"
           description="Create a new quiz to start adding questions."

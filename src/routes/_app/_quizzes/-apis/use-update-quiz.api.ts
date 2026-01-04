@@ -4,13 +4,13 @@ import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import { serialize } from "object-to-formdata";
 import omitEmpty from "omit-empty";
-import type { TQuizFormSchema } from "../-types";
+import type { TFormQuizSchema } from "../-types";
 
 export const useUpdateQuiz = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-quiz"],
-    mutationFn: (body: TQuizFormSchema | FormData) => {
+    mutationFn: (body: TFormQuizSchema | FormData) => {
       // If body already is FormData, send directly
       if (body instanceof FormData) {
         const id = body.get("id");

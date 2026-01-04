@@ -10,15 +10,6 @@ import {
   FileQuestionMark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
 import { FORM_DATA } from "@/data/form";
 import type { TQuizSchema } from "./-types";
 import { SearchSchema } from "./-types";
@@ -35,6 +26,7 @@ import AppPagination from "@/components/base/app-pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useGetAllQuizzes } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
+import AppDeleteDialog from "@/components/base/app-delete-dialog";
 
 export const Route = createFileRoute("/_app/_quizzes/")({
   component: RouteComponent,
@@ -156,7 +148,7 @@ export default function RouteComponent() {
                     ...FORM_DATA,
                     type: "delete",
                     title: quiz.title,
-                    id: quiz.id,
+                    id: quiz.id || "",
                   })
                 }
               >
@@ -215,36 +207,13 @@ export default function RouteComponent() {
         }
       />
       {/* Delete Dialog */}
-      <AlertDialog
+      <AppDeleteDialog
         open={deleteForm.type === "delete"}
         onOpenChange={() => setDeleteForm(FORM_DATA)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to{" "}
-              <span className="font-semibold text-destructive">delete </span>{" "}
-              <span className="font-semibold">{deleteForm.title}</span>? This
-              action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="capitalize min-w-24">
-              Cancel
-            </AlertDialogCancel>
-            <Button
-              variant="destructive"
-              className="flex items-center gap-2 min-w-24 capitalize"
-              onClick={() => {
-                setDeleteForm(FORM_DATA);
-              }}
-            >
-              <Trash2 /> Delete
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        onConfirm={() => {}}
+        item_name={deleteForm.title}
+        loading={false}
+      />
     </div>
   );
 }
