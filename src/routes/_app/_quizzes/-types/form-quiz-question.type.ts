@@ -1,3 +1,4 @@
+import { TFileSchema } from "@/types";
 import { z } from "zod";
 
 export const OptionSchema = z.object({
@@ -7,6 +8,7 @@ export const OptionSchema = z.object({
 
 export const FormQuizQuestionSchema = z.object({
   name: z.string().min(1, { message: "Question name is required" }),
+  question_image: TFileSchema.optional().nullable(),
   options: z
     .array(OptionSchema)
     .min(1, { message: "At least one option is required" }),

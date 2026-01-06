@@ -1,6 +1,5 @@
+import { TFileSchema } from "@/types";
 import { z } from "zod";
-
-const FileSchema = typeof File !== "undefined" ? z.instanceof(File) : z.any();
 
 // Quiz Schema
 export const QuizSchema = z.object({
@@ -11,8 +10,8 @@ export const QuizSchema = z.object({
   cta_text: z.string().optional(),
   footer_text: z.string().optional(),
   description: z.string().nullable().optional(),
-  logo: z.union([FileSchema, z.string(), z.null()]).optional(),
-  background_image: z.union([FileSchema, z.string(), z.null()]).optional(),
+  logo: TFileSchema.nullable().optional(),
+  background_image: TFileSchema.nullable().optional(),
   primary_color: z.string().optional(),
   secondary_color: z.string().optional(),
   is_active: z.boolean().optional(),

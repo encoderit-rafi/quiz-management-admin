@@ -5,7 +5,7 @@ import {
   FormQuizQuestionSchema,
   type TFormQuizQuestionSchema,
 } from "../-types";
-import { FormInput } from "@/components/form";
+import { FormImageUpload, FormInput } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { TFormType } from "@/types";
 import { CardAction, CardContent } from "@/components/ui/card";
@@ -91,6 +91,7 @@ export default function FormQuizQuestion({ type, id }: TProps) {
     resolver: zodResolver(FormQuizQuestionSchema),
     defaultValues: {
       name: "",
+      question_image: null,
       options: [{ label: "", points: 0 }],
     },
   });
@@ -131,6 +132,15 @@ export default function FormQuizQuestion({ type, id }: TProps) {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormImageUpload
+            name="question_image"
+            control={control}
+            label="Question Image"
+            description="Upload or drag a question image"
+          />
+        </div>
+
         <FormInput
           name="name"
           control={control}

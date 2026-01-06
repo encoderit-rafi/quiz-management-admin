@@ -182,15 +182,18 @@ function QuizQuestionsPage() {
           >
             <GripVertical className="h-4 w-4 text-muted-foreground" />
           </button>
-
-          <AccordionTrigger className="hover:no-underline py-0 flex-1">
-            <span className="flex items-center gap-2 text-left">
-              <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
-                {index + 1}
+          <div className="flex-1">
+            <AccordionTrigger className="hover:no-underline py-0">
+              <span className="flex items-center gap-2 text-left">
+                <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                  {index + 1}
+                </span>
+                <span className="font-medium line-clamp-1">
+                  {question.name}
+                </span>
               </span>
-              <span className="font-medium line-clamp-1">{question.name}</span>
-            </span>
-          </AccordionTrigger>
+            </AccordionTrigger>
+          </div>
 
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="mr-2">

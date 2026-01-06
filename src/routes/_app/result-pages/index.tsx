@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Plus, Pencil, Trash2, MoreHorizontal, Eye } from "lucide-react";
+import { Plus, Trash2, MoreHorizontal, Eye, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -97,7 +97,7 @@ export default function RouteComponent() {
                   to="/result-pages/view/$id"
                   params={{ id: String(page.id) }}
                 >
-                  <Eye className="mr-2 h-4 w-4" /> View
+                  <Eye /> View
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -105,14 +105,14 @@ export default function RouteComponent() {
                   to="/result-pages/edit/$id"
                   params={{ id: String(page.id) }}
                 >
-                  <Pencil className="mr-2 h-4 w-4" /> Edit
+                  <PenSquare /> Edit
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => setDeleteId(page.id!)} // Just setting ID for now
               >
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                <Trash2 /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
