@@ -1,13 +1,14 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Calendar, CheckCircle, Mail } from "lucide-react";
+import { CheckCircle, FileQuestion, Trophy } from "lucide-react";
 import type { TLeadResultSchema } from "../-types";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/utils/cn";
 
 interface LeadCardProps {
   data: TLeadResultSchema;
@@ -15,65 +16,63 @@ interface LeadCardProps {
 
 export const LeadCard = ({ data }: LeadCardProps) => {
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="bg-muted/40 pb-4">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1.5">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <span className="line-clamp-1">{data.quiz_title}</span>
-            </CardTitle>
-            <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-3.5 w-3.5" />
-                <span>{data.submission_date}</span>
-              </div>
-              {data.user_email && (
-                <div className="flex items-center gap-2">
-                  <Mail className="h-3.5 w-3.5" />
-                  <span>{data.user_email}</span>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col items-end gap-2">
-            <Badge variant="default" className="text-sm px-3 py-1">
-              Score: {data.total_score}
-            </Badge>
-            <Badge variant="outline" className="font-mono text-xs">
-              Result: {data.result_page.name}
-            </Badge>
-          </div>
+    <Card className="group overflow-hidden transition-all hover:shadow-md border-border bg-card">
+      <div className="p-6">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <span className="text-sm font-medium leading-none tracking-tight text-muted-foreground">
+            {data.quiz_title}
+          </span>
+          <FileQuestion className="h-4 w-4 text-muted-foreground" />
         </div>
-      </CardHeader>
-      <CardContent className="p-0">
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="answers" className="border-b-0">
-            <AccordionTrigger className="px-6 py-3 hover:bg-muted/50 transition-colors">
-              <span className="text-sm font-medium">View Answers</span>
-            </AccordionTrigger>
-            <AccordionContent className="px-6 pb-6 pt-2">
-              <div className="space-y-4">
-                {data.answers.map((answer, index) => (
-                  <div key={index} className="space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      Q{index + 1}: {answer.question}
+        <div className="flex items-baseline gap-2 mt-1">
+          <div className="text-2xl font-bold tabular-nums">
+            {data.total_score}
+          </div>
+          <Trophy className="h-4 w-4 text-primary shrink-0" />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">
+          Result:{" "}
+          <span className="text-foreground font-medium">
+            {data.result_page.name}
+          </span>
+        </p>
+      </div>
+
+      <Accordion type="single" collapsible className="w-full border-t">
+        <AccordionItem value="answers" className="border-none">
+          <AccordionTrigger className="flex h-10 w-full items-center justify-between px-6 py-2 transition-all hover:bg-muted/50 hover:no-underline text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Response Details
+          </AccordionTrigger>
+          <AccordionContent className="bg-muted/10 px-6 pb-4 pt-2">
+            <div className="space-y-4">
+              {data.answers.map((answer, index) => (
+                <div key={index} className="space-y-1.5">
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                      {index + 1}
+                    </span>
+                    <p className="text-sm font-medium leading-tight text-foreground/90">
+                      {answer.question}
                     </p>
-                    <div className="flex items-center justify-between mt-1.5 bg-muted/50 p-2 rounded text-sm">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-3.5 w-3.5 text-primary" />
-                        <span>{answer.answer}</span>
-                      </div>
-                      <Badge variant="secondary" className="text-[10px] h-5">
-                        {answer.points} pts
-                      </Badge>
-                    </div>
                   </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </CardContent>
+                  <div className="flex items-center justify-between pl-6">
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <CheckCircle className="size-3.5 text-primary" />
+                      <span>{answer.answer}</span>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className="bg-muted text-[10px] font-bold h-5 px-1.5"
+                    >
+                      +{answer.points}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </Card>
   );
 };

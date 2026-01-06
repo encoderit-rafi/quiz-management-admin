@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import HardBreak from "@tiptap/extension-hard-break";
 import { TiptapContext } from "./context";
 import { cn } from "@/utils";
 
@@ -20,7 +21,7 @@ export const Tiptap = ({
   className,
 }: TiptapProps) => {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, HardBreak],
     content: value || defaultValue,
     immediatelyRender: false,
     editorProps: {

@@ -39,6 +39,7 @@
     "@tanstack/react-router": "^1.120.20",
     "@tanstack/react-router-devtools": "^1.120.18",
     "@tanstack/react-table": "^8.21.3",
+    "@tiptap/extension-hard-break": "^3.15.0",
     "@tiptap/pm": "^3.14.0",
     "@tiptap/react": "^3.14.0",
     "@tiptap/starter-kit": "^3.14.0",

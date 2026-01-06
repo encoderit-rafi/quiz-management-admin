@@ -14,6 +14,7 @@ import {
   Heading3,
   Undo,
   Redo,
+  HardBreak,
 } from "../tiptap";
 
 type TFormTiptapProps<
@@ -71,6 +72,7 @@ export const FormTiptap = <
                 <div className="flex items-center gap-1">
                   <Undo />
                   <Redo />
+                  <HardBreak />
                 </div>
               </Toolbar>
               <Editor />
