@@ -1,6 +1,7 @@
 import { SidebarTrigger } from "../ui/sidebar";
 import AppThemeToggle from "./app-theme-toggle";
 import { useActiveRoute } from "@/store";
+import NavUser from "./nav-user";
 
 export default function Navbar() {
   const { activeRoute } = useActiveRoute();
@@ -16,7 +17,7 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-2">
         <AppThemeToggle />
-        {/* <NavUser /> */}
+        <NavUser />
       </div>
     </header>
   );
