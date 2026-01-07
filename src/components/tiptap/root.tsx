@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import HardBreak from "@tiptap/extension-hard-break";
-import ImageExtension from "@tiptap/extension-image";
+import ResizableImageExtension from "tiptap-extension-resize-image";
 import {
   Table,
   TableRow,
@@ -33,7 +33,10 @@ export const Tiptap = ({
     extensions: [
       StarterKit,
       HardBreak,
-      ImageExtension,
+      ResizableImageExtension.configure({
+        inline: true,
+        allowBase64: true,
+      }),
       Table.configure({
         resizable: true,
       }),
