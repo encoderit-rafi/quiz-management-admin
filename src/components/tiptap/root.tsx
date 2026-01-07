@@ -43,6 +43,9 @@ export const Tiptap = ({
       TaskList,
       TaskItem.configure({
         nested: true,
+        HTMLAttributes: {
+          class: "flex items-center gap-2",
+        },
       }),
     ],
     content: value || defaultValue,
@@ -50,7 +53,7 @@ export const Tiptap = ({
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm dark:prose-invert max-w-none p-3 focus:outline-none",
+          "prose prose-sm dark:prose-invert max-w-none p-3 focus:outline-none [&_ul[data-type='taskList']]:list-none [&_li[data-type='taskItem']]:flex [&_li[data-type='taskItem']]:items-start [&_li[data-type='taskItem']]:gap-2",
       },
     },
     onUpdate: ({ editor }) => {
