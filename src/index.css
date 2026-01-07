@@ -235,4 +235,25 @@
   .ProseMirror table th {
     border: 2px solid var(--accent) !important;
   }
+
+  /* Tiptap Columns Styles */
+  .ProseMirror .column-block {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+  }
+
+  .ProseMirror .column {
+    border: 1px dashed transparent;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .ProseMirror-focused .column {
+    border-color: hsl(var(--border));
+  }
 }

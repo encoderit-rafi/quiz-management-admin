@@ -13,6 +13,7 @@ import {
   Heading2,
   Heading3,
   BulletList,
+  Columns,
   Link,
   OrderedList,
   HorizontalRule,
@@ -87,6 +88,7 @@ export const FormTiptap = <
                 <div className="flex items-center gap-1 pr-2 mr-1">
                   <HorizontalRule />
                   <Image />
+                  <Columns />
                   <Table />
                 </div>
 
