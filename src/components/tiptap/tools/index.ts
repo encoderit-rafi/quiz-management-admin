@@ -13,6 +13,7 @@ export * from "./code-block";
 export * from "./horizontal-rule";
 export * from "./image";
 export * from "./table";
+export * from "./table-controls";
 export * from "./task-list";
 export * from "./undo";
 export * from "./redo";
