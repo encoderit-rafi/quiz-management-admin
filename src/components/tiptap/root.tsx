@@ -2,6 +2,15 @@ import { useEffect } from "react";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import HardBreak from "@tiptap/extension-hard-break";
+import ImageExtension from "@tiptap/extension-image";
+import {
+  Table,
+  TableRow,
+  TableCell,
+  TableHeader,
+} from "@tiptap/extension-table";
+import TaskList from "@tiptap/extension-task-list";
+import TaskItem from "@tiptap/extension-task-item";
 import { TiptapContext } from "./context";
 import { cn } from "@/utils";
 
@@ -21,7 +30,21 @@ export const Tiptap = ({
   className,
 }: TiptapProps) => {
   const editor = useEditor({
-    extensions: [StarterKit, HardBreak],
+    extensions: [
+      StarterKit,
+      HardBreak,
+      ImageExtension,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+    ],
     content: value || defaultValue,
     immediatelyRender: false,
     editorProps: {

@@ -12,6 +12,12 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  BulletList,
+  OrderedList,
+  HorizontalRule,
+  Image,
+  Table,
+  TaskList,
   Undo,
   Redo,
   HardBreak,
@@ -61,6 +67,7 @@ export const FormTiptap = <
                   <Bold />
                   <Italic />
                   <Strikethrough />
+                  <HardBreak />
                 </div>
 
                 <div className="flex items-center gap-1 pr-2 mr-1">
@@ -69,10 +76,21 @@ export const FormTiptap = <
                   <Heading3 />
                 </div>
 
+                <div className="flex items-center gap-1 pr-2 mr-1">
+                  <BulletList />
+                  <OrderedList />
+                  <TaskList />
+                </div>
+
+                <div className="flex items-center gap-1 pr-2 mr-1">
+                  <HorizontalRule />
+                  <Image />
+                  <Table />
+                </div>
+
                 <div className="flex items-center gap-1">
                   <Undo />
                   <Redo />
-                  <HardBreak />
                 </div>
               </Toolbar>
               <Editor />

@@ -11,5 +11,8 @@ export * from "./blockquote";
 export * from "./code";
 export * from "./code-block";
 export * from "./horizontal-rule";
+export * from "./image";
+export * from "./table";
+export * from "./task-list";
 export * from "./undo";
 export * from "./redo";
