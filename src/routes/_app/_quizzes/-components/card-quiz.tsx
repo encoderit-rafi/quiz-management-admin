@@ -1,6 +1,6 @@
 import { CardContent } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { useGetQuiz } from "../-apis";
+// import { useQuery } from "@tanstack/react-query";
+// import { useGetQuiz } from "../-apis";
 import {
   Accordion,
   AccordionContent,
@@ -13,17 +13,71 @@ type TProps = {
   form_data: { id: string | number; type: string };
 };
 
-export default function CardQuiz({ form_data }: TProps) {
-  const { id } = form_data;
+// Static quiz data
+const STATIC_QUIZ_DATA = {
+  id: 1,
+  quiz_name: "Sample Quiz",
+  title: "Customer Satisfaction Survey",
+  heading: "Help Us Improve",
+  cta_text: "Start Quiz",
+  footer_text: "Thank you for your feedback",
+  description:
+    "<p>We value your opinion and would love to hear your thoughts about our products and services.</p>",
+  logo: "https://images.unsplash.com/photo-1590650516494-0c8e4a4dd67e?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  background_image:
+    "https://images.unsplash.com/photo-1590650589327-3f67c43ad8a2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  primary_color: "#3b82f6",
+  secondary_color: "#8b5cf6",
+  is_active: true,
+  questions: [
+    {
+      name: "How satisfied are you with our service?",
+      options: [
+        { label: "Very Satisfied", points: 10 },
+        { label: "Satisfied", points: 7 },
+        { label: "Neutral", points: 5 },
+        { label: "Dissatisfied", points: 3 },
+        { label: "Very Dissatisfied", points: 0 },
+      ],
+    },
+    {
+      name: "Would you recommend us to others?",
+      options: [
+        { label: "Definitely", points: 10 },
+        { label: "Probably", points: 7 },
+        { label: "Maybe", points: 5 },
+        { label: "Probably Not", points: 3 },
+        { label: "Definitely Not", points: 0 },
+      ],
+    },
+    {
+      name: "How would you rate the quality of our products?",
+      options: [
+        { label: "Excellent", points: 10 },
+        { label: "Good", points: 7 },
+        { label: "Average", points: 5 },
+        { label: "Poor", points: 3 },
+        { label: "Very Poor", points: 0 },
+      ],
+    },
+  ],
+};
 
-  const { data: quiz, isLoading } = useQuery({
-    ...useGetQuiz(id),
-    enabled: !!id,
-  });
+export default function CardQuiz({ form_data: _form_data }: TProps) {
+  // const { id } = form_data; // Not needed when using static data
 
-  if (isLoading) {
-    return <CardContent>Loading quiz details...</CardContent>;
-  }
+  // Commented out API call - using static data instead
+  // const { data: quiz, isLoading } = useQuery({
+  //   ...useGetQuiz(id),
+  //   enabled: !!id,
+  // });
+
+  // if (isLoading) {
+  //   return <CardContent>Loading quiz details...</CardContent>;
+  // }
+
+  // Use static data
+  const quiz = STATIC_QUIZ_DATA;
 
   if (!quiz) {
     return <CardContent>No quiz data found.</CardContent>;
@@ -33,9 +87,6 @@ export default function CardQuiz({ form_data }: TProps) {
     <CardContent className="space-y-6 overflow-y-auto">
       <div className="grid gap-6">
         <section className="space-y-4">
-          <h3 className="text-lg font-semibold border-b pb-2">
-            General Information
-          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <div className="text-sm font-medium">Quiz Name</div>
