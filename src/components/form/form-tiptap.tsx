@@ -13,6 +13,7 @@ import {
   Heading2,
   Heading3,
   BulletList,
+  Link,
   OrderedList,
   HorizontalRule,
   Image,
@@ -66,6 +67,7 @@ export const FormTiptap = <
                 <div className="flex items-center gap-1 pr-2 mr-1">
                   <Bold />
                   <Italic />
+                  <Link />
                   <Strikethrough />
                   <HardBreak />
                 </div>

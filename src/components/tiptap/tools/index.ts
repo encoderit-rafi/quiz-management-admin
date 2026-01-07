@@ -5,6 +5,7 @@ export * from "./heading-1";
 export * from "./heading-2";
 export * from "./heading-3";
 export * from "./bullet-list";
+export * from "./link";
 export * from "./ordered-list";
 export * from "./hard-break";
 export * from "./blockquote";
