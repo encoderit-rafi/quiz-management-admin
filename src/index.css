@@ -186,30 +186,4 @@
     margin-top: 0.5rem;
     padding-left: 1.5rem;
   }
-
-  /* Tiptap Image Resize Styles */
-  .ProseMirror img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .ProseMirror img:hover {
-    outline: 2px solid hsl(var(--primary) / 0.5);
-    outline-offset: 2px;
-  }
-
-  .ProseMirror img.ProseMirror-selectednode {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
-  }
-
-  /* Image resizing support */
-  .ProseMirror img {
-    resize: both;
-    overflow: auto;
-    min-width: 50px;
-    min-height: 50px;
-  }
 }

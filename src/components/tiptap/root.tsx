@@ -34,7 +34,8 @@ export const Tiptap = ({
       StarterKit,
       HardBreak,
       ResizableImageExtension.configure({
-        inline: true,
+        // inline: true,
+
         allowBase64: true,
       }),
       Table.configure({
