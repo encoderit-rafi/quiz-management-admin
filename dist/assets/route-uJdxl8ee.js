@@ -1,1 +1,0 @@
-import{j as e,O as t}from"./index-C0O9Q7MJ.js";function o(){return e.jsx("div",{className:"min-h-svh overflow-hidden flex items-center justify-center p-2",children:e.jsx(t,{})})}export{o as component};

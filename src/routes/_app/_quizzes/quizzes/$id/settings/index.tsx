@@ -20,6 +20,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
+import { DEFAULT_PAGINATION } from "@/consts";
 
 export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/settings/")({
   component: QuizSettingsPage,
@@ -61,7 +62,7 @@ function QuizSettingsPage() {
   const onSubmit = (data: any) => {
     updateSettings(data, {
       onSuccess: () => {
-        navigate({ to: "/", search: { page: 1, per_page: 15 } });
+        navigate({ to: "/", search: DEFAULT_PAGINATION });
       },
     });
   };

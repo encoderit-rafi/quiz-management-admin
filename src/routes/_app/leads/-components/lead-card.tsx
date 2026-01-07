@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
@@ -8,7 +8,6 @@ import {
 import { CheckCircle, FileQuestion, Trophy } from "lucide-react";
 import type { TLeadResultSchema } from "../-types";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/utils/cn";
 
 interface LeadCardProps {
   data: TLeadResultSchema;
