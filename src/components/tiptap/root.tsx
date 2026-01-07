@@ -13,6 +13,7 @@ import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
 import { Column, ColumnBlock } from "./extensions/columns";
+import { CTAButton } from "./extensions/cta-button";
 import { TiptapContext } from "./context";
 import { cn } from "@/utils";
 
@@ -63,6 +64,7 @@ export const Tiptap = ({
       }),
       Column,
       ColumnBlock,
+      CTAButton,
     ],
     content: value || defaultValue,
     immediatelyRender: false,

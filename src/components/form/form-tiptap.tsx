@@ -14,6 +14,7 @@ import {
   Heading3,
   BulletList,
   Columns,
+  CTAButton,
   Link,
   OrderedList,
   HorizontalRule,
@@ -89,6 +90,7 @@ export const FormTiptap = <
                   <HorizontalRule />
                   <Image />
                   <Columns />
+                  <CTAButton />
                   <Table />
                 </div>
 

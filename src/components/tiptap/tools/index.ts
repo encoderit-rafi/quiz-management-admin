@@ -6,6 +6,7 @@ export * from "./heading-2";
 export * from "./heading-3";
 export * from "./bullet-list";
 export * from "./columns";
+export * from "./cta-button";
 export * from "./link";
 export * from "./ordered-list";
 export * from "./hard-break";
