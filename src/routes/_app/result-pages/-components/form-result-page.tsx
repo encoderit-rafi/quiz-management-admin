@@ -93,6 +93,7 @@ export const FormResultPage = ({
             control={control}
             label="Page Content"
             description="Design your result page content here."
+            variant="advance"
           />
         </div>
       </form>

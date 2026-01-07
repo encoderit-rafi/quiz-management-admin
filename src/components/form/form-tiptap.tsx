@@ -34,6 +34,7 @@ type TFormTiptapProps<
   label?: string;
   description?: string;
   defaultValue?: string;
+  variant?: "simple" | "advance";
 };
 
 export const FormTiptap = <
@@ -46,6 +47,7 @@ export const FormTiptap = <
   label = "",
   description = "",
   defaultValue = "",
+  variant = "simple",
 }: TFormTiptapProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -72,6 +74,7 @@ export const FormTiptap = <
                   <Link />
                   <Strikethrough />
                   <HardBreak />
+                  <HorizontalRule />
                 </div>
 
                 <div className="flex items-center gap-1 pr-2 mr-1">
@@ -80,19 +83,22 @@ export const FormTiptap = <
                   <Heading3 />
                 </div>
 
-                <div className="flex items-center gap-1 pr-2 mr-1">
-                  <BulletList />
-                  <OrderedList />
-                  <TaskList />
-                </div>
+                {variant === "advance" && (
+                  <>
+                    <div className="flex items-center gap-1 pr-2 mr-1">
+                      <BulletList />
+                      <OrderedList />
+                      <TaskList />
+                    </div>
 
-                <div className="flex items-center gap-1 pr-2 mr-1">
-                  <HorizontalRule />
-                  <Image />
-                  <Columns />
-                  <CTAButton />
-                  <Table />
-                </div>
+                    <div className="flex items-center gap-1 pr-2 mr-1">
+                      <Image />
+                      <Columns />
+                      <CTAButton />
+                      <Table />
+                    </div>
+                  </>
+                )}
 
                 <div className="flex items-center gap-1">
                   <Undo />
