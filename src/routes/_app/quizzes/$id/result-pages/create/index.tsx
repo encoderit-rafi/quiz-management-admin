@@ -3,7 +3,7 @@ import { FormResultPage } from "../-components";
 import { CardHeader } from "@/components/ui/card";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
-export const Route = createFileRoute("/_app/result-pages/create/")({
+export const Route = createFileRoute("/_app/quizzes/$id/result-pages/create/")({
   component: CreateResultPage,
 });
 

@@ -19,8 +19,11 @@ import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
+import AppBackButton from "@/components/base/app-back-button";
 
-export const Route = createFileRoute("/_app/result-pages/")({
+export const Route = createFileRoute(
+  "/_app/quizzes/$id/result-pages/"
+)({
   component: RouteComponent,
   validateSearch: ResultPageSearchSchema,
 });
@@ -94,7 +97,8 @@ export default function RouteComponent() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link
-                  to="/result-pages/view/$id"
+                  // to="/result-pages/view/$id"
+                  to="/quizzes/$id/result-pages/view/$id"
                   params={{ id: String(page.id) }}
                 >
                   <Eye /> View
@@ -102,7 +106,7 @@ export default function RouteComponent() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
-                  to="/result-pages/edit/$id"
+                  to="/quizzes/$id/result-pages/edit/$id"
                   params={{ id: String(page.id) }}
                 >
                   <PenSquare /> Edit
@@ -124,22 +128,30 @@ export default function RouteComponent() {
   return (
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between gap-4">
-        <AppSearch
-          props={{
-            input: {
-              placeholder: "Search quiz...",
-              value: search.q,
-              onChange: (e) => {
-                navigate({
-                  search: { ...search, q: e.target.value },
-                  replace: true,
-                });
+        <div className="flex items-center gap-2 flex-1">
+          <AppBackButton />
+
+          <AppSearch
+            props={{
+              input: {
+                placeholder: "Search quiz...",
+                value: search.q,
+                onChange: (e) => {
+                  navigate({
+                    search: { ...search, q: e.target.value },
+                    replace: true,
+                  });
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
         <Button asChild>
-          <Link to="/result-pages/create" className="flex items-center">
+          <Link
+            to="/quizzes/$id/result-pages/create"
+            params={{ id: "1" }}
+            className="flex items-center"
+          >
             <Plus />
             <AppButtonText>Add Result Page</AppButtonText>
           </Link>

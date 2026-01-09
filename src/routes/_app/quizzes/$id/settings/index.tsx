@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/field";
 import { DEFAULT_PAGINATION } from "@/consts";
 
-export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/settings/")({
+export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
   component: QuizSettingsPage,
 });
 

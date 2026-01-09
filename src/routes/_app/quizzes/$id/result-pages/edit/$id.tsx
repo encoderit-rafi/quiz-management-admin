@@ -5,7 +5,7 @@ import { useGetResultPage } from "../-apis";
 import { CardHeader } from "@/components/ui/card";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
-export const Route = createFileRoute("/_app/result-pages/edit/$id")({
+export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")({
   component: EditResultPage,
 });
 

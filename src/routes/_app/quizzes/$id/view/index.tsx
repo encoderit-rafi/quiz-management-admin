@@ -5,7 +5,7 @@ import { Edit } from "lucide-react";
 import { CardQuiz } from "../../../-components";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
-export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/view/")({
+export const Route = createFileRoute("/_app/quizzes/$id/view/")({
   component: ViewQuizPage,
 });
 

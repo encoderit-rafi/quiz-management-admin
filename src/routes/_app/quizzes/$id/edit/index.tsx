@@ -3,7 +3,7 @@ import { CardHeader } from "@/components/ui/card";
 import { FormQuiz } from "../../../-components";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
-export const Route = createFileRoute("/_app/_quizzes/quizzes/$id/edit/")({
+export const Route = createFileRoute("/_app/quizzes/$id/edit/")({
   component: EditQuizPage,
 });
 

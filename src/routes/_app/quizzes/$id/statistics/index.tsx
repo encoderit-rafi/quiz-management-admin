@@ -19,12 +19,14 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetAllQuizzes } from "../_quizzes/-apis";
+// import { useGetAllQuizzes } from "../_quizzes/-apis";
 import { useGetStatistics } from "./-apis";
 import { StatCard } from "./-components";
 import type { TStatisticsSchema } from "./-types";
+import { useGetAllQuizzes } from "../../../-apis";
+import AppBackButton from "@/components/base/app-back-button";
 
-export const Route = createFileRoute("/_app/statistics/")({
+export const Route = createFileRoute("/_app/quizzes/$id/statistics/")({
   component: StatisticsPage,
 });
 
@@ -72,25 +74,8 @@ function StatisticsPage() {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex items-center justify-end">
-        <div className="w-full sm:w-[250px]">
-          {isLoadingQuizzes ? (
-            <Skeleton className="h-10 w-full" />
-          ) : (
-            <Select value={selectedQuizId} onValueChange={handleQuizChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a quiz" />
-              </SelectTrigger>
-              <SelectContent>
-                {quizzes?.map((quiz: any) => (
-                  <SelectItem key={quiz.id} value={String(quiz.id)}>
-                    {quiz.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        </div>
+      <div className="flex items-center justify-between">
+        <AppBackButton />
       </div>
 
       {!selectedQuizId && !isLoadingQuizzes ? (

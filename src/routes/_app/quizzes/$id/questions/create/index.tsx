@@ -4,7 +4,7 @@ import { FormQuizQuestion } from "@/routes/_app/_quizzes/-components";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_app/_quizzes/quizzes/$id/questions/create/"
+  "/_app/quizzes/$id/questions/create/"
 )({
   component: RouteComponent,
 });

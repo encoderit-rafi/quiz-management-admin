@@ -8,7 +8,9 @@ import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 
-export const Route = createFileRoute("/_app/result-pages/view/$id")({
+export const Route = createFileRoute(
+  "/_app/quizzes/$id/result-pages/view/$id"
+)({
   component: ViewResultPage,
 });
 
@@ -80,7 +82,7 @@ function ViewResultPage() {
           description="View result page information and details"
         />
         <Button asChild>
-          <Link to="/result-pages/edit/$id" params={{ id }}>
+          <Link to="/quizzes/$id/result-pages/edit/$id" params={{ id }}>
             <Edit />
             <AppButtonText>Edit Result Page</AppButtonText>
           </Link>

@@ -8,6 +8,9 @@ import {
   Settings,
   MoreHorizontal,
   FileQuestionMark,
+  FileText,
+  Users,
+  BarChart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FORM_DATA } from "@/data/form";
@@ -27,8 +30,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useGetAllQuizzes } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
+import { DEFAULT_PAGINATION } from "@/consts";
 
-export const Route = createFileRoute("/_app/_quizzes/")({
+export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
   validateSearch: SearchSchema,
 });
@@ -139,6 +143,28 @@ export default function RouteComponent() {
                 <Link to="/quizzes/$id/questions" params={{ id: quizId }}>
                   <FileQuestionMark />
                   Questions
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  to="/quizzes/$id/result-pages"
+                  params={{ id: quizId }}
+                  search={DEFAULT_PAGINATION}
+                >
+                  <FileText />
+                  Result Pages
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/quizzes/$id/leads" params={{ id: quizId }}>
+                  <Users />
+                  Leads & Results
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/quizzes/$id/statistics" params={{ id: quizId }}>
+                  <BarChart />
+                  Statistics
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem

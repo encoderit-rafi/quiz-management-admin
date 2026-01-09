@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { LeadCard } from "./-components";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
+import AppBackButton from "@/components/base/app-back-button";
 
-export const Route = createFileRoute("/_app/leads/")({
+export const Route = createFileRoute("/_app/quizzes/$id/leads/")({
   component: LeadsListPage,
 });
 
@@ -73,9 +74,10 @@ function LeadsListPage() {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <AppBackButton />
         <Button onClick={exportLeads}>
-          <Download className="mr-2 h-4 w-4" /> Export CSV
+          <Download /> Export CSV
         </Button>
       </div>
 
