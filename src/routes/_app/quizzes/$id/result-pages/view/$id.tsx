@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
+import { useSetRoute } from "@/hooks/use-set-route";
 
-export const Route = createFileRoute(
-  "/_app/quizzes/$id/result-pages/view/$id"
-)({
-  component: ViewResultPage,
-});
+export const Route = createFileRoute("/_app/quizzes/$id/result-pages/view/$id")(
+  {
+    component: ViewResultPage,
+  }
+);
 
 // Static demo data
 const DEMO_RESULT_PAGES: TResultPageSchema[] = [
@@ -44,7 +45,7 @@ const DEMO_RESULT_PAGES: TResultPageSchema[] = [
 
 function ViewResultPage() {
   const { id } = Route.useParams();
-
+  useSetRoute({ name: "Result Page Details", path: Route.fullPath });
   // Commented out API call - using static data instead
   // const { isLoading } = useQuery({
   //   ...useGetResultPage(id),
@@ -76,11 +77,7 @@ function ViewResultPage() {
 
   return (
     <>
-      <CardHeader className="flex items-center gap-2">
-        <AppCardHeaderWithBackButton
-          title="Result Page Details"
-          description="View result page information and details"
-        />
+      <CardHeader className="flex items-center gap-2 justify-end">
         <Button asChild>
           <Link to="/quizzes/$id/result-pages/edit/$id" params={{ id }}>
             <Edit />

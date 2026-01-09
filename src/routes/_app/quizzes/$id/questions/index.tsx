@@ -9,7 +9,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { CardHeader, CardContent } from "@/components/ui/card";
-import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import AppButtonText from "@/components/base/app-button-text";
 import {
   Accordion,
@@ -35,6 +34,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { FORM_DATA } from "@/data";
+import { useSetRoute } from "@/hooks/use-set-route";
 
 const DEMO_QUESTIONS = [
   {
@@ -74,6 +74,8 @@ export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
 });
 
 function QuizQuestionsPage() {
+  useSetRoute({ name: "Quiz Questions", path: Route.fullPath });
+
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
   const [questions, setQuestions] = useState(DEMO_QUESTIONS);
@@ -257,11 +259,7 @@ function QuizQuestionsPage() {
   }
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex items-center justify-between gap-4">
-        <AppCardHeaderWithBackButton
-          title="Quiz Questions"
-          description="Manage questions, options, and points for this quiz."
-        />
+      <CardHeader className="flex items-center justify-end gap-4">
         <Button asChild>
           <Link to="/quizzes/$id/questions/create" params={{ id: "1" }}>
             <Plus />

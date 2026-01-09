@@ -4,25 +4,21 @@ import { FormResultPage } from "../-components";
 import { useGetResultPage } from "../-apis";
 import { CardHeader } from "@/components/ui/card";
 import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
+import { useSetRoute } from "@/hooks/use-set-route";
 
-export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")({
-  component: EditResultPage,
-});
+export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(
+  {
+    component: EditResultPage,
+  }
+);
 
 function EditResultPage() {
   const { id } = Route.useParams();
-
+  useSetRoute({ name: "Edit Result Page", path: Route.fullPath });
   const { data: resultPage } = useQuery(useGetResultPage(id));
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex items-start gap-2">
-        <AppCardHeaderWithBackButton
-          title="Edit Result Page"
-          description="Modify the content and score range for this result page."
-        />
-      </CardHeader>
-
       <FormResultPage
         type="update"
         initialData={resultPage}

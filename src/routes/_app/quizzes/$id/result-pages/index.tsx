@@ -19,11 +19,9 @@ import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import AppBackButton from "@/components/base/app-back-button";
+import { useSetRoute } from "@/hooks/use-set-route";
 
-export const Route = createFileRoute(
-  "/_app/quizzes/$id/result-pages/"
-)({
+export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
   component: RouteComponent,
   validateSearch: ResultPageSearchSchema,
 });
@@ -53,6 +51,7 @@ const DEMO_RESULT_PAGES: TResultPageSchema[] = [
 ];
 
 export default function RouteComponent() {
+  useSetRoute({ name: "Result Pages", path: Route.fullPath });
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
@@ -128,24 +127,20 @@ export default function RouteComponent() {
   return (
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 flex-1">
-          <AppBackButton />
-
-          <AppSearch
-            props={{
-              input: {
-                placeholder: "Search quiz...",
-                value: search.q,
-                onChange: (e) => {
-                  navigate({
-                    search: { ...search, q: e.target.value },
-                    replace: true,
-                  });
-                },
+        <AppSearch
+          props={{
+            input: {
+              placeholder: "Search quiz...",
+              value: search.q,
+              onChange: (e) => {
+                navigate({
+                  search: { ...search, q: e.target.value },
+                  replace: true,
+                });
               },
-            }}
-          />
-        </div>
+            },
+          }}
+        />
         <Button asChild>
           <Link
             to="/quizzes/$id/result-pages/create"

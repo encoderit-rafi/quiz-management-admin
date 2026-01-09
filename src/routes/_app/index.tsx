@@ -31,6 +31,7 @@ import { useGetAllQuizzes } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
+import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -188,6 +189,8 @@ export default function RouteComponent() {
       size: 100,
     },
   ];
+
+  useSetRoute({ name: "", path: "/" });
 
   return (
     <div className="space-y-4 p-4">

@@ -21,6 +21,7 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { DEFAULT_PAGINATION } from "@/consts";
+import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
   component: QuizSettingsPage,
@@ -66,6 +67,7 @@ function QuizSettingsPage() {
       },
     });
   };
+  useSetRoute({ name: "Quiz Settings", path: Route.fullPath });
 
   useEffect(() => {
     if (settings) {
@@ -74,13 +76,6 @@ function QuizSettingsPage() {
   }, [settings, reset]);
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex items-start gap-2">
-        <AppCardHeaderWithBackButton
-          title="Quiz Settings"
-          description="Configure lead generation and result delivery for this quiz."
-        />
-      </CardHeader>
-
       {isFetching ? (
         <div className="flex items-center justify-center p-12">
           <p className="text-muted-foreground">Loading settings...</p>

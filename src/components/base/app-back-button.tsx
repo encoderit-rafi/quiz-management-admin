@@ -9,7 +9,7 @@ export default function AppBackButton() {
     router.history.back();
   };
   return (
-    <Button variant="outline" size={"icon"} onClick={handleBack}>
+    <Button variant="ghost" size={"icon"} onClick={handleBack}>
       <ArrowLeft className="size-4" />
     </Button>
   );

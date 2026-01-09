@@ -74,10 +74,6 @@ function StatisticsPage() {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex items-center justify-between">
-        <AppBackButton />
-      </div>
-
       {!selectedQuizId && !isLoadingQuizzes ? (
         <div className="flex h-[400px] items-center justify-center border rounded-lg bg-muted/10 border-dashed">
           <div className="flex flex-col items-center gap-2 text-muted-foreground">

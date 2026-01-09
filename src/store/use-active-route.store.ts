@@ -12,7 +12,7 @@ type TActiveRouteStore = {
 
 export const useActiveRoute = create<TActiveRouteStore>()((set) => ({
   activeRoute: {
-    name: "Quizzes",
+    name: "",
     path: "/",
   },
   setActiveRoute: (route) => set({ activeRoute: route }),

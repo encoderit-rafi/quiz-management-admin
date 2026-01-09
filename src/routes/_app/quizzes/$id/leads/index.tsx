@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LeadCard } from "./-components";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
-import AppBackButton from "@/components/base/app-back-button";
+import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/leads/")({
   component: LeadsListPage,
@@ -64,6 +64,7 @@ const DEMO_LEADS: TLeadResultSchema[] = [
 ];
 
 function LeadsListPage() {
+  useSetRoute({ name: "Leads", path: Route.fullPath });
   const { data: leads } = useQuery({
     ...useGetLeads(),
     select: (data: any) =>
@@ -74,8 +75,7 @@ function LeadsListPage() {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex items-center justify-between">
-        <AppBackButton />
+      <div className="flex items-center justify-end">
         <Button onClick={exportLeads}>
           <Download /> Export CSV
         </Button>

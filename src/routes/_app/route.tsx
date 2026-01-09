@@ -3,7 +3,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 // import { AppSidebar } from "@/components/base/app-sidebar";
 import Navbar from "@/components/base/navbar";
 import { useToken } from "@/store";
-import { Card } from "@/components/ui/card";
+// import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/_app")({
   component: RouteComponent,
@@ -21,10 +21,10 @@ function RouteComponent() {
         </div> */}
         <div className="flex flex-1 flex-col overflow-hidden">
           <Navbar />
-          <main className="flex-1 flex flex-col overflow-hidden p-4">
-            <Card className="flex-1 flex flex-col overflow-hidden shadow-none">
+          <main className="flex-1 flex flex-col overflow-hidden py-4">
+            <div className="flex-1 flex flex-col overflow-hidden shadow-none">
               <Outlet />
-            </Card>
+            </div>
           </main>
         </div>
       </div>

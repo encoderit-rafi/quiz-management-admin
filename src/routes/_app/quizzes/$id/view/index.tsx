@@ -3,7 +3,7 @@ import { CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { CardQuiz } from "../../../-components";
-import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
+import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/view/")({
   component: ViewQuizPage,
@@ -12,13 +12,11 @@ export const Route = createFileRoute("/_app/quizzes/$id/view/")({
 function ViewQuizPage() {
   const { id } = Route.useParams();
 
+  useSetRoute({ name: "View Quiz", path: Route.fullPath });
+
   return (
     <>
-      <CardHeader className="flex items-center gap-2">
-        <AppCardHeaderWithBackButton
-          title="Quiz Details"
-          description="View quiz information and details"
-        />
+      <CardHeader className="flex items-center gap-2 justify-end">
         <Button asChild>
           <Link to="/quizzes/$id/edit" params={{ id }}>
             <Edit />
