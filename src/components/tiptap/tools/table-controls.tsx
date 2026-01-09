@@ -107,10 +107,10 @@ export const TableControls = () => {
             type="button"
             aria-label="Delete row"
             size="sm"
-            variant="ghost"
+            variant="destructive"
             disabled={!state.canDeleteRow}
             onClick={() => editor.chain().focus().deleteRow().run()}
-            className="cursor-pointer size-8 p-0 text-destructive hover:text-destructive"
+            className="cursor-pointer size-8 p-0"
           >
             <Trash2 className="size-4" />
           </Button>
@@ -125,12 +125,12 @@ export const TableControls = () => {
             type="button"
             aria-label="Delete column"
             size="sm"
-            variant="ghost"
+            variant="destructive"
             disabled={!state.canDeleteColumn}
             onClick={() => editor.chain().focus().deleteColumn().run()}
-            className="cursor-pointer size-8 p-0 text-destructive hover:text-destructive"
+            className="cursor-pointer size-8 p-0"
           >
-            <Trash2 className="size-4 rotate-90" />
+            <Trash2 className="size-4" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Delete Column</TooltipContent>
@@ -143,10 +143,10 @@ export const TableControls = () => {
             type="button"
             aria-label="Delete table"
             size="sm"
-            variant="ghost"
+            variant="destructive"
             disabled={!state.canDeleteTable}
             onClick={() => editor.chain().focus().deleteTable().run()}
-            className="cursor-pointer size-8 p-0 text-destructive hover:text-destructive"
+            className="cursor-pointer size-8 p-0"
           >
             <Trash2 className="size-4" />
           </Button>

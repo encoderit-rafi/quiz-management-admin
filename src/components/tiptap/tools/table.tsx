@@ -103,9 +103,10 @@ export const Table = () => {
             </DropdownMenuItem>
 
             <DropdownMenuItem
+              variant="destructive"
               disabled={!state.canDeleteRow}
               onClick={() => editor.chain().focus().deleteRow().run()}
-              className="text-destructive focus:text-destructive"
+              // className="text-destructive focus:text-destructive"
             >
               <Trash2 className="size-4 mr-2" />
               Delete Row
@@ -131,11 +132,12 @@ export const Table = () => {
             </DropdownMenuItem>
 
             <DropdownMenuItem
+              variant="destructive"
               disabled={!state.canDeleteColumn}
               onClick={() => editor.chain().focus().deleteColumn().run()}
               className="text-destructive focus:text-destructive"
             >
-              <Trash2 className="size-4 mr-2 rotate-90" />
+              <Trash2 className="size-4 mr-2 " />
               Delete Column
             </DropdownMenuItem>
 
@@ -143,9 +145,10 @@ export const Table = () => {
 
             {/* Delete Table */}
             <DropdownMenuItem
+              variant="destructive"
               disabled={!state.canDeleteTable}
               onClick={() => editor.chain().focus().deleteTable().run()}
-              className="text-destructive focus:text-destructive"
+              // className="text-destructive focus:text-destructive"
             >
               <Trash2 className="size-4 mr-2" />
               Delete Table
