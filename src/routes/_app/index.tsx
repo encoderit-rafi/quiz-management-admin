@@ -109,8 +109,18 @@ export default function RouteComponent() {
       },
     },
     {
-      header: "Actions",
-      accessorKey: "action",
+      header: "Views",
+      accessorKey: "views",
+      cell: () => <div className="text-muted-foreground">1.2k</div>, // Mock data
+    },
+    {
+      header: "Submissions",
+      accessorKey: "submissions",
+      cell: () => <div className="text-muted-foreground">342</div>, // Mock data
+    },
+    {
+      header: "Tools",
+      accessorKey: "tools",
       cell: ({ row }) => {
         const quiz = row.original;
         const quizId = String(quiz.id);
