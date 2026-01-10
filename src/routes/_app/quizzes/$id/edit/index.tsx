@@ -1,7 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { CardHeader } from "@/components/ui/card";
 import { FormQuiz } from "../../../-components";
-import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/edit/")({

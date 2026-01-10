@@ -10,21 +10,10 @@ import {
   TrendingUp,
   BarChart3,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-
-// import { useGetAllQuizzes } from "../_quizzes/-apis";
 import { useGetStatistics } from "./-apis";
 import { StatCard } from "./-components";
 import type { TStatisticsSchema } from "./-types";
 import { useGetAllQuizzes } from "../../../-apis";
-import AppBackButton from "@/components/base/app-back-button";
 
 export const Route = createFileRoute("/_app/quizzes/$id/statistics/")({
   component: StatisticsPage,
@@ -67,10 +56,6 @@ function StatisticsPage() {
     ...useGetStatistics(selectedQuizId),
     select: (data: any) => data || DEMO_STATS,
   });
-
-  const handleQuizChange = (value: string) => {
-    setSelectedQuizId(value);
-  };
 
   return (
     <div className="space-y-6 p-4">

@@ -2,11 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 // import { useQuery } from "@tanstack/react-query";
 // import { useGetResultPage } from "../-apis"; // Fixed import
 import type { TResultPageSchema } from "../-types"; // Added type import
-import { CardHeader, CardContent } from "@/components/ui/card";
+import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
-import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/view/$id")(

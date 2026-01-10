@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { CardHeader, CardContent, CardAction } from "@/components/ui/card";
+import { CardContent, CardAction } from "@/components/ui/card";
 import { useGetQuizSettings, useUpdateQuizSettings } from "../../../-apis";
 // import { FormQuizSettings } from "../../../-components";
 import { FormCheckbox, FormSwitch } from "@/components/form";
@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DEFAULT_QUIZ_SETTINGS_DATA } from "../../../-data";
 import { QuizSettingsSchema, type TQuizSettingsSchema } from "../../../-types";
 import { useEffect } from "react";
-import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import {
   FieldContent,
   FieldError,

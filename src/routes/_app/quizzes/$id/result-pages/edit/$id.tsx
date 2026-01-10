@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { FormResultPage } from "../-components";
 import { useGetResultPage } from "../-apis";
-import { CardHeader } from "@/components/ui/card";
-import AppCardHeaderWithBackButton from "@/components/base/app-card-header-with-back-button";
 import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(

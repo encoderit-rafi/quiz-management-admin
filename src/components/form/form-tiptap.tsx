@@ -90,17 +90,14 @@ export const FormTiptap = <
 
                 <div className="flex items-center gap-1 pr-2 mr-1">
                   <TextType />
+                  <FontFamily />
+                  <Color />
+                  <TextAlign />
+                  <Script />
                 </div>
 
                 {variant === "advance" && (
                   <>
-                    <div className="flex items-center gap-1 pr-2 mr-1">
-                      <FontFamily />
-                      <Color />
-                      <TextAlign />
-                      <Script />
-                    </div>
-
                     <div className="flex items-center gap-1 pr-2 mr-1">
                       <BulletList />
                       <OrderedList />
@@ -122,8 +119,15 @@ export const FormTiptap = <
                   <Redo />
                 </div>
               </Toolbar>
-              <BubbleMenu>
-                <Toolbar className="flex-wrap h-auto gap-2 divide-x bg-background border rounded-md shadow mx-2">
+              <BubbleMenu
+                tippyOptions={{
+                  duration: 100,
+                  maxWidth: "none",
+                  zIndex: 50,
+                  appendTo: "parent",
+                }}
+              >
+                <Toolbar className="flex-wrap h-auto gap-2 divide-x bg-background relative z-50 border rounded-md shadow mx-2">
                   <div className="flex items-center gap-1 pr-2 mr-1">
                     <Bold />
                     <Italic />
@@ -134,7 +138,8 @@ export const FormTiptap = <
                   </div>
 
                   <div className="flex items-center gap-1 pr-2 mr-1">
-                    <TextType />
+                    <TextAlign />
+                    <Color />
                   </div>
                 </Toolbar>
               </BubbleMenu>
