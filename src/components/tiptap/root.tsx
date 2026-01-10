@@ -55,7 +55,7 @@ export const Tiptap = ({
       }),
       HardBreak,
       ResizableImageExtension.configure({
-        // inline: true,
+        inline: true,
         allowBase64: true,
       }),
       Table.configure({
