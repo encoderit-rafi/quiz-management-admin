@@ -20,3 +20,6 @@ export * from "./table-controls";
 export * from "./task-list";
 export * from "./undo";
 export * from "./redo";
+export * from "./underline";
+export * from "./highlight";
+export * from "./text-type";

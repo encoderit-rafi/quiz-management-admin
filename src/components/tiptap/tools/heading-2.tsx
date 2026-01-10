@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/utils";
 
 export const Heading2 = () => {
   const { editor } = useTiptap();
@@ -34,7 +35,9 @@ export const Heading2 = () => {
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
-          className="cursor-pointer"
+          className={cn("cursor-pointer", {
+            "bg-muted text-muted-foreground": state.isActive,
+          })}
         >
           <Heading2Icon className="size-4" />
         </Toggle>

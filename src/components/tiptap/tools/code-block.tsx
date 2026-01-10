@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/utils";
 
 export const CodeBlock = () => {
   const { editor } = useTiptap();
@@ -30,7 +31,9 @@ export const CodeBlock = () => {
           pressed={state.isActive}
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className="cursor-pointer"
+          className={cn("cursor-pointer", {
+            "bg-muted text-muted-foreground": state.isActive,
+          })}
         >
           <CodeXmlIcon className="size-4" />
         </Toggle>

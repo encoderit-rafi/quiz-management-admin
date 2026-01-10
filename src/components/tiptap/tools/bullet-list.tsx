@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/utils";
 
 export const BulletList = () => {
   const { editor } = useTiptap();
@@ -31,7 +32,9 @@ export const BulletList = () => {
           pressed={state.isActive}
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className="cursor-pointer"
+          className={cn("cursor-pointer", {
+            "bg-muted text-muted-foreground": state.isActive,
+          })}
         >
           <ListIcon className="size-4" />
         </Toggle>

@@ -14,6 +14,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/utils";
 
 export const Link = () => {
   const { editor } = useTiptap();
@@ -40,7 +42,7 @@ export const Link = () => {
     [state?.currentUrl]
   );
 
-  const toggleLink = useCallback(() => {
+  const setLink = useCallback(() => {
     if (!editor) return;
 
     if (url === "") {
@@ -55,13 +57,39 @@ export const Link = () => {
     }
   }, [editor, url]);
 
-  const unsetLink = useCallback(() => {
-    if (!editor) return;
-    editor.chain().focus().extendMarkRange("link").unsetLink().run();
-  }, [editor]);
+  // const unsetLink = useCallback(() => {
+  //   if (!editor) return;
+  //   editor.chain().focus().extendMarkRange("link").unsetLink().run();
+  // }, [editor]);
 
   if (!editor || !state) return null;
-
+  if (state.isActive) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle
+            type="button"
+            aria-label="Toggle link"
+            size="sm"
+            pressed={state.isActive}
+            disabled={!state.canDo}
+            onClick={() =>
+              editor.chain().focus().extendMarkRange("link").unsetLink().run()
+            }
+            className={cn(
+              "cursor-pointer text-muted-foreground hover:text-destructive",
+              {
+                "bg-muted": state.isActive,
+              }
+            )}
+          >
+            <UnlinkIcon className="size-4" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>Remove Link</TooltipContent>
+      </Tooltip>
+    );
+  }
   return (
     <Popover onOpenChange={onOpenChange}>
       <Tooltip>
@@ -93,24 +121,13 @@ export const Link = () => {
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  toggleLink();
+                  setLink();
                 }
               }}
             />
-            {state.isActive && (
-              <Button
-                size="sm"
-                variant="destructive"
-                className="h-8 px-2"
-                onClick={unsetLink}
-                title="Remove link"
-              >
-                <UnlinkIcon className="size-4" />
-              </Button>
-            )}
           </div>
           <div className="flex justify-end gap-2">
-            <Button size="sm" className="h-8" onClick={toggleLink}>
+            <Button size="sm" className="h-8" onClick={setLink}>
               Apply
             </Button>
           </div>

@@ -1,5 +1,5 @@
 import { useEditorState } from "@tiptap/react";
-import { Heading1Icon } from "lucide-react";
+import { HighlighterIcon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { useTiptap } from "../context";
 import {
@@ -9,15 +9,13 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/utils";
 
-export const Heading1 = () => {
+export const Highlight = () => {
   const { editor } = useTiptap();
   const state = useEditorState({
     editor,
     selector: (ctx) => ({
-      isActive: ctx.editor?.isActive("heading", { level: 1 }) ?? false,
-      canDo:
-        ctx.editor?.can().chain().focus().toggleHeading({ level: 1 }).run() ??
-        false,
+      isActive: ctx.editor?.isActive("highlight") ?? false,
+      canDo: ctx.editor?.can().chain().focus().toggleHighlight().run() ?? false,
     }),
   });
 
@@ -28,21 +26,19 @@ export const Heading1 = () => {
       <TooltipTrigger asChild>
         <Toggle
           type="button"
-          aria-label="Toggle heading 1"
+          aria-label="Toggle highlight"
           size="sm"
           pressed={state.isActive}
           disabled={!state.canDo}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={cn("cursor-pointer", {
             "bg-muted text-muted-foreground": state.isActive,
           })}
         >
-          <Heading1Icon className="size-4" />
+          <HighlighterIcon className="size-4" />
         </Toggle>
       </TooltipTrigger>
-      <TooltipContent>Heading 1</TooltipContent>
+      <TooltipContent>Highlight</TooltipContent>
     </Tooltip>
   );
 };

@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/utils";
 
 export const OrderedList = () => {
   const { editor } = useTiptap();
@@ -31,7 +32,9 @@ export const OrderedList = () => {
           pressed={state.isActive}
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className="cursor-pointer"
+          className={cn("cursor-pointer", {
+            "bg-muted text-muted-foreground": state.isActive,
+          })}
         >
           <ListOrderedIcon className="size-4" />
         </Toggle>

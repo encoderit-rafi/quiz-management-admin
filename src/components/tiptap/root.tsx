@@ -12,6 +12,8 @@ import {
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
 import { Column, ColumnBlock } from "./extensions/columns";
 import { CTAButton } from "./extensions/cta-button";
 import { TiptapContext } from "./context";
@@ -38,7 +40,6 @@ export const Tiptap = ({
       HardBreak,
       ResizableImageExtension.configure({
         // inline: true,
-
         allowBase64: true,
       }),
       Table.configure({
@@ -65,6 +66,8 @@ export const Tiptap = ({
       Column,
       ColumnBlock,
       CTAButton,
+      Underline,
+      Highlight.configure({ multicolor: true }),
     ],
     content: value || defaultValue,
     immediatelyRender: false,

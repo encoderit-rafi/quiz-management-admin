@@ -9,9 +9,7 @@ import {
   Bold,
   Italic,
   Strikethrough,
-  Heading1,
-  Heading2,
-  Heading3,
+  TextType,
   BulletList,
   Columns,
   CTAButton,
@@ -24,6 +22,8 @@ import {
   Undo,
   Redo,
   HardBreak,
+  Underline,
+  Highlight,
 } from "../tiptap";
 
 type TFormTiptapProps<
@@ -71,6 +71,8 @@ export const FormTiptap = <
                 <div className="flex items-center gap-1 pr-2 mr-1">
                   <Bold />
                   <Italic />
+                  <Underline />
+                  <Highlight />
                   <Link />
                   <Strikethrough />
                   <HardBreak />
@@ -78,9 +80,7 @@ export const FormTiptap = <
                 </div>
 
                 <div className="flex items-center gap-1 pr-2 mr-1">
-                  <Heading1 />
-                  <Heading2 />
-                  <Heading3 />
+                  <TextType />
                 </div>
 
                 {variant === "advance" && (
