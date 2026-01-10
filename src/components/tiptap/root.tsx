@@ -14,7 +14,18 @@ import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
-import Highlight from "@tiptap/extension-highlight";
+import HighlightExtension from "@tiptap/extension-highlight";
+import { BubbleMenu as BubbleMenuExtension } from "@tiptap/extension-bubble-menu";
+import FontFamily from "@tiptap/extension-font-family";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import TextAlign from "@tiptap/extension-text-align";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Youtube from "@tiptap/extension-youtube";
+import FontSize from "tiptap-extension-font-size";
+import Blockquote from "@tiptap/extension-blockquote";
+import Typography from "@tiptap/extension-typography";
 import { Column, ColumnBlock } from "./extensions/columns";
 import { CTAButton } from "./extensions/cta-button";
 import { TiptapContext } from "./context";
@@ -83,7 +94,24 @@ export const Tiptap = ({
       ColumnBlock,
       CTAButton,
       Underline,
-      Highlight.configure({ multicolor: true }),
+      HighlightExtension.configure({ multicolor: true }),
+      BubbleMenuExtension.configure({
+        pluginKey: "bubbleMenu",
+      }),
+      FontFamily,
+      TextStyle,
+      Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Subscript,
+      Superscript,
+      Youtube.configure({
+        controls: false,
+      }),
+      // FontSize,
+      Blockquote,
+      Typography,
     ],
     content: value || defaultValue,
     immediatelyRender: false,

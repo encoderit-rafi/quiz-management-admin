@@ -1,42 +1,27 @@
 import { useEditorState } from "@tiptap/react";
 import { QuoteIcon } from "lucide-react";
-import { useTiptap } from "../context";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Toggle } from "@/components/ui/toggle";
+import { useTiptap } from "../context";
+import { cn } from "@/utils";
 
 export const Blockquote = () => {
   const { editor } = useTiptap();
   const state = useEditorState({
     editor,
-    selector: (ctx) => ({
-      isActive: ctx.editor?.isActive("blockquote") ?? false,
-      canDo:
-        ctx.editor?.can().chain().focus().toggleBlockquote().run() ?? false,
-    }),
+    selector: (ctx) => ctx.editor?.isActive("blockquote"),
   });
 
-  if (!editor || !state) return null;
+  if (!editor) return null;
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Toggle
-          type="button"
-          aria-label="Toggle blockquote"
-          size="sm"
-          pressed={state.isActive}
-          disabled={!state.canDo}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className="cursor-pointer"
-        >
-          <QuoteIcon className="size-4" />
-        </Toggle>
-      </TooltipTrigger>
-      <TooltipContent>Blockquote</TooltipContent>
-    </Tooltip>
+    <Toggle
+      size="sm"
+      pressed={!!state}
+      onClick={() => editor.chain().focus().toggleBlockquote().run()}
+      className={cn("h-8 w-8 p-0", { "bg-muted": state })}
+      aria-label="Blockquote"
+    >
+      <QuoteIcon className="size-4" />
+    </Toggle>
   );
 };

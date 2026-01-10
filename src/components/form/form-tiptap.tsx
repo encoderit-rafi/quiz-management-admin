@@ -25,7 +25,15 @@ import {
   Underline,
   Highlight,
   BubbleMenu,
+  FontFamily,
+  Color,
+  TextAlign,
+  Script,
+  Video,
 } from "../tiptap";
+// ... existing imports ...
+
+// ... FormTiptap logic ...
 
 type TFormTiptapProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -87,6 +95,13 @@ export const FormTiptap = <
                 {variant === "advance" && (
                   <>
                     <div className="flex items-center gap-1 pr-2 mr-1">
+                      <FontFamily />
+                      <Color />
+                      <TextAlign />
+                      <Script />
+                    </div>
+
+                    <div className="flex items-center gap-1 pr-2 mr-1">
                       <BulletList />
                       <OrderedList />
                       <TaskList />
@@ -94,6 +109,7 @@ export const FormTiptap = <
 
                     <div className="flex items-center gap-1 pr-2 mr-1">
                       <Image />
+                      <Video />
                       <Columns />
                       <CTAButton />
                       <Table />
