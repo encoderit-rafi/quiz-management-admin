@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { useEditor } from "@tiptap/react";
+import { useEditor, textblockTypeInputRule } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Heading from "@tiptap/extension-heading";
 import HardBreak from "@tiptap/extension-hard-break";
 import ResizableImageExtension from "tiptap-extension-resize-image";
 import {
@@ -36,7 +37,22 @@ export const Tiptap = ({
 }: TiptapProps) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: false,
+      }),
+      Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }).extend({
+        addInputRules() {
+          return this.options.levels.map((level) => {
+            return textblockTypeInputRule({
+              find: new RegExp(`^(#{1,${level}})\\s$`),
+              type: this.type,
+              getAttributes: {
+                level: level === 1 ? 2 : level + 1 <= 6 ? level + 1 : 6,
+              },
+            });
+          });
+        },
+      }),
       HardBreak,
       ResizableImageExtension.configure({
         // inline: true,
