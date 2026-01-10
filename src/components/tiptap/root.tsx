@@ -42,7 +42,7 @@ export const Tiptap = ({
       }),
       Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }).extend({
         addInputRules() {
-          return this.options.levels.map((level) => {
+          return this.options.levels.map((level: number) => {
             return textblockTypeInputRule({
               find: new RegExp(`^(#{1,${level}})\\s$`),
               type: this.type,
