@@ -24,12 +24,15 @@ import {
   HardBreak,
   Underline,
   Highlight,
-  BubbleMenu,
+  // BubbleMenu,
   FontFamily,
   Color,
   TextAlign,
   Script,
   Video,
+  Code,
+  CodeBlock,
+  // FontSize,
 } from "../tiptap";
 // ... existing imports ...
 
@@ -94,6 +97,9 @@ export const FormTiptap = <
                   <Color />
                   <TextAlign />
                   <Script />
+                  <Code />
+                  <CodeBlock />
+                  {/* <FontSize /> */}
                 </div>
 
                 {variant === "advance" && (
@@ -119,7 +125,7 @@ export const FormTiptap = <
                   <Redo />
                 </div>
               </Toolbar>
-              <BubbleMenu
+              {/* <BubbleMenu
                 tippyOptions={{
                   duration: 100,
                   maxWidth: "none",
@@ -142,7 +148,7 @@ export const FormTiptap = <
                     <Color />
                   </div>
                 </Toolbar>
-              </BubbleMenu>
+              </BubbleMenu> */}
               <Editor />
             </Tiptap>
             {Boolean(description) && !invalid && (
