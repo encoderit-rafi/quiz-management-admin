@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { FormResultPage } from "../-components";
 import { useGetResultPage } from "../-apis";
-import { useSetRoute } from "@/hooks/use-set-route";
+// import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import { useEffect } from "react";
+import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(
   {
@@ -12,7 +15,23 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(
 
 function EditResultPage() {
   const { id } = Route.useParams();
-  useSetRoute({ name: "Edit Result Page", path: Route.fullPath });
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
+      {
+        name: "Quiz Result Pages",
+        path: `/quizzes/${id}/result-pages/` as TPtah,
+      },
+      {
+        name: "Quiz Result Details",
+        path: `/quizzes/${id}/result-pages/view/${id}` as TPtah,
+      },
+      {
+        name: "Edit Result Page",
+      },
+    ]);
+  }, []);
   const { data: resultPage } = useQuery(useGetResultPage(id));
 
   return (

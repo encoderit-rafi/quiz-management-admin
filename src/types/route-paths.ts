@@ -6,7 +6,7 @@ export type TRoute = {
   name: string;
   url: TPtah;
   icon: LucideIcon;
-  isActive: boolean;
+  // isActive: boolean;
   isVisible: boolean;
-  children?: TRoute[];
+  // children?: TRoute[];
 };

@@ -14,6 +14,8 @@ import { useGetStatistics } from "./-apis";
 import { StatCard } from "./-components";
 import type { TStatisticsSchema } from "./-types";
 import { useGetAllQuizzes } from "../../../-apis";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/statistics/")({
   component: StatisticsPage,
@@ -35,6 +37,16 @@ const DEMO_STATS: TStatisticsSchema = {
 };
 
 function StatisticsPage() {
+  const { id } = Route.useParams();
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
+      {
+        name: "Quiz Statistics",
+      },
+    ]);
+  }, []);
   const [selectedQuizId, setSelectedQuizId] = useState<string>("");
 
   // Fetch all quizzes for the dropdown

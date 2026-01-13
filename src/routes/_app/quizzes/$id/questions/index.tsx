@@ -31,10 +31,12 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { FORM_DATA } from "@/data";
-import { useSetRoute } from "@/hooks/use-set-route";
+// import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import type { TPtah } from "@/types";
 
 const DEMO_QUESTIONS = [
   {
@@ -74,7 +76,18 @@ export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
 });
 
 function QuizQuestionsPage() {
-  useSetRoute({ name: "Quiz Questions", path: Route.fullPath });
+  // useSetRoute({ name: "Quiz Questions", path: Route.fullPath });
+
+  const { id } = Route.useParams();
+  // const navigate = useNavigate();
+
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
+      { name: "Quiz Questions" },
+    ]);
+  }, []);
 
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 

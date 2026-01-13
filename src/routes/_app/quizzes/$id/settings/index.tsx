@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardAction } from "@/components/ui/card";
 import { useGetQuizSettings, useUpdateQuizSettings } from "../../../-apis";
-// import { FormQuizSettings } from "../../../-components";
+
 import { FormCheckbox, FormSwitch } from "@/components/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/field";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
   component: QuizSettingsPage,
@@ -29,7 +31,13 @@ export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
 function QuizSettingsPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
+      { name: "Quiz Settings" },
+    ]);
+  }, []);
   const leadFormFields = [
     { name: "email", label: "Email" },
     { name: "phone", label: "Phone" },
@@ -94,7 +102,6 @@ function QuizSettingsPage() {
                 </FieldContent>
                 <FieldGroup data-slot="checkbox-group">
                   {leadFormFields.map((field) => {
-                    // const isEnabled = watch(`lead_form.${field.name}.enabled`);
                     return (
                       <div
                         key={field.name}
@@ -109,7 +116,6 @@ function QuizSettingsPage() {
                           control={control}
                           name={`lead_form.${field.name}.required`}
                           label="Required"
-                          // disabled={!isEnabled}
                         />
                       </div>
                     );
@@ -126,7 +132,6 @@ function QuizSettingsPage() {
                 </FieldContent>
                 <FieldGroup data-slot="checkbox-group">
                   {resultDeliveryFields.map((field) => {
-                    // const isEnabled = watch(`lead_form.${field.name}.enabled`);
                     return (
                       <div key={field.name}>
                         <FormCheckbox

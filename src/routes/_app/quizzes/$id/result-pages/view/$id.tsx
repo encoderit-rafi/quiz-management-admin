@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-// import { useQuery } from "@tanstack/react-query";
-// import { useGetResultPage } from "../-apis"; // Fixed import
+
 import type { TResultPageSchema } from "../-types"; // Added type import
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
 import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import { useEffect } from "react";
+import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/view/$id")(
   {
@@ -44,26 +46,19 @@ const DEMO_RESULT_PAGES: TResultPageSchema[] = [
 
 function ViewResultPage() {
   const { id } = Route.useParams();
-  useSetRoute({ name: "Result Page Details", path: Route.fullPath });
-  // Commented out API call - using static data instead
-  // const { isLoading } = useQuery({
-  //   ...useGetResultPage(id),
-  //   select: (data: any) => {
-  //     if (data) return data as TResultPageSchema;
-  //     // Fallback to demo data
-  //     return DEMO_RESULT_PAGES.find((p) => String(p.id) === String(id));
-  //   },
-  // });
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex h-full items-center justify-center">
-  //       <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-  //     </div>
-  //   );
-  // }
-
-  // Use static data
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
+      {
+        name: "Quiz Result Pages",
+        path: `/quizzes/${id}/result-pages/` as TPtah,
+      },
+      {
+        name: "Result Page Details",
+      },
+    ]);
+  }, []);
   const resultPage = DEMO_RESULT_PAGES.find((p) => String(p.id) === String(id));
 
   if (!resultPage) {

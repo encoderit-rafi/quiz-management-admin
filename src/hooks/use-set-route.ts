@@ -11,6 +11,5 @@ export const useSetRoute = (route: TRoute) => {
 
   useEffect(() => {
     setActiveRoute(route);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.name, route.path]);
 };

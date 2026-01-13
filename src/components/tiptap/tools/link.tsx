@@ -57,11 +57,6 @@ export const Link = () => {
     }
   }, [editor, url]);
 
-  // const unsetLink = useCallback(() => {
-  //   if (!editor) return;
-  //   editor.chain().focus().extendMarkRange("link").unsetLink().run();
-  // }, [editor]);
-
   if (!editor || !state) return null;
   if (state.isActive) {
     return (

@@ -23,7 +23,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import Youtube from "@tiptap/extension-youtube";
-// import FontSize from "tiptap-extension-font-size";
+
 import Blockquote from "@tiptap/extension-blockquote";
 import Typography from "@tiptap/extension-typography";
 import { Column, ColumnBlock } from "./extensions/columns";
@@ -109,7 +109,7 @@ export const Tiptap = ({
       Youtube.configure({
         controls: false,
       }),
-      // FontSize,
+
       Blockquote,
       Typography,
     ],

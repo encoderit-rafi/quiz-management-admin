@@ -1,62 +1,41 @@
 import { MessageCircleQuestionMark } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarRail } from "@/components/ui/sidebar";
-import type { TPtah, TRoute } from "@/types";
-import { useRouterState } from "@tanstack/react-router";
+import type { TRoute } from "@/types";
+// import { useRouterState } from "@tanstack/react-router";
 import { NavMain } from "./nav-main";
-import { useActiveRoute } from "@/store";
-import { useEffect } from "react";
+// import { useActiveRoute } from "@/store";
+// import { useEffect } from "react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {
-    location: { pathname },
-  } = useRouterState();
-  const { setActiveRoute } = useActiveRoute();
+  // const {
+  //   location: { pathname },
+  // } = useRouterState();
+  // const { setActiveRoute } = useActiveRoute();
 
   const routes: TRoute[] = [
     {
       name: "Quizzes",
       url: "/",
       icon: MessageCircleQuestionMark,
-      isActive: isActiveLink(["/"]),
+      // isActive: isActiveLink(["/"]),
       isVisible: true,
     },
-    // {
-    //   name: "Result Pages",
-    //   url: "/result-pages",
-    //   icon: FileText,
-    //   isActive: isActiveLink(["/result-pages"]),
-    //   isVisible: true,
-    // },
-    // {
-    //   name: "Leads & Results",
-    //   url: "/leads",
-    //   icon: Users,
-    //   isActive: isActiveLink(["/leads"]),
-    //   isVisible: true,
-    // },
-    // {
-    //   name: "Statistics",
-    //   url: "/statistics",
-    //   icon: BarChart,
-    //   isActive: isActiveLink(["/statistics"]),
-    //   isVisible: true,
-    // },
   ];
 
-  function isActiveLink(items: TPtah[]): boolean {
-    return items.includes(pathname as TPtah);
-  }
+  // function isActiveLink(items: TPtah[]): boolean {
+  //   return items.includes(pathname as TPtah);
+  // }
 
   // Update active route when pathname changes
-  useEffect(() => {
-    const activeRouteItem = routes.find((route) => route.isActive);
-    if (activeRouteItem) {
-      setActiveRoute({
-        name: activeRouteItem.name,
-        path: activeRouteItem.url,
-      });
-    }
-  }, [pathname, setActiveRoute]);
+  // useEffect(() => {
+  //   const activeRouteItem = routes.find((route) => route.isActive);
+  //   if (activeRouteItem) {
+  //     setActiveRoute({
+  //       name: activeRouteItem.name,
+  //       path: activeRouteItem.url,
+  //     });
+  //   }
+  // }, [pathname, setActiveRoute]);
 
   return (
     <Sidebar collapsible="icon" {...props}>

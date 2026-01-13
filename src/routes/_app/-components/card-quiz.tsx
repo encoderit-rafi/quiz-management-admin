@@ -1,6 +1,5 @@
 import { CardContent } from "@/components/ui/card";
-// import { useQuery } from "@tanstack/react-query";
-// import { useGetQuiz } from "../-apis";
+
 import {
   Accordion,
   AccordionContent,
@@ -64,17 +63,7 @@ const STATIC_QUIZ_DATA = {
 };
 
 export default function CardQuiz({ form_data: _form_data }: TProps) {
-  // const { id } = form_data; // Not needed when using static data
-
   // Commented out API call - using static data instead
-  // const { data: quiz, isLoading } = useQuery({
-  //   ...useGetQuiz(id),
-  //   enabled: !!id,
-  // });
-
-  // if (isLoading) {
-  //   return <CardContent>Loading quiz details...</CardContent>;
-  // }
 
   // Use static data
   const quiz = STATIC_QUIZ_DATA;

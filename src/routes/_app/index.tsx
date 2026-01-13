@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PenSquare,
   Trash2,
@@ -32,6 +32,7 @@ import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -74,6 +75,10 @@ const DEMO_QUIZZES: TQuizSchema[] = [
 ];
 
 export default function RouteComponent() {
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([]);
+  }, []);
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);

@@ -3,7 +3,9 @@ import { CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { CardQuiz } from "../../../-components";
-import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import { useEffect } from "react";
+// import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/view/")({
   component: ViewQuizPage,
@@ -12,7 +14,10 @@ export const Route = createFileRoute("/_app/quizzes/$id/view/")({
 function ViewQuizPage() {
   const { id } = Route.useParams();
 
-  useSetRoute({ name: "View Quiz", path: Route.fullPath });
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([{ name: "View Quiz" }]);
+  }, []);
 
   return (
     <>

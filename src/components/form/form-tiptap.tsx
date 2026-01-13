@@ -125,30 +125,7 @@ export const FormTiptap = <
                   <Redo />
                 </div>
               </Toolbar>
-              {/* <BubbleMenu
-                tippyOptions={{
-                  duration: 100,
-                  maxWidth: "none",
-                  zIndex: 50,
-                  appendTo: "parent",
-                }}
-              >
-                <Toolbar className="flex-wrap h-auto gap-2 divide-x bg-background relative z-50 border rounded-md shadow mx-2">
-                  <div className="flex items-center gap-1 pr-2 mr-1">
-                    <Bold />
-                    <Italic />
-                    <Underline />
-                    <Highlight />
-                    <Link />
-                    <Strikethrough />
-                  </div>
 
-                  <div className="flex items-center gap-1 pr-2 mr-1">
-                    <TextAlign />
-                    <Color />
-                  </div>
-                </Toolbar>
-              </BubbleMenu> */}
               <Editor />
             </Tiptap>
             {Boolean(description) && !invalid && (

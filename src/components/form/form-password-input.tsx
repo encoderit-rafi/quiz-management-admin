@@ -2,7 +2,6 @@ import { Controller } from "react-hook-form";
 import type { FieldPath, FieldValues } from "react-hook-form";
 
 import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
-// import type { HTMLInputTypeAttribute } from "react";
 
 import type { TFormController } from "../../types"; // adjust path
 import { PasswordInput } from "../ui/password-input";

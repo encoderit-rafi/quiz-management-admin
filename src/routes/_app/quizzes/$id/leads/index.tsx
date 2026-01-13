@@ -6,6 +6,9 @@ import { LeadCard } from "./-components";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
 import { useSetRoute } from "@/hooks/use-set-route";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import { useEffect } from "react";
+import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/leads/")({
   component: LeadsListPage,
@@ -64,7 +67,16 @@ const DEMO_LEADS: TLeadResultSchema[] = [
 ];
 
 function LeadsListPage() {
-  useSetRoute({ name: "Leads", path: Route.fullPath });
+  const { id } = Route.useParams();
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
+      {
+        name: "Leads & Results",
+      },
+    ]);
+  }, []);
   const { data: leads } = useQuery({
     ...useGetLeads(),
     select: (data: any) =>

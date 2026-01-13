@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  FormQuizSchema,
-  type TFormQuizSchema,
-  // type TQuizSchema,
-} from "../-types";
+import { FormQuizSchema, type TFormQuizSchema } from "../-types";
 import { useCreateQuiz, useGetQuiz, useUpdateQuiz } from "../-apis";
 
 import { useQuery } from "@tanstack/react-query";
@@ -44,24 +40,9 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   const { reset, control, handleSubmit } = form;
 
   // Format API Data
-  // const formatter = (data: TQuizSchema): TFormQuizSchema => ({
-  //   id: data.id ?? undefined,
-  //   title: data.title ?? "",
-  //   quiz_name: data.quiz_name ?? "",
-  //   heading: data.heading ?? "",
-  //   cta_text: data.cta_text ?? "",
-  //   footer_text: data.footer_text ?? "",
-  //   description: data.description ?? "",
-  //   logo: data.logo ?? null,
-  //   background_image: data.background_image ?? null,
-  //   primary_color: data.primary_color ?? "#ffffff",
-  //   secondary_color: data.secondary_color ?? "#ffffff",
-  //   is_active: data.is_active ?? true,
-  // });
 
   useEffect(() => {
     if (type === "update" && quiz) {
-      // const formattedData = formatter(quiz);
       reset(quiz);
     }
   }, [quiz, type, reset]);

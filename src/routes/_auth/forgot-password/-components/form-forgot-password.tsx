@@ -5,7 +5,6 @@ import { FormSchema, type TFormSchema } from "../-types/form.type";
 import { useForgotPassword } from "../-apis";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/form";
-// import InputWithIcon from "@/components/base/input-with-icon";
 
 export default function FormForgotPassword() {
   const { mutate: forgotPassword, isPending } = useForgotPassword();
@@ -30,7 +29,6 @@ export default function FormForgotPassword() {
           control={control}
           type="email"
           name="email"
-          // label="Email"
           placeholder="m@example.com"
         />
 
