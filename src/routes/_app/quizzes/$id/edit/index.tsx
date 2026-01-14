@@ -3,7 +3,6 @@ import { FormQuiz } from "../../../-components";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
 import type { TPtah } from "@/types";
-// import { useSetRoute } from "@/hooks/use-set-route";
 
 export const Route = createFileRoute("/_app/quizzes/$id/edit/")({
   component: EditQuizPage,

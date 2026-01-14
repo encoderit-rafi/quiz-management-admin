@@ -1,17 +1,30 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Navbar from "@/components/base/navbar";
-import { useToken } from "@/store";
+import { useCurrentUser, useToken } from "@/store";
+import { useQuery } from "@tanstack/react-query";
+import { getAuthProfile } from "../_auth/-api";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_app")({
+  beforeLoad: () => {
+    const { token } = useToken.getState();
+    if (!token) {
+      throw redirect({ to: "/login" });
+    }
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { token } = useToken();
-
-  console.log("👉 ~ RouteComponent", { token });
+  const { setUser } = useCurrentUser();
+  const { data: user } = useQuery(getAuthProfile());
+  console.log("👉 ~ RouteComponent ~ user:", user);
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user]);
   return (
     <SidebarProvider>
       <div className="flex h-svh w-full overflow-hidden">

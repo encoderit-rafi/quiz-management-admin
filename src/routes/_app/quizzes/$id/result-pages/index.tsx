@@ -19,7 +19,6 @@ import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { useSetRoute } from "@/hooks/use-set-route";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
 
@@ -150,7 +149,7 @@ export default function RouteComponent() {
             },
           }}
         />
-        <Button asChild>
+        <Button asChild variant={"outline"}>
           <Link
             to="/quizzes/$id/result-pages/create"
             params={{ id: "1" }}

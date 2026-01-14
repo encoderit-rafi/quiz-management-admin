@@ -38,11 +38,10 @@ export const FormPasswordInput = <
           <Field data-invalid={invalid}>
             {Boolean(label) && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
             <PasswordInput
-              {...field}
-              type="password"
-              placeholder={placeholder}
               id={name}
               aria-invalid={invalid}
+              placeholder={placeholder}
+              {...field}
             />
             {Boolean(description) && !invalid && (
               <FieldDescription>{description}</FieldDescription>

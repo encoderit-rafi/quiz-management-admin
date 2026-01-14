@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { FormResultPage } from "../-components";
 import { useGetResultPage } from "../-apis";
-// import { useSetRoute } from "@/hooks/use-set-route";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
 import type { TPtah } from "@/types";

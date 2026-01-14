@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { LeadCard } from "./-components";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
-import { useSetRoute } from "@/hooks/use-set-route";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
 import type { TPtah } from "@/types";
@@ -88,7 +87,7 @@ function LeadsListPage() {
   return (
     <div className="space-y-6 p-4">
       <div className="flex items-center justify-end">
-        <Button onClick={exportLeads}>
+        <Button onClick={exportLeads} variant={"outline"}>
           <Download /> Export CSV
         </Button>
       </div>

@@ -1,15 +1,7 @@
-import {
-  createFileRoute,
-  useRouter,
-  // useRouterState,
-} from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { FormQuiz } from "../../-components";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
-// import useBreadcrumbPath from "@/hooks/use-breadcrumb-path";
-// import { useSetRoute } from "@/hooks/use-set-route";
-// import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-// import { useEffect } from "react";
 
 export const Route = createFileRoute("/_app/quizzes/create/")({
   component: CreateQuizPage,

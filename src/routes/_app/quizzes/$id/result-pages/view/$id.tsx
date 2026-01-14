@@ -3,12 +3,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import type { TResultPageSchema } from "../-types"; // Added type import
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react"; // Removed Loader2, Trash2
+import { Edit, Trash2 } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
-import { useSetRoute } from "@/hooks/use-set-route";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
 import type { TPtah } from "@/types";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/view/$id")(
   {
@@ -72,12 +72,22 @@ function ViewResultPage() {
   return (
     <>
       <CardHeader className="flex items-center gap-2 justify-end">
-        <Button asChild>
-          <Link to="/quizzes/$id/result-pages/edit/$id" params={{ id }}>
-            <Edit />
-            <AppButtonText>Edit Result Page</AppButtonText>
-          </Link>
-        </Button>
+        <ButtonGroup>
+          <Button asChild variant={"outline"}>
+            <Link to="/quizzes/$id/result-pages/edit/$id" params={{ id }}>
+              <Edit />
+              <AppButtonText>Edit Result Page</AppButtonText>
+            </Link>
+          </Button>
+          <Button
+            variant={"outline"}
+            // size={"icon"}
+            className="hover:text-destructive text-destructive"
+          >
+            <Trash2 />
+            {/* Delete */}
+          </Button>
+        </ButtonGroup>
       </CardHeader>
 
       <CardContent className="space-y-6">

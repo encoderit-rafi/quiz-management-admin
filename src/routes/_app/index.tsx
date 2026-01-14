@@ -31,7 +31,6 @@ import { useGetAllQuizzes } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
-import { useSetRoute } from "@/hooks/use-set-route";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 
 export const Route = createFileRoute("/_app/")({
@@ -90,7 +89,7 @@ export default function RouteComponent() {
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
     {
-      header: "Title",
+      header: "Quiz Name",
       accessorKey: "title",
       cell: ({ row }) => (
         <div className="font-medium text-foreground">
@@ -205,8 +204,6 @@ export default function RouteComponent() {
     },
   ];
 
-  useSetRoute({ name: "", path: "/" });
-
   return (
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between gap-4">
@@ -224,7 +221,7 @@ export default function RouteComponent() {
             },
           }}
         />
-        <Button asChild>
+        <Button asChild variant={"outline"}>
           <Link to="/quizzes/create" className="flex items-center">
             <Plus />
             <AppButtonText>Add Quiz</AppButtonText>

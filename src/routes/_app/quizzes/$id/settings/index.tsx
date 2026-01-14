@@ -20,9 +20,16 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { DEFAULT_PAGINATION } from "@/consts";
-import { useSetRoute } from "@/hooks/use-set-route";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
   component: QuizSettingsPage,
@@ -74,7 +81,6 @@ function QuizSettingsPage() {
       },
     });
   };
-  useSetRoute({ name: "Quiz Settings", path: Route.fullPath });
 
   useEffect(() => {
     if (settings) {
@@ -101,25 +107,37 @@ function QuizSettingsPage() {
                   <FieldError errors={[errors.lead_form]} />
                 </FieldContent>
                 <FieldGroup data-slot="checkbox-group">
-                  {leadFormFields.map((field) => {
-                    return (
-                      <div
-                        key={field.name}
-                        className="flex items-center gap-2 justify-between max-w-xs"
-                      >
-                        <FormCheckbox
-                          control={control}
-                          name={`lead_form.${field.name}.enabled`}
-                          label={field.label}
-                        />
-                        <FormSwitch
-                          control={control}
-                          name={`lead_form.${field.name}.required`}
-                          label="Required"
-                        />
-                      </div>
-                    );
-                  })}
+                  <Table className="max-w-md border rounded-lg">
+                    <TableHeader className="bg-muted/50  ">
+                      <TableRow>
+                        <TableHead className="w-[100px]">Name</TableHead>
+                        <TableHead>Required</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {leadFormFields.map((field) => {
+                        return (
+                          <TableRow key={field.name}>
+                            <TableCell className="font-medium w-1/2">
+                              <FormCheckbox
+                                control={control}
+                                name={`lead_form.${field.name}.enabled`}
+                                label={field.label}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              {" "}
+                              <FormSwitch
+                                control={control}
+                                name={`lead_form.${field.name}.required`}
+                                label="Required"
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
                 </FieldGroup>
               </FieldSet>
 
