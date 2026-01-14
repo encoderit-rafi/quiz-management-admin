@@ -79,7 +79,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
             <FormInput
-              name="quiz_name"
+              name="name"
               control={control}
               label="Quiz Name"
               placeholder="Enter quiz name"
@@ -142,7 +142,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
             placeholder="Enter description"
           />
           <FormTiptap
-            name="footer_text"
+            name="landing_page_text"
             control={control}
             label="Footer Text"
           />
@@ -153,6 +153,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
           type="button"
           variant="outline"
           className="min-w-36"
+          disabled={isPendingCreate || isPendingUpdate}
           onClick={onCancel}
         >
           Cancel

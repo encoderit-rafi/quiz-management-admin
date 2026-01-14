@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import type { TFormQuizSchema } from "../-types";
+import { QUERY_KEYS } from "@/query-keys";
 
 const toFormData = (data: Record<string, any>): FormData => {
   const formData = new FormData();
@@ -33,17 +34,8 @@ export const useCreateQuiz = () => {
   return useMutation({
     mutationKey: ["create-quiz"],
     mutationFn: (body: TFormQuizSchema | FormData) => {
-      // If body already is FormData, send directly
-      if (body instanceof FormData) {
-        return api.post("/quizzes", body, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      }
-
-      // Format fields & remove empty values
       const data = omitEmpty({
         ...body,
-        is_active: body.is_active ? 1 : 0,
       });
 
       // Convert to FormData if there are files
@@ -59,7 +51,7 @@ export const useCreateQuiz = () => {
     },
     onSuccess: () => {
       toast.success("Quiz created successfully!");
-      queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ALL_QUIZZES() });
     },
     onError: (error) => {
       const fallback = "Failed to create quiz.";

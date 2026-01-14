@@ -77,10 +77,9 @@ export const FormImageUpload = <
                     <ImagePreview src={previewUrl} alt={`${label} preview`} />
                     <Button
                       type="button"
-                      variant="destructive"
+                      // variant="destructive"
                       size="icon"
-                      className="absolute top-2 right-2 rounded-full size-6
-                    "
+                      className="absolute bg-red-500/80 text-white hover:bg-red-500 top-2 right-2 rounded-full size-6 transition-colors"
                       onClick={() => onChange(null)}
                     >
                       <Trash2 className="h-4 w-4" />

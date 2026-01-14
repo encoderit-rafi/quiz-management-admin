@@ -39,39 +39,6 @@ export const Route = createFileRoute("/_app/")({
 });
 
 // Demo data (fallback)
-const DEMO_QUIZZES: TQuizSchema[] = [
-  // ... (keeping demo data same as before, assuming it's used when API fails)
-  {
-    id: 1,
-    title: "JavaScript Fundamentals",
-    description: "Test your knowledge of JavaScript basics",
-    logo: null,
-    background_image: null,
-    primary_color: "#3b82f6",
-    secondary_color: "#8b5cf6",
-    is_active: true,
-  },
-  {
-    id: 2,
-    title: "React Advanced Concepts",
-    description: "Deep dive into React hooks, context, and performance",
-    logo: null,
-    background_image: null,
-    primary_color: "#10b981",
-    secondary_color: "#06b6d4",
-    is_active: true,
-  },
-  {
-    id: 3,
-    title: "TypeScript Mastery",
-    description: "Master TypeScript types, generics, and advanced patterns",
-    logo: null,
-    background_image: null,
-    primary_color: "#f59e0b",
-    secondary_color: "#ef4444",
-    is_active: true,
-  },
-];
 
 export default function RouteComponent() {
   const { setBreadcrumb } = useBreadcrumb();
@@ -83,45 +50,30 @@ export default function RouteComponent() {
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
   // Use the new queryOptions pattern
-  const { data: quizzes = { data: DEMO_QUIZZES, meta: { total: 0 } } } =
-    useQuery(useGetAllQuizzes(search));
+  const {
+    data: { data: quizzes, meta },
+  } = useQuery(useGetAllQuizzes(search));
+  console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
 
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
     {
       header: "Quiz Name",
+      accessorKey: "name",
+    },
+    {
+      header: "Title",
       accessorKey: "title",
-      cell: ({ row }) => (
-        <div className="font-medium text-foreground">
-          {row.getValue("title")}
-        </div>
-      ),
     },
     {
       header: "Description",
       accessorKey: "description",
-      cell: ({ row }) => {
-        const description = row.getValue("description") as string;
-        return (
-          <div
-            className="text-muted-foreground line-clamp-1 max-w-[400px]"
-            dangerouslySetInnerHTML={{
-              __html: description || "No description",
-            }}
-          />
-        );
-      },
     },
     {
       header: "Views",
       accessorKey: "views",
-      cell: () => <div className="text-muted-foreground">1.2k</div>, // Mock data
     },
-    {
-      header: "Submissions",
-      accessorKey: "submissions",
-      cell: () => <div className="text-muted-foreground">342</div>, // Mock data
-    },
+
     {
       header: "Tools",
       accessorKey: "tools",
@@ -230,23 +182,25 @@ export default function RouteComponent() {
       </div>
 
       <div className="rounded-md border">
-        <AppTable data={quizzes?.data || DEMO_QUIZZES} columns={columns} />
+        <AppTable data={quizzes ?? []} columns={columns} />
       </div>
 
-      <AppPagination
-        total={quizzes?.meta?.total || 0}
-        perPage={search.per_page}
-        page={search.page}
-        onPageChange={(page) =>
-          navigate({ search: { ...search, page }, replace: true })
-        }
-        onPerPageChange={(per_page) =>
-          navigate({
-            search: { ...search, per_page: Number(per_page), page: 1 },
-            replace: true,
-          })
-        }
-      />
+      {meta.last_page > 1 && (
+        <AppPagination
+          total={meta?.total || 0}
+          perPage={search.per_page}
+          page={search.page}
+          onPageChange={(page) =>
+            navigate({ search: { ...search, page }, replace: true })
+          }
+          onPerPageChange={(per_page) =>
+            navigate({
+              search: { ...search, per_page: Number(per_page), page: 1 },
+              replace: true,
+            })
+          }
+        />
+      )}
       {/* Delete Dialog */}
       <AppDeleteDialog
         open={deleteForm.type === "delete"}

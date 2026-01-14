@@ -2,7 +2,6 @@ import axios from "axios";
 import { BASE_URL } from "./consts";
 import { toast } from "sonner";
 import { useToken, useCurrentUser } from "./store";
-const theme = localStorage.getItem("theme");
 
 export const api = axios.create({
   baseURL: `${BASE_URL}/api`,
@@ -12,7 +11,6 @@ export const api = axios.create({
 // Attach token automatically
 api.interceptors.request.use((config) => {
   const { token } = useToken.getState();
-  console.log("👉 ~ token:", token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

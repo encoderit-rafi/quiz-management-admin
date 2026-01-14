@@ -1,21 +1,30 @@
-import { TFileSchema } from "@/types";
 import { z } from "zod";
 
 // Quiz Schema
 export const QuizSchema = z.object({
-  id: z.union([z.string(), z.number()]).optional(),
+  id: z.number(),
+  uuid: z.uuid(),
+
+  name: z.string(),
   title: z.string(),
-  quiz_name: z.string().optional(),
-  heading: z.string().optional(),
-  cta_text: z.string().optional(),
-  footer_text: z.string().optional(),
-  description: z.string().nullable().optional(),
-  logo: TFileSchema.nullable().optional(),
-  background_image: TFileSchema.nullable().optional(),
-  primary_color: z.string().optional(),
-  secondary_color: z.string().optional(),
-  is_active: z.boolean().optional(),
-  questions: z.array(z.any()).optional(),
+  heading: z.string(),
+  description: z.string(),
+
+  landing_page_text: z.string(), // HTML string
+  cta_text: z.string(),
+
+  background_image: z.url(),
+  logo: z.url(),
+
+  primary_color: z.string(), // hex color
+  secondary_color: z.string(), // hex color
+
+  is_active: z.boolean(),
+
+  views: z.string(), // comes as string from API
+
+  client_id: z.number().nullable(),
+  embed_code: z.string().nullable(),
 });
 
 // Type inference
