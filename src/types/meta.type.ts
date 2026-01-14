@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const MeteSchema = z.object({
+export const MetaSchema = z.object({
   current_page: z.number(),
   first_page_url: z.string().url(),
   from: z.number().nullable(),
@@ -14,4 +14,4 @@ export const MeteSchema = z.object({
   total: z.number(),
 });
 
-export type TMeteSchema = z.infer<typeof MeteSchema>;
+export type TMetaSchema = z.infer<typeof MetaSchema>;

@@ -13,8 +13,8 @@ export const QuizSchema = z.object({
   landing_page_text: z.string(), // HTML string
   cta_text: z.string(),
 
-  background_image: z.url(),
-  logo: z.url(),
+  background_image: z.string().url(),
+  logo: z.string().url(),
 
   primary_color: z.string(), // hex color
   secondary_color: z.string(), // hex color

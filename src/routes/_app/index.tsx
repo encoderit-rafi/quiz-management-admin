@@ -50,10 +50,9 @@ export default function RouteComponent() {
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
   // Use the new queryOptions pattern
-  const {
-    data: { data: quizzes, meta },
-  } = useQuery(useGetAllQuizzes(search));
-  console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
+  const { data: response } = useQuery(useGetAllQuizzes(search));
+  const quizzes = response?.data ?? [];
+  const meta = response?.meta;
 
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
@@ -141,7 +140,7 @@ export default function RouteComponent() {
                     ...FORM_DATA,
                     type: "delete",
                     title: quiz.title,
-                    id: quiz.id || "",
+                    id: quizId,
                   })
                 }
               >
@@ -182,10 +181,10 @@ export default function RouteComponent() {
       </div>
 
       <div className="rounded-md border">
-        <AppTable data={quizzes ?? []} columns={columns} />
+        <AppTable data={quizzes} columns={columns} />
       </div>
 
-      {meta.last_page > 1 && (
+      {meta && meta.last_page > 1 && (
         <AppPagination
           total={meta?.total || 0}
           perPage={search.per_page}
