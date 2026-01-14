@@ -17,6 +17,11 @@ export const useUpdateQuiz = () => {
       // Format fields & remove empty values
       const data = omitEmpty({
         ...rest,
+        logo: typeof rest.logo === "string" ? "" : rest.logo,
+        background_image:
+          typeof rest.background_image === "string"
+            ? ""
+            : rest.background_image,
       });
 
       // Convert to FormData if there are files
@@ -34,7 +39,7 @@ export const useUpdateQuiz = () => {
       return api.put(`/quizzes/${id}`, data);
     },
     onSuccess: (_, body) => {
-      const id = body instanceof FormData ? body.get("id") : body.id;
+      const id = body.id;
       toast.success("Quiz updated successfully!");
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ALL_QUIZZES() });
       if (id) {

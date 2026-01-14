@@ -76,8 +76,6 @@ export default function FormQuiz({ form_data }: TProps) {
     if (type === "update") {
       updateQuiz(data, {
         onSuccess: () => {
-          // onSuccess(res);
-          toast.success("Quiz updated successfully");
           navigate({ to: "/quizzes/$id/view", params: { id: String(id) } });
           reset(DEFAULT_QUIZ_DATA);
         },
@@ -85,7 +83,6 @@ export default function FormQuiz({ form_data }: TProps) {
     } else {
       createQuiz(data, {
         onSuccess: (res) => {
-          toast.success("Quiz created successfully");
           navigate({
             to: "/quizzes/$id/view",
             params: { id: String(res?.data?.data?.id) },
