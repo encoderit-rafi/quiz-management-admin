@@ -2,6 +2,7 @@ import { api } from "@/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
+import { QUERY_KEYS } from "@/query-keys";
 
 type TDeleteQuizParams = {
   id: string | number;
@@ -16,7 +17,7 @@ export const useDeleteQuiz = () => {
     },
     onSuccess: () => {
       toast.success("Quiz deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ALL_QUIZZES() });
     },
     onError: (error) => {
       const fallback = "Failed to delete quiz.";

@@ -36,7 +36,7 @@ export default function AppDeleteDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="capitalize min-w-24">
+          <AlertDialogCancel className="capitalize min-w-24" disabled={loading}>
             Cancel
           </AlertDialogCancel>
           <Button

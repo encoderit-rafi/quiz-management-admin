@@ -17,11 +17,8 @@ import { CardAction, CardContent } from "@/components/ui/card";
 import { DEFAULT_QUIZ_DATA } from "../-data";
 import type { TFormType } from "@/types";
 import { useNavigate, useRouter } from "@tanstack/react-router";
-import { toast } from "sonner";
 type TProps = {
   form_data: { id: string | number; type: TFormType };
-  // onSuccess: (res?: any) => void;
-  // onCancel: () => void;
 };
 
 export default function FormQuiz({ form_data }: TProps) {
@@ -45,21 +42,6 @@ export default function FormQuiz({ form_data }: TProps) {
   // Format API Data
   useEffect(() => {
     if (type === "update" && quiz) {
-      // reset({
-      //   id: quiz.id,
-      //   name: quiz.name,
-      //   title: quiz.title,
-      //   heading: quiz.heading,
-      //   cta_text: quiz.cta_text,
-      //   landing_page_text: quiz.landing_page_text,
-      //   description: quiz.description,
-      //   // is_active: Boolean(quiz.is_active),
-      //   // embed_code: quiz.embed_code,
-      //   logo: quiz.logo,
-      //   background_image: quiz.background_image,
-      //   primary_color: quiz.primary_color,
-      //   secondary_color: quiz.secondary_color,
-      // });
       reset(quiz);
     }
   }, [quiz, type, reset]);

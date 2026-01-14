@@ -27,7 +27,7 @@ import AppTable from "@/components/base/app-table";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import { useQuery } from "@tanstack/react-query";
-import { useGetAllQuizzes } from "./-apis";
+import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
@@ -54,6 +54,20 @@ export default function RouteComponent() {
   const quizzes = response?.data ?? [];
   console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
   const meta = response?.meta;
+
+  const { mutate: deleteQuiz, isPending: isDeletePending } = useDeleteQuiz();
+
+  const handleConfirmDelete = () => {
+    if (!deleteForm.id) return;
+    deleteQuiz(
+      { id: deleteForm.id },
+      {
+        onSuccess: () => {
+          setDeleteForm(FORM_DATA);
+        },
+      }
+    );
+  };
 
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
@@ -205,9 +219,9 @@ export default function RouteComponent() {
       <AppDeleteDialog
         open={deleteForm.type === "delete"}
         onOpenChange={() => setDeleteForm(FORM_DATA)}
-        onConfirm={() => {}}
+        onConfirm={handleConfirmDelete}
         item_name={deleteForm.title}
-        loading={false}
+        loading={isDeletePending}
       />
     </div>
   );
