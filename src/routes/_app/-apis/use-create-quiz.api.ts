@@ -4,31 +4,8 @@ import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import type { TFormQuizSchema } from "../-types";
 import { QUERY_KEYS } from "@/query-keys";
-
-const toFormData = (data: Record<string, any>): FormData => {
-  const formData = new FormData();
-  Object.entries(data).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      if (value instanceof File) {
-        formData.append(key, value);
-      } else if (typeof value === "boolean") {
-        formData.append(key, value ? "1" : "0");
-      } else {
-        formData.append(key, String(value));
-      }
-    }
-  });
-  return formData;
-};
-
-const omitEmpty = (obj: Record<string, any>): Record<string, any> => {
-  return Object.fromEntries(
-    Object.entries(obj).filter(
-      ([_, v]) => v !== null && v !== undefined && v !== ""
-    )
-  );
-};
-
+import { serialize } from "object-to-formdata";
+import omitEmpty from "omit-empty";
 export const useCreateQuiz = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -36,12 +13,12 @@ export const useCreateQuiz = () => {
     mutationFn: (body: TFormQuizSchema | FormData) => {
       const data = omitEmpty({
         ...body,
-      });
+      }) as TFormQuizSchema;
 
       // Convert to FormData if there are files
       const hasFiles =
         data.logo instanceof File || data.background_image instanceof File;
-      const payload = hasFiles ? toFormData(data) : data;
+      const payload = hasFiles ? serialize(data) : data;
 
       return api.post("/quizzes", payload, {
         headers: hasFiles

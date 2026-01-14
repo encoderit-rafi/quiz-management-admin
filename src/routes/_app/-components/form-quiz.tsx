@@ -12,10 +12,10 @@ import {
   FormImageUpload,
   FormColorPicker,
   FormTextarea,
-  FormSwitch,
 } from "@/components/form";
 import { CardAction, CardContent } from "@/components/ui/card";
 import { DEFAULT_QUIZ_DATA } from "../-data";
+import { useNavigate } from "@tanstack/react-router";
 
 type TProps = {
   form_data: { id: string | number; type: string };
@@ -25,7 +25,7 @@ type TProps = {
 
 export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   const { id, type } = form_data;
-
+  const navigate = useNavigate();
   // Fetch existing quiz
   const { data: quiz } = useQuery({
     ...useGetQuiz(id),
@@ -51,8 +51,8 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
         cta_text: quiz.cta_text,
         landing_page_text: quiz.landing_page_text,
         description: quiz.description,
-        is_active: Boolean(quiz.is_active),
-        embed_code: quiz.embed_code,
+        // is_active: Boolean(quiz.is_active),
+        // embed_code: quiz.embed_code,
         logo: quiz.logo,
         background_image: quiz.background_image,
         primary_color: quiz.primary_color,
@@ -69,14 +69,21 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   const onSubmit = (data: TFormQuizSchema) => {
     if (type === "update") {
       updateQuiz(data, {
-        onSuccess: () => {
+        onSuccess: (res) => {
+          console.log("👉 ~ onSubmit ~ res:", res);
+          navigate({ to: "/quizzes/$id/view", params: { id: String(id) } });
           onSuccess();
           reset(DEFAULT_QUIZ_DATA);
         },
       });
     } else {
       createQuiz(data, {
-        onSuccess: () => {
+        onSuccess: (res) => {
+          console.log("👉 ~ onSubmit ~ res:", res);
+          navigate({
+            to: "/quizzes/$id/view",
+            params: { id: String(res.data.data.id) },
+          });
           onSuccess();
           reset(DEFAULT_QUIZ_DATA);
         },
@@ -87,7 +94,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   return (
     <CardContent className="flex-1 flex flex-col overflow-hidden">
       <form
-        onSubmit={handleSubmit(onSubmit as any)}
+        onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
         <div className="space-y-4">
@@ -160,20 +167,6 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
             control={control}
             label="Landing Page Text"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormSwitch
-              name="is_active"
-              control={control}
-              label="Is Active"
-              description="Whether this quiz is currently active and accessible."
-            />
-            <FormTextarea
-              name="embed_code"
-              control={control}
-              label="Embed Code"
-              placeholder="Enter embed code if available"
-            />
-          </div>
         </div>
       </form>
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
