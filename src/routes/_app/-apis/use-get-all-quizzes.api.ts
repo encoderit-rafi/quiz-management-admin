@@ -9,7 +9,13 @@ export const useGetAllQuizzes = (params?: any) => {
   return queryOptions({
     queryKey: QUERY_KEYS.GET_ALL_QUIZZES(),
     queryFn: async (): Promise<{ data: TQuizSchema[]; meta: TMetaSchema }> => {
-      const res = await api.get("/quizzes", { params });
+      const res = await api.get("/quizzes", {
+        params: {
+          order_by: "created_at",
+          direction: "desc",
+          ...params,
+        },
+      });
       return res.data.data;
     },
   });

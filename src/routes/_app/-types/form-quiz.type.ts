@@ -13,8 +13,8 @@ export const FormQuizSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
   // embed_code: z.string().nullable().optional(),
   // is_active: z.boolean(),
-  logo: TFileSchema,
-  background_image: TFileSchema,
+  logo: z.union([TFileSchema, z.string()]),
+  background_image: z.union([TFileSchema, z.string()]),
   primary_color: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
     message: "Invalid color format. Use hex color (e.g., #FF5733)",
   }),

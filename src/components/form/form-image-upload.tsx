@@ -7,7 +7,7 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Button } from "../ui/button";
 import type { TFormController } from "@/types"; // adjust path
 import { ImagePreview } from "./image-preview";
-import { cn } from "@/utils";
+import { cn, getImageUrl } from "@/utils";
 
 type TFormImageUploadProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -43,7 +43,7 @@ export const FormImageUpload = <
             setPreviewUrl(url);
             return () => URL.revokeObjectURL(url);
           } else if (typeof value === "string") {
-            setPreviewUrl(value);
+            setPreviewUrl(getImageUrl(value));
           } else {
             setPreviewUrl(null);
           }

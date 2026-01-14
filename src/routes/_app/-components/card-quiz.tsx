@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { useGetQuiz } from "../-apis";
 import { Loader2 } from "lucide-react";
+import { getImageUrl } from "@/utils";
 
 type TProps = {
   form_data: { id: string | number; type: string };
@@ -88,7 +89,7 @@ export default function CardQuiz({ form_data }: TProps) {
               <div className="text-sm font-medium mb-2">Logo</div>
               {quiz.logo ? (
                 <img
-                  src={quiz.logo}
+                  src={getImageUrl(quiz.logo)}
                   alt="Logo"
                   className="max-h-32 rounded-md border"
                 />
@@ -102,7 +103,7 @@ export default function CardQuiz({ form_data }: TProps) {
               <div className="text-sm font-medium mb-2">Background</div>
               {quiz.background_image ? (
                 <img
-                  src={quiz.background_image}
+                  src={getImageUrl(quiz.background_image)}
                   alt="Background"
                   className="max-h-32 rounded-md border"
                 />
@@ -163,7 +164,7 @@ export default function CardQuiz({ form_data }: TProps) {
                     <div className="pl-8 space-y-4">
                       {question.image && (
                         <img
-                          src={question.image}
+                          src={getImageUrl(question.image)}
                           alt="Question"
                           className="max-h-40 rounded-md border"
                         />

@@ -10,21 +10,20 @@ export const useCreateQuiz = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["create-quiz"],
-    mutationFn: (body: TFormQuizSchema | FormData) => {
-      const data = omitEmpty({
-        ...body,
-      }) as TFormQuizSchema;
+    mutationFn: (body: TFormQuizSchema) => {
+      const data = omitEmpty(body);
 
       // Convert to FormData if there are files
       const hasFiles =
         data.logo instanceof File || data.background_image instanceof File;
-      const payload = hasFiles ? serialize(data) : data;
 
-      return api.post("/quizzes", payload, {
-        headers: hasFiles
-          ? { "Content-Type": "multipart/form-data" }
-          : undefined,
-      });
+      if (hasFiles) {
+        return api.post("/quizzes", serialize(data), {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+
+      return api.post("/quizzes", data);
     },
     onSuccess: () => {
       toast.success("Quiz created successfully!");

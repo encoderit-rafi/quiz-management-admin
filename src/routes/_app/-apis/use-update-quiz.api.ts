@@ -11,26 +11,27 @@ export const useUpdateQuiz = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-quiz"],
-    mutationFn: (body: TFormQuizSchema | FormData) => {
+    mutationFn: (body: TFormQuizSchema) => {
+      const { id, ...rest } = body;
+
+      // Format fields & remove empty values
       const data = omitEmpty({
-        ...body,
-        // _method: "PUT",
-      }) as TFormQuizSchema;
+        ...rest,
+      });
 
       // Convert to FormData if there are files
       const hasFiles =
         data.logo instanceof File || data.background_image instanceof File;
-      const payload = hasFiles ? serialize(data) : data;
 
-      return api.post(
-        `/quizzes/${data.id}`,
-        { ...payload, _method: "PUT" },
-        {
-          headers: hasFiles
-            ? { "Content-Type": "multipart/form-data" }
-            : undefined,
-        }
-      );
+      if (hasFiles) {
+        const payload = serialize(data);
+        payload.append("_method", "PUT");
+        return api.post(`/quizzes/${id}`, payload, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+
+      return api.put(`/quizzes/${id}`, data);
     },
     onSuccess: (_, body) => {
       const id = body instanceof FormData ? body.get("id") : body.id;

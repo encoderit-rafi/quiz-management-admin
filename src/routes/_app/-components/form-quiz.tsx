@@ -15,17 +15,19 @@ import {
 } from "@/components/form";
 import { CardAction, CardContent } from "@/components/ui/card";
 import { DEFAULT_QUIZ_DATA } from "../-data";
-import { useNavigate } from "@tanstack/react-router";
-
+import type { TFormType } from "@/types";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 type TProps = {
-  form_data: { id: string | number; type: string };
-  onSuccess: () => void;
-  onCancel: () => void;
+  form_data: { id: string | number; type: TFormType };
+  // onSuccess: (res?: any) => void;
+  // onCancel: () => void;
 };
 
-export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
-  const { id, type } = form_data;
+export default function FormQuiz({ form_data }: TProps) {
+  const router = useRouter();
   const navigate = useNavigate();
+  const { id, type } = form_data;
   // Fetch existing quiz
   const { data: quiz } = useQuery({
     ...useGetQuiz(id),
@@ -43,48 +45,51 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   // Format API Data
   useEffect(() => {
     if (type === "update" && quiz) {
-      reset({
-        id: quiz.id,
-        name: quiz.name,
-        title: quiz.title,
-        heading: quiz.heading,
-        cta_text: quiz.cta_text,
-        landing_page_text: quiz.landing_page_text,
-        description: quiz.description,
-        // is_active: Boolean(quiz.is_active),
-        // embed_code: quiz.embed_code,
-        logo: quiz.logo,
-        background_image: quiz.background_image,
-        primary_color: quiz.primary_color,
-        secondary_color: quiz.secondary_color,
-      });
+      // reset({
+      //   id: quiz.id,
+      //   name: quiz.name,
+      //   title: quiz.title,
+      //   heading: quiz.heading,
+      //   cta_text: quiz.cta_text,
+      //   landing_page_text: quiz.landing_page_text,
+      //   description: quiz.description,
+      //   // is_active: Boolean(quiz.is_active),
+      //   // embed_code: quiz.embed_code,
+      //   logo: quiz.logo,
+      //   background_image: quiz.background_image,
+      //   primary_color: quiz.primary_color,
+      //   secondary_color: quiz.secondary_color,
+      // });
+      reset(quiz);
     }
   }, [quiz, type, reset]);
 
   // Mutations
   const { mutate: createQuiz, isPending: isPendingCreate } = useCreateQuiz();
   const { mutate: updateQuiz, isPending: isPendingUpdate } = useUpdateQuiz();
-
+  //Cancel
+  const handelCancel = () => {
+    router.history.back();
+  };
   // Submit
   const onSubmit = (data: TFormQuizSchema) => {
     if (type === "update") {
       updateQuiz(data, {
-        onSuccess: (res) => {
-          console.log("👉 ~ onSubmit ~ res:", res);
+        onSuccess: () => {
+          // onSuccess(res);
+          toast.success("Quiz updated successfully");
           navigate({ to: "/quizzes/$id/view", params: { id: String(id) } });
-          onSuccess();
           reset(DEFAULT_QUIZ_DATA);
         },
       });
     } else {
       createQuiz(data, {
         onSuccess: (res) => {
-          console.log("👉 ~ onSubmit ~ res:", res);
+          toast.success("Quiz created successfully");
           navigate({
             to: "/quizzes/$id/view",
-            params: { id: String(res.data.data.id) },
+            params: { id: String(res?.data?.data?.id) },
           });
-          onSuccess();
           reset(DEFAULT_QUIZ_DATA);
         },
       });
@@ -94,6 +99,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   return (
     <CardContent className="flex-1 flex flex-col overflow-hidden">
       <form
+        id="create-quiz-form"
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
@@ -175,14 +181,14 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
           variant="outline"
           className="min-w-36"
           disabled={isPendingCreate || isPendingUpdate}
-          onClick={onCancel}
+          onClick={handelCancel}
         >
           Cancel
         </Button>
         <Button
-          type="button"
+          form="create-quiz-form"
+          type="submit"
           className="min-w-36"
-          onClick={handleSubmit(onSubmit as any)}
           loading={isPendingCreate || isPendingUpdate}
         >
           {type === "update" ? "Update" : "Create"}

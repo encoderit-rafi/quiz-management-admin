@@ -52,6 +52,7 @@ export default function RouteComponent() {
   // Use the new queryOptions pattern
   const { data: response } = useQuery(useGetAllQuizzes(search));
   const quizzes = response?.data ?? [];
+  console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
   const meta = response?.meta;
 
   // Column definitions
