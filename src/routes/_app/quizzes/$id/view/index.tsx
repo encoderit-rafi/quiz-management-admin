@@ -7,7 +7,6 @@ import {
   FileQuestionMark,
   FileText,
   Settings,
-  Trash2,
   Users,
 } from "lucide-react";
 import { CardQuiz } from "../../../-components";
@@ -28,7 +27,6 @@ export const Route = createFileRoute("/_app/quizzes/$id/view/")({
 
 function ViewQuizPage() {
   const { id } = Route.useParams();
-  // const [label, setLabel] = useState("personal");
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([{ name: "View Quiz" }]);
@@ -84,20 +82,6 @@ function ViewQuizPage() {
                   <BarChart />
                   Statistics
                 </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                variant="destructive"
-                // onClick={() =>
-                //   setDeleteForm({
-                //     ...FORM_DATA,
-                //     type: "delete",
-                //     title: quiz.title,
-                //     id: quiz.id || "",
-                //   })
-                // }
-              >
-                <Trash2 />
-                Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

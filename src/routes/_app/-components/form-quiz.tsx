@@ -150,7 +150,7 @@ export default function FormQuiz({ form_data }: TProps) {
           <FormTiptap
             name="landing_page_text"
             control={control}
-            label="Landing Page Text"
+            label="Footer Text"
           />
         </div>
       </form>

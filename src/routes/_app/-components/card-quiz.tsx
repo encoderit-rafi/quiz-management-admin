@@ -74,7 +74,7 @@ export default function CardQuiz({ form_data }: TProps) {
             />
           </div>
           <div>
-            <div className="text-sm font-medium">Landing Page Text</div>
+            <div className="text-sm font-medium">Footer Text</div>
             <div
               className="text-sm text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: quiz.landing_page_text || "" }}
