@@ -5,6 +5,7 @@ import { isAxiosError } from "axios";
 import { serialize } from "object-to-formdata";
 import omitEmpty from "omit-empty";
 import type { TFormQuizSchema } from "../-types";
+import { QUERY_KEYS } from "@/query-keys";
 
 export const useUpdateQuiz = () => {
   const queryClient = useQueryClient();
@@ -38,10 +39,15 @@ export const useUpdateQuiz = () => {
           : undefined,
       });
     },
-    onSuccess: () => {
+    onSuccess: (_, body) => {
+      const id = body instanceof FormData ? body.get("id") : body.id;
       toast.success("Quiz updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["quizzes"] });
-      queryClient.invalidateQueries({ queryKey: ["quiz"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ALL_QUIZZES() });
+      if (id) {
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.GET_QUIZ(id as string),
+        });
+      }
     },
     onError: (error) => {
       const fallback = "Failed to update quiz.";

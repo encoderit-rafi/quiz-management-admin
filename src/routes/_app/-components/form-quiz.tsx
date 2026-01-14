@@ -12,6 +12,7 @@ import {
   FormImageUpload,
   FormColorPicker,
   FormTextarea,
+  FormSwitch,
 } from "@/components/form";
 import { CardAction, CardContent } from "@/components/ui/card";
 import { DEFAULT_QUIZ_DATA } from "../-data";
@@ -40,10 +41,23 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   const { reset, control, handleSubmit } = form;
 
   // Format API Data
-
   useEffect(() => {
     if (type === "update" && quiz) {
-      reset(quiz);
+      reset({
+        id: quiz.id,
+        name: quiz.name,
+        title: quiz.title,
+        heading: quiz.heading,
+        cta_text: quiz.cta_text,
+        landing_page_text: quiz.landing_page_text,
+        description: quiz.description,
+        is_active: Boolean(quiz.is_active),
+        embed_code: quiz.embed_code,
+        logo: quiz.logo,
+        background_image: quiz.background_image,
+        primary_color: quiz.primary_color,
+        secondary_color: quiz.secondary_color,
+      });
     }
   }, [quiz, type, reset]);
 
@@ -57,14 +71,14 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
       updateQuiz(data, {
         onSuccess: () => {
           onSuccess();
-          reset();
+          reset(DEFAULT_QUIZ_DATA);
         },
       });
     } else {
       createQuiz(data, {
         onSuccess: () => {
           onSuccess();
-          reset();
+          reset(DEFAULT_QUIZ_DATA);
         },
       });
     }
@@ -73,7 +87,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
   return (
     <CardContent className="flex-1 flex flex-col overflow-hidden">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit as any)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
         <div className="space-y-4">
@@ -144,8 +158,22 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
           <FormTiptap
             name="landing_page_text"
             control={control}
-            label="Footer Text"
+            label="Landing Page Text"
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormSwitch
+              name="is_active"
+              control={control}
+              label="Is Active"
+              description="Whether this quiz is currently active and accessible."
+            />
+            <FormTextarea
+              name="embed_code"
+              control={control}
+              label="Embed Code"
+              placeholder="Enter embed code if available"
+            />
+          </div>
         </div>
       </form>
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
@@ -161,7 +189,7 @@ export default function FormQuiz({ form_data, onSuccess, onCancel }: TProps) {
         <Button
           type="button"
           className="min-w-36"
-          onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmit(onSubmit as any)}
           loading={isPendingCreate || isPendingUpdate}
         >
           {type === "update" ? "Update" : "Create"}

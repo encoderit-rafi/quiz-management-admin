@@ -8,68 +8,31 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 
+import { useQuery } from "@tanstack/react-query";
+import { useGetQuiz } from "../-apis";
+import { Loader2 } from "lucide-react";
+
 type TProps = {
   form_data: { id: string | number; type: string };
 };
 
-// Static quiz data
-const STATIC_QUIZ_DATA = {
-  id: 1,
-  quiz_name: "Sample Quiz",
-  title: "Customer Satisfaction Survey",
-  heading: "Help Us Improve",
-  cta_text: "Start Quiz",
-  footer_text: "Thank you for your feedback",
-  description:
-    "<p>We value your opinion and would love to hear your thoughts about our products and services.</p>",
-  logo: "https://images.unsplash.com/photo-1590650516494-0c8e4a4dd67e?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  background_image:
-    "https://images.unsplash.com/photo-1590650589327-3f67c43ad8a2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  primary_color: "#3b82f6",
-  secondary_color: "#8b5cf6",
-  is_active: true,
-  questions: [
-    {
-      name: "How satisfied are you with our service?",
-      options: [
-        { label: "Very Satisfied", points: 10 },
-        { label: "Satisfied", points: 7 },
-        { label: "Neutral", points: 5 },
-        { label: "Dissatisfied", points: 3 },
-        { label: "Very Dissatisfied", points: 0 },
-      ],
-    },
-    {
-      name: "Would you recommend us to others?",
-      options: [
-        { label: "Definitely", points: 10 },
-        { label: "Probably", points: 7 },
-        { label: "Maybe", points: 5 },
-        { label: "Probably Not", points: 3 },
-        { label: "Definitely Not", points: 0 },
-      ],
-    },
-    {
-      name: "How would you rate the quality of our products?",
-      options: [
-        { label: "Excellent", points: 10 },
-        { label: "Good", points: 7 },
-        { label: "Average", points: 5 },
-        { label: "Poor", points: 3 },
-        { label: "Very Poor", points: 0 },
-      ],
-    },
-  ],
-};
+export default function CardQuiz({ form_data }: TProps) {
+  const { data: quiz, isLoading } = useQuery(useGetQuiz(form_data.id));
 
-export default function CardQuiz({ form_data: _form_data }: TProps) {
-  // Commented out API call - using static data instead
-
-  // Use static data
-  const quiz = STATIC_QUIZ_DATA;
+  if (isLoading) {
+    return (
+      <CardContent className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </CardContent>
+    );
+  }
 
   if (!quiz) {
-    return <CardContent>No quiz data found.</CardContent>;
+    return (
+      <CardContent className="py-20 text-center text-muted-foreground">
+        No quiz data found.
+      </CardContent>
+    );
   }
 
   return (
@@ -78,9 +41,9 @@ export default function CardQuiz({ form_data: _form_data }: TProps) {
         <section className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <div className="text-sm font-medium">Quiz Name</div>
+              <div className="text-sm font-medium">Name</div>
               <div className="text-sm text-muted-foreground">
-                {quiz.quiz_name || "N/A"}
+                {quiz.name || "N/A"}
               </div>
             </div>
             <div>
@@ -107,6 +70,13 @@ export default function CardQuiz({ form_data: _form_data }: TProps) {
             <div
               className="text-sm text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: quiz.description || "" }}
+            />
+          </div>
+          <div>
+            <div className="text-sm font-medium">Landing Page Text</div>
+            <div
+              className="text-sm text-muted-foreground"
+              dangerouslySetInnerHTML={{ __html: quiz.landing_page_text || "" }}
             />
           </div>
         </section>
@@ -186,28 +156,42 @@ export default function CardQuiz({ form_data: _form_data }: TProps) {
                       <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs">
                         {index + 1}
                       </span>
-                      {question.name}
+                      {question.question_text}
                     </span>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="pl-8 space-y-2">
-                      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                        Options & Points
-                      </div>
-                      <div className="grid gap-2">
-                        {question.options?.map(
-                          (option: any, optIndex: number) => (
-                            <div
-                              key={optIndex}
-                              className="flex items-center justify-between p-2 rounded-md bg-muted/30 border border-transparent hover:border-muted-foreground/20 transition-colors"
-                            >
-                              <span className="text-sm">{option.label}</span>
-                              <Badge variant="secondary" className="font-mono">
-                                {option.points} pts
-                              </Badge>
-                            </div>
-                          )
-                        )}
+                    <div className="pl-8 space-y-4">
+                      {question.image && (
+                        <img
+                          src={question.image}
+                          alt="Question"
+                          className="max-h-40 rounded-md border"
+                        />
+                      )}
+                      <div className="space-y-2">
+                        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          Answers & Points
+                        </div>
+                        <div className="grid gap-2">
+                          {question.answers?.map(
+                            (answer: any, ansIndex: number) => (
+                              <div
+                                key={ansIndex}
+                                className="flex items-center justify-between p-2 rounded-md bg-muted/30 border border-transparent hover:border-muted-foreground/20 transition-colors"
+                              >
+                                <span className="text-sm">
+                                  {answer.answer_text}
+                                </span>
+                                <Badge
+                                  variant="secondary"
+                                  className="font-mono"
+                                >
+                                  {answer.points} pts
+                                </Badge>
+                              </div>
+                            )
+                          )}
+                        </div>
                       </div>
                     </div>
                   </AccordionContent>
@@ -220,6 +204,108 @@ export default function CardQuiz({ form_data: _form_data }: TProps) {
             </div>
           )}
         </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center justify-between border-b pb-2">
+            <h3 className="text-lg font-semibold">Result Pages</h3>
+            <Badge variant="outline">
+              {quiz.resultPages?.length || 0} Pages
+            </Badge>
+          </div>
+
+          {quiz.resultPages && quiz.resultPages.length > 0 ? (
+            <Accordion type="single" collapsible className="w-full">
+              {quiz.resultPages.map((page: any, index: number) => (
+                <AccordionItem key={index} value={`page-${index}`}>
+                  <AccordionTrigger className="hover:no-underline">
+                    <span className="flex items-center gap-2">
+                      <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                        {index + 1}
+                      </span>
+                      {page.title} ({page.min_score} - {page.max_score} pts)
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="pl-8 space-y-2">
+                      <div
+                        className="text-sm text-muted-foreground"
+                        dangerouslySetInnerHTML={{ __html: page.content || "" }}
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground border rounded-lg border-dashed">
+              No result pages added yet.
+            </div>
+          )}
+        </section>
+
+        {(quiz.leadFormSetting || quiz.resultDeliverySetting) && (
+          <section className="space-y-4">
+            <h3 className="text-lg font-semibold border-b pb-2">Settings</h3>
+            {quiz.leadFormSetting && (
+              <div className="space-y-2">
+                <div className="text-sm font-medium">Lead Form Fields</div>
+                <div className="flex flex-wrap gap-2">
+                  {quiz.leadFormSetting.fields.map((field: any, i: number) => (
+                    <Badge key={i} variant="secondary">
+                      {field.label} ({field.type})
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+            {quiz.resultDeliverySetting && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <div className="text-sm font-medium">Email Result</div>
+                  <Badge
+                    variant={
+                      quiz.resultDeliverySetting.enable_email_result
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {quiz.resultDeliverySetting.enable_email_result
+                      ? "Enabled"
+                      : "Disabled"}
+                  </Badge>
+                </div>
+                <div>
+                  <div className="text-sm font-medium">PDF Download</div>
+                  <Badge
+                    variant={
+                      quiz.resultDeliverySetting.enable_pdf_download
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {quiz.resultDeliverySetting.enable_pdf_download
+                      ? "Enabled"
+                      : "Disabled"}
+                  </Badge>
+                </div>
+                <div>
+                  <div className="text-sm font-medium">Link Share</div>
+                  <Badge
+                    variant={
+                      quiz.resultDeliverySetting.enable_link_share
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {quiz.resultDeliverySetting.enable_link_share
+                      ? "Enabled"
+                      : "Disabled"}
+                  </Badge>
+                </div>
+              </div>
+            )}
+          </section>
+        )}
       </div>
     </CardContent>
   );

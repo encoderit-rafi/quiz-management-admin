@@ -12,4 +12,6 @@ export const DEFAULT_QUIZ_DATA: TFormQuizSchema = {
   background_image: null,
   primary_color: "#ffffff",
   secondary_color: "#ffffff",
+  is_active: true,
+  embed_code: null,
 };

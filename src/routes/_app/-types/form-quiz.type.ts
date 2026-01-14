@@ -7,8 +7,12 @@ export const FormQuizSchema = z.object({
   name: z.string().min(1, { message: "Quiz name is required" }),
   heading: z.string().min(1, { message: "Heading is required" }),
   cta_text: z.string().min(1, { message: "CTA text is required" }),
-  landing_page_text: z.string().min(1, { message: "Footer text is required" }),
+  landing_page_text: z
+    .string()
+    .min(1, { message: "Landing page text is required" }),
   description: z.string().min(1, { message: "Description is required" }),
+  embed_code: z.string().nullable().optional(),
+  is_active: z.boolean(),
   logo: TFileSchema,
   background_image: TFileSchema,
   primary_color: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
