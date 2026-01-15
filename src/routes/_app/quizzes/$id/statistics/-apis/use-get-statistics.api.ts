@@ -28,7 +28,7 @@ export const useGetStatistics = (quizId?: string | number) => {
       // In a real app this would be: await api.get("/leads", { params });
       // For now we will rely on demo data injection similarly to others if API fails
       try {
-        const { data } = await api.get(`/quiz/${quizId}/statistics`);
+        const { data } = await api.get(`/quiz-statistics/detailed/${quizId}`);
         return data.data || data;
       } catch (e) {
         return null; // Return null so we can fall back to demo data
