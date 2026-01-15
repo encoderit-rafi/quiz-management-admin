@@ -30,6 +30,7 @@ export default function RouteComponent() {
 
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
+  const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
   const { data: resultPages = { data: [], meta: { total: 0 } } } = useQuery(
@@ -103,16 +104,17 @@ export default function RouteComponent() {
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between gap-4">
         <AppSearch
+          onSearch={() => {
+            navigate({
+              search: { ...search, search: searchValue, page: 1 },
+              replace: true,
+            });
+          }}
           props={{
             input: {
               placeholder: "Search quiz...",
-              value: search.q,
-              onChange: (e) => {
-                navigate({
-                  search: { ...search, q: e.target.value },
-                  replace: true,
-                });
-              },
+              value: searchValue,
+              onChange: (e) => setSearchValue(e.target.value),
             },
           }}
         />

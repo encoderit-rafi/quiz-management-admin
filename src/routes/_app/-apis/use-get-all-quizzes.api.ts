@@ -7,7 +7,7 @@ import type { TMetaSchema } from "@/types";
 
 export const useGetAllQuizzes = (params?: any) => {
   return queryOptions({
-    queryKey: QUERY_KEYS.GET_ALL_QUIZZES(),
+    queryKey: QUERY_KEYS.GET_ALL_QUIZZES(params),
     queryFn: async (): Promise<{ data: TQuizSchema[]; meta: TMetaSchema }> => {
       const res = await api.get("/quizzes", {
         params: {
