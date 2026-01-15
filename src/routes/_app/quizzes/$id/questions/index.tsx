@@ -275,6 +275,13 @@ function QuizQuestionsPage() {
               replace: true,
             });
           }}
+          onClear={() => {
+            setSearchValue("");
+            navigate({
+              search: { ...search, search: "", page: 1 },
+              replace: true,
+            });
+          }}
           props={{
             input: {
               placeholder: "Search question...",

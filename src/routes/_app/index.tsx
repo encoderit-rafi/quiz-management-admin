@@ -194,6 +194,13 @@ export default function RouteComponent() {
               replace: true,
             });
           }}
+          onClear={() => {
+            setSearchValue("");
+            navigate({
+              search: { ...search, search: "", page: 1 },
+              replace: true,
+            });
+          }}
           props={{
             input: {
               placeholder: "Search quiz...",
