@@ -48,7 +48,7 @@ function StatisticsPage() {
     ]);
   }, []);
 
-  // Fetch statistics for selected quiz
+  // Fetch statistics for the selected quiz
   const { data: stats, isLoading: isLoadingStats } = useQuery({
     ...useGetStatistics(id),
     select: (data: any) => data || DEMO_STATS,
