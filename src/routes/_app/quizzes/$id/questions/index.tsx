@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
@@ -33,49 +32,56 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { FORM_DATA } from "@/data";
+// import { FORM_DATA } from "@/data";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
-import { useGetQuizQuestions } from "./-apis";
+import { useGetQuizQuestions, useDeleteQuestion } from "./-apis";
 import { useQuery } from "@tanstack/react-query";
 import type { TQuizAnswer, TQuizQuestion } from "./-types";
+import { SearchSchema } from "../../../-types";
+import AppSearch from "@/components/base/app-search";
+import AppPagination from "@/components/base/app-pagination";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
+  validateSearch: SearchSchema,
 });
 
 function QuizQuestionsPage() {
-  // useSetRoute({ name: "Quiz Questions", path: Route.fullPath });
-
   const { id } = Route.useParams();
-  // const navigate = useNavigate();
-  const { data, isLoading } = useQuery(useGetQuizQuestions(id));
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const { data, isLoading } = useQuery(useGetQuizQuestions(id, search));
   console.log("👉 ~ QuizQuestionsPage ~ data:", data);
   const questions = data?.data || [];
   const meta = data?.meta;
+
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([
       { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
       { name: "Quiz Questions" },
     ]);
-  }, []);
+  }, [id, setBreadcrumb]);
 
-  const [deleteForm, setDeleteForm] = useState(FORM_DATA);
+  const [deleteId, setDeleteId] = useState<number | string | null>(null);
+  const deleteMutation = useDeleteQuestion(id);
 
-  // const [questions, setQuestions] = useState(DEMO_QUESTIONS);
-  // const getQuestionPosition = (id: number) => {
-  //   return questions.findIndex((q: any) => q.id === id);
-  // };
+  const handleDelete = () => {
+    if (deleteId !== null) {
+      deleteMutation.mutate(deleteId, {
+        onSuccess: () => {
+          setDeleteId(null);
+        },
+      });
+    }
+  };
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     console.log("👉 ~ handleDragEnd ~ active, over:", active, over);
-    if (active.id === over.id) return;
-    // setQuestions((questions) => {
-    //   const oldPosition = getQuestionPosition(active.id);
-    //   const newPosition = getQuestionPosition(over.id);
-    //   return arrayMove(questions, oldPosition, newPosition);
-    // });
+    if (!over || active.id === over.id) return;
+    // Drag and drop logic for questions would go here if implemented on backend
   };
 
   function SortableOption({ option }: { option: TQuizAnswer }) {
@@ -115,7 +121,9 @@ function QuizQuestionsPage() {
       </div>
     );
   }
+
   if (isLoading) return <div>Loading...</div>;
+
   function Question({
     question,
     index,
@@ -133,37 +141,15 @@ function QuizQuestionsPage() {
     const handleOptionDragEnd = (event: any) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
-
-      // setQuestions((currentQuestions) => {
-      //   const updatedQuestions = [...currentQuestions];
-      //   const questionToUpdate = updatedQuestions.find(
-      //     (q) => q.id === question.id
-      //   );
-
-      //   if (questionToUpdate) {
-      //     const oldIndex = questionToUpdate.options.findIndex(
-      //       (opt: any) => opt.id === active.id
-      //     );
-      //     const newIndex = questionToUpdate.options.findIndex(
-      //       (opt: any) => opt.id === over.id
-      //     );
-
-      //     const newOptions = [...questionToUpdate.options];
-      //     const [movedOption] = newOptions.splice(oldIndex, 1);
-      //     newOptions.splice(newIndex, 0, movedOption);
-      //     questionToUpdate.options = newOptions;
-      //   }
-
-      //   return updatedQuestions;
-      // });
+      // Drag and drop logic for options would go here
     };
 
     return (
       <AccordionItem
         ref={setNodeRef}
         style={style}
-        key={index}
-        value={`item-${index}`}
+        key={question.id}
+        value={`item-${question.id}`}
         className="px-4 border-b last:border-0"
       >
         <div className="flex items-center gap-2 py-4">
@@ -179,7 +165,7 @@ function QuizQuestionsPage() {
             <AccordionTrigger className="hover:no-underline py-0">
               <span className="flex items-center gap-2 text-left">
                 <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
-                  {index + 1}
+                  {index + 1 + (search.page - 1) * search.per_page}
                 </span>
                 <span className="font-medium line-clamp-1">
                   {question.question_text}
@@ -211,13 +197,7 @@ function QuizQuestionsPage() {
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => {
-                    setDeleteForm({
-                      type: "delete",
-                      title: "Delete Question",
-                      description:
-                        "Are you sure you want to delete this question?",
-                      id: question.id,
-                    });
+                    setDeleteId(question.id);
                   }}
                 >
                   <Trash2 className="mr-2 h-4 w-4" /> Delete
@@ -248,9 +228,24 @@ function QuizQuestionsPage() {
       </AccordionItem>
     );
   }
+
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex items-center justify-end gap-4">
+      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <AppSearch
+          props={{
+            input: {
+              placeholder: "Search question...",
+              value: search.q,
+              onChange: (e) => {
+                navigate({
+                  search: { ...search, q: e.target.value },
+                  replace: true,
+                });
+              },
+            },
+          }}
+        />
         <Button asChild variant={"outline"}>
           <Link to="/quizzes/$id/questions/create" params={{ id }}>
             <Plus />
@@ -259,7 +254,7 @@ function QuizQuestionsPage() {
         </Button>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex-1 overflow-y-auto">
         <Accordion type="multiple" className="w-full">
           <DndContext
             onDragEnd={handleDragEnd}
@@ -270,19 +265,37 @@ function QuizQuestionsPage() {
               strategy={verticalListSortingStrategy}
             >
               {questions.map((question, index) => (
-                <Question question={question} index={index} />
+                <Question key={question.id} question={question} index={index} />
               ))}
             </SortableContext>
           </DndContext>
         </Accordion>
-        <AppDeleteDialog
-          open={deleteForm.type === "delete"}
-          onOpenChange={() => setDeleteForm(FORM_DATA)}
-          onConfirm={() => {}}
-          item_name={deleteForm.title}
-          loading={false}
-        />
       </CardContent>
+
+      <div className="p-4 border-t">
+        <AppPagination
+          total={meta?.total || 0}
+          perPage={search.per_page}
+          page={search.page}
+          onPageChange={(page) =>
+            navigate({ search: { ...search, page }, replace: true })
+          }
+          onPerPageChange={(per_page) =>
+            navigate({
+              search: { ...search, per_page: Number(per_page), page: 1 },
+              replace: true,
+            })
+          }
+        />
+      </div>
+
+      <AppDeleteDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+        onConfirm={handleDelete}
+        item_name="Question"
+        loading={deleteMutation.isPending}
+      />
     </div>
   );
 }

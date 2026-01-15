@@ -56,7 +56,11 @@ function ViewQuizPage() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/questions" params={{ id }}>
+                <Link
+                  to="/quizzes/$id/questions"
+                  params={{ id }}
+                  search={DEFAULT_PAGINATION}
+                >
                   <FileQuestionMark />
                   Questions
                 </Link>

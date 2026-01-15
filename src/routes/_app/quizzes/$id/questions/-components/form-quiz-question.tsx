@@ -17,6 +17,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useRouter } from "@tanstack/react-router";
+import { DEFAULT_PAGINATION } from "@/consts";
 import {
   FormQuizQuestionSchema,
   type TFormQuizQuestionSchema,
@@ -169,6 +170,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
             navigate({
               to: "/quizzes/$id/questions",
               params: { id: String(quizId) },
+              search: DEFAULT_PAGINATION,
             });
           },
         }
@@ -179,6 +181,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
           navigate({
             to: "/quizzes/$id/questions",
             params: { id: String(quizId) },
+            search: DEFAULT_PAGINATION,
           });
         },
       });
