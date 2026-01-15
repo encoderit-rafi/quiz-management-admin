@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import type { TStatisticsSchema } from "../-types";
+import {api} from "@/axios.ts";
 
 // Mock data generator based on ID to simulate different stats
 const generateMockStats = (id: string | number): TStatisticsSchema => {
@@ -22,13 +23,16 @@ const generateMockStats = (id: string | number): TStatisticsSchema => {
 
 export const useGetStatistics = (quizId?: string | number) => {
   return queryOptions({
-    queryKey: ["statistics", quizId],
+    queryKey: ["leads", quizId],
     queryFn: async () => {
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      if (!quizId) return null;
-      return generateMockStats(quizId);
+      // In a real app this would be: await api.get("/leads", { params });
+      // For now we will rely on demo data injection similarly to others if API fails
+      try {
+        const { data } = await api.get(`/quiz/${quizId}/statistics`);
+        return data.data || data;
+      } catch (e) {
+        return null; // Return null so we can fall back to demo data
+      }
     },
     enabled: !!quizId,
   });

@@ -47,31 +47,16 @@ function StatisticsPage() {
       },
     ]);
   }, []);
-  const [selectedQuizId, setSelectedQuizId] = useState<string>("");
-
-  // Fetch all quizzes for the dropdown
-  const { data: quizzes, isLoading: isLoadingQuizzes } = useQuery({
-    ...useGetAllQuizzes(),
-    select: (data: any) =>
-      Array.isArray(data) && data.length > 0 ? data : DEMO_QUIZZES,
-  });
-
-  // Set default selection when quizzes load
-  useEffect(() => {
-    if (quizzes?.length && !selectedQuizId) {
-      setSelectedQuizId(String(quizzes[0].id));
-    }
-  }, [quizzes, selectedQuizId]);
 
   // Fetch statistics for selected quiz
   const { data: stats, isLoading: isLoadingStats } = useQuery({
-    ...useGetStatistics(selectedQuizId),
+    ...useGetStatistics(id),
     select: (data: any) => data || DEMO_STATS,
   });
 
   return (
     <div className="space-y-6 p-4">
-      {!selectedQuizId && !isLoadingQuizzes ? (
+      {!id && !isLoadingStats ? (
         <div className="flex h-[400px] items-center justify-center border rounded-lg bg-muted/10 border-dashed">
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
             <BarChart3 className="h-8 w-8" />
@@ -82,46 +67,46 @@ function StatisticsPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <StatCard
             title="Landing Views"
-            value={stats?.views}
+            value={stats?.landing_page_views}
             icon={Eye}
             isLoading={isLoadingStats}
             description="Total visits to the landing page"
           />
           <StatCard
             title="Quiz Starts"
-            value={stats?.starts}
+            value={stats?.quiz_starts}
             icon={Play}
             isLoading={isLoadingStats}
             description="Number of times the quiz was started"
           />
           <StatCard
             title="Completions"
-            value={stats?.completions}
+            value={stats?.quiz_completions}
             icon={CheckCircle}
             isLoading={isLoadingStats}
             description="Total completed submissions"
           />
-          <StatCard
+          {stats.drop_off_rate && <StatCard
             title="Drop-off Rate"
             value={stats ? `${stats.drop_off_rate}%` : undefined}
             icon={ArrowDownRight}
             isLoading={isLoadingStats}
             description="Percentage of users who abandoned"
-          />
+          />}
           <StatCard
             title="Avg. Time Spent"
-            value={stats?.avg_time}
+            value={stats?.total_time_spent}
             icon={Clock}
             isLoading={isLoadingStats}
             description="Average duration per completion"
           />
-          <StatCard
+          {stats.conversion_rate && <StatCard
             title="Conversion Rate"
-            value={stats ? `${stats.conversion_rate}%` : undefined}
+            value={stats ? `${stats.conversion_rate}%` : 0}
             icon={TrendingUp}
             isLoading={isLoadingStats}
             description="Views to completion ratio"
-          />
+          />}
         </div>
       )}
     </div>
