@@ -31,6 +31,8 @@ import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
+// import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+// import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -40,6 +42,7 @@ export const Route = createFileRoute("/_app/")({
 // Demo data (fallback)
 
 export default function RouteComponent() {
+  // const { setBreadcrumb } = useBreadcrumb();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
@@ -51,7 +54,18 @@ export default function RouteComponent() {
   const meta = response?.meta;
 
   const { mutate: deleteQuiz, isPending: isDeletePending } = useDeleteQuiz();
-
+  // const handelBreadcrumb = (
+  //   name: string,
+  //   id: string | number,
+  //   module: string = ""
+  // ) => {
+  //   setBreadcrumb(
+  //     [
+  //       { name: name, path: `/quizzes/${id}/view` as TPtah },
+  //       { name: module },
+  //     ].filter((item) => item.name)
+  //   );
+  // };
   const handleConfirmDelete = () => {
     if (!deleteForm.id) return;
     deleteQuiz(
@@ -198,22 +212,20 @@ export default function RouteComponent() {
         <AppTable data={quizzes} columns={columns} />
       </div>
 
-      {meta && meta.last_page > 1 && (
-        <AppPagination
-          total={meta?.total || 0}
-          perPage={search.per_page}
-          page={search.page}
-          onPageChange={(page) =>
-            navigate({ search: { ...search, page }, replace: true })
-          }
-          onPerPageChange={(per_page) =>
-            navigate({
-              search: { ...search, per_page: Number(per_page), page: 1 },
-              replace: true,
-            })
-          }
-        />
-      )}
+      <AppPagination
+        total={meta?.total || 0}
+        perPage={search.per_page}
+        page={search.page}
+        onPageChange={(page) =>
+          navigate({ search: { ...search, page }, replace: true })
+        }
+        onPerPageChange={(per_page) =>
+          navigate({
+            search: { ...search, per_page: Number(per_page), page: 1 },
+            replace: true,
+          })
+        }
+      />
       {/* Delete Dialog */}
       <AppDeleteDialog
         open={deleteForm.type === "delete"}
