@@ -11,8 +11,10 @@ export const useCreateQuestion = (quizId: string | number) => {
   return useMutation({
     mutationKey: ["create-question", quizId],
     mutationFn: async (body: any) => {
-      const data = omitEmpty(body);
-      const payload = serialize(data);
+      const data = omitEmpty({ ...body });
+      // console.log("👉 ~ useCreateQuestion ~ data:", data);
+      // return;
+      const payload = serialize(data, { indices: true });
 
       return (
         await api.post("/questions", payload, {

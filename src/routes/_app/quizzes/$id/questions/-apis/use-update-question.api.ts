@@ -5,15 +5,19 @@ import { isAxiosError } from "axios";
 import { serialize } from "object-to-formdata";
 import omitEmpty from "omit-empty";
 import { QUERY_KEYS } from "@/query-keys";
+import type { TFormQuizQuestionSchema } from "../-types";
 
 export const useUpdateQuestion = (quizId: string | number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-question", quizId],
-    mutationFn: async (body: any) => {
+    mutationFn: async (body: TFormQuizQuestionSchema) => {
       const { id, ...rest } = body;
-      const data = omitEmpty(rest);
-      const payload = serialize(data);
+      const data = omitEmpty({
+        ...rest,
+        image: typeof body.image === "string" ? undefined : body.image,
+      });
+      const payload = serialize(data, { indices: true });
       payload.append("_method", "PUT");
 
       return (

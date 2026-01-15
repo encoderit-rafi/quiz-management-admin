@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
 import { useCreateQuestion, useGetQuestion, useUpdateQuestion } from "../-apis";
-import { FormImageUpload, FormInput } from "@/components/form";
+import { FormImageUpload, FormInput, FormSwitch } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { TFormType } from "@/types";
 import { CardAction, CardContent } from "@/components/ui/card";
@@ -64,14 +64,14 @@ function SortableOption({ id, index, control, onRemove }: SortableOptionProps) {
 
       <div className="flex-1">
         <FormInput
-          name={`options.${index}.label`}
+          name={`answers.${index}.answer_text`}
           control={control}
           placeholder="Option label"
         />
       </div>
       <div className="w-24">
         <FormInput
-          name={`options.${index}.points`}
+          name={`answers.${index}.points`}
           control={control}
           type="number"
           placeholder="Pts"
@@ -102,11 +102,12 @@ export default function FormQuizQuestion({ form_data }: TProps) {
   });
 
   const form = useForm<TFormQuizQuestionSchema>({
-    resolver: zodResolver(FormQuizQuestionSchema),
+    resolver: zodResolver(FormQuizQuestionSchema) as any,
     defaultValues: {
-      name: "",
-      question_image: null,
-      options: [{ label: "", points: 0 }],
+      question_text: "",
+      image: null,
+      // is_active: true,
+      answers: [{ answer_text: "", points: 0 }],
     },
   });
 
@@ -115,12 +116,13 @@ export default function FormQuizQuestion({ form_data }: TProps) {
   useEffect(() => {
     if (type === "update" && question) {
       reset({
-        name: question.name || question.question_text || "",
-        question_image: question.image || null,
-        options: (question.options || question.answers || []).map(
+        question_text: question.question_text || question.name || "",
+        image: question.image || null,
+        // is_active: !!(question.is_active ?? true),
+        answers: (question.answers || question.options || []).map(
           (opt: any) => ({
-            label: opt.label || opt.answer_text || "",
-            points: Number(opt.points) || 0,
+            answer_text: opt.answer_text || opt.label || "",
+            points: opt.points ?? 0,
           })
         ),
       });
@@ -129,7 +131,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
 
   const { fields, append, remove, move } = useFieldArray({
     control,
-    name: "options",
+    name: "answers",
   });
 
   const handleDragEnd = (event: any) => {
@@ -155,11 +157,11 @@ export default function FormQuizQuestion({ form_data }: TProps) {
     const payload = {
       ...data,
       quiz_id: quizId,
-      options: data.options.map((o, index) => ({
+      answers: data.answers.map((o, index) => ({
         ...o,
-        points: Number(o.points),
         order: index,
       })),
+      // is_active: true,
     };
 
     if (type === "update" && id) {
@@ -197,30 +199,38 @@ export default function FormQuizQuestion({ form_data }: TProps) {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormImageUpload
-            name="question_image"
+            name="image"
             control={control}
             label="Question Image"
             description="Upload or drag a question image"
           />
+          {/* <div className="flex items-center justify-end">
+            <FormSwitch
+              name="is_active"
+              control={control}
+              label="Active Status"
+              description="Whether this question is active in the quiz"
+            />
+          </div> */}
         </div>
 
         <FormInput
-          name="name"
+          name="question_text"
           control={control}
-          label="Question Name"
+          label="Question Text"
           placeholder="Enter question"
         />
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">Options</label>
+            <label className="text-sm font-medium">Answers</label>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => append({ label: "", points: 0 })}
+              onClick={() => append({ answer_text: "", points: 0 })}
             >
-              <Plus className="h-3 w-3 mr-1" /> Add Option
+              <Plus className="h-3 w-3 mr-1" /> Add Answer
             </Button>
           </div>
 

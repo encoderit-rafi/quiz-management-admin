@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import {
+  arrayMove,
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
@@ -32,15 +33,15 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-// import { FORM_DATA } from "@/data";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
 import { useGetQuizQuestions, useDeleteQuestion } from "./-apis";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { TQuizAnswer, TQuizQuestion } from "./-types";
 import { SearchSchema } from "../../../-types";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
+import { QUERY_KEYS } from "@/query-keys";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
@@ -51,9 +52,20 @@ function QuizQuestionsPage() {
   const { id } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-  const { data, isLoading } = useQuery(useGetQuizQuestions(id, search));
-  console.log("👉 ~ QuizQuestionsPage ~ data:", data);
-  const questions = data?.data || [];
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, refetch } = useQuery(
+    useGetQuizQuestions(id, search)
+  );
+
+  const [localQuestions, setLocalQuestions] = useState<TQuizQuestion[]>([]);
+
+  useEffect(() => {
+    if (data?.data) {
+      setLocalQuestions(data.data);
+    }
+  }, [data]);
+
   const meta = data?.meta;
 
   const { setBreadcrumb } = useBreadcrumb();
@@ -72,6 +84,7 @@ function QuizQuestionsPage() {
       deleteMutation.mutate(deleteId, {
         onSuccess: () => {
           setDeleteId(null);
+          refetch();
         },
       });
     }
@@ -79,9 +92,14 @@ function QuizQuestionsPage() {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    console.log("👉 ~ handleDragEnd ~ active, over:", active, over);
     if (!over || active.id === over.id) return;
-    // Drag and drop logic for questions would go here if implemented on backend
+
+    setLocalQuestions((items) => {
+      const oldIndex = items.findIndex((i) => i.id === active.id);
+      const newIndex = items.findIndex((i) => i.id === over.id);
+      return arrayMove(items, oldIndex, newIndex);
+    });
+    // Note: To persist this, you'd need an API call to update order
   };
 
   function SortableOption({ option }: { option: TQuizAnswer }) {
@@ -149,7 +167,7 @@ function QuizQuestionsPage() {
         ref={setNodeRef}
         style={style}
         key={question.id}
-        value={`item-${question.id}`}
+        value={String(question.id)}
         className="px-4 border-b last:border-0"
       >
         <div className="flex items-center gap-2 py-4">
@@ -175,7 +193,10 @@ function QuizQuestionsPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="mr-2">
+            <Badge variant={question.is_active ? "default" : "secondary"}>
+              {question.is_active ? "Active" : "Inactive"}
+            </Badge>
+            <Badge variant="outline" className="mr-2">
               {question.answers.length} Options
             </Badge>
             <DropdownMenu>
@@ -190,11 +211,12 @@ function QuizQuestionsPage() {
                     to="/quizzes/$id/questions/$questionID/edit"
                     params={{ id, questionID: String(question.id) }}
                   >
-                    <PenSquare />
+                    <PenSquare className="mr-2 h-4 w-4" />
                     Edit
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  // className="text-destructive focus:text-destructive"
                   variant="destructive"
                   onClick={() => {
                     setDeleteId(question.id);
@@ -206,7 +228,7 @@ function QuizQuestionsPage() {
             </DropdownMenu>
           </div>
         </div>
-        <AccordionContent className="pk-4 pb-4">
+        <AccordionContent className="px-4 pb-4">
           <div className="pl-8 space-y-2">
             <div className="grid gap-2">
               <DndContext
@@ -237,7 +259,7 @@ function QuizQuestionsPage() {
             input: {
               placeholder: "Search question...",
               value: search.q,
-              onChange: (e) => {
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 navigate({
                   search: { ...search, q: e.target.value },
                   replace: true,
@@ -248,7 +270,7 @@ function QuizQuestionsPage() {
         />
         <Button asChild variant={"outline"}>
           <Link to="/quizzes/$id/questions/create" params={{ id }}>
-            <Plus />
+            <Plus className="mr-2 h-4 w-4" />
             <AppButtonText>Add Question</AppButtonText>
           </Link>
         </Button>
@@ -261,10 +283,10 @@ function QuizQuestionsPage() {
             collisionDetection={closestCorners}
           >
             <SortableContext
-              items={questions}
+              items={localQuestions}
               strategy={verticalListSortingStrategy}
             >
-              {questions.map((question, index) => (
+              {localQuestions.map((question, index) => (
                 <Question key={question.id} question={question} index={index} />
               ))}
             </SortableContext>
@@ -277,10 +299,10 @@ function QuizQuestionsPage() {
           total={meta?.total || 0}
           perPage={search.per_page}
           page={search.page}
-          onPageChange={(page) =>
+          onPageChange={(page: number) =>
             navigate({ search: { ...search, page }, replace: true })
           }
-          onPerPageChange={(per_page) =>
+          onPerPageChange={(per_page: string) =>
             navigate({
               search: { ...search, per_page: Number(per_page), page: 1 },
               replace: true,
@@ -291,7 +313,7 @@ function QuizQuestionsPage() {
 
       <AppDeleteDialog
         open={!!deleteId}
-        onOpenChange={(open) => !open && setDeleteId(null)}
+        onOpenChange={(open: boolean) => !open && setDeleteId(null)}
         onConfirm={handleDelete}
         item_name="Question"
         loading={deleteMutation.isPending}
