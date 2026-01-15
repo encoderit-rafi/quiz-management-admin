@@ -36,39 +36,9 @@ import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { FORM_DATA } from "@/data";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
-
-const DEMO_QUESTIONS = [
-  {
-    id: 1,
-    name: "What is the capital of France?",
-    options: [
-      { id: "opt-1-1", label: "London", points: 0 },
-      { id: "opt-1-2", label: "Berlin", points: 0 },
-      { id: "opt-1-3", label: "Paris", points: 10 },
-      { id: "opt-1-4", label: "Madrid", points: 0 },
-    ],
-  },
-  {
-    id: 2,
-    name: "Which planet is known as the Red Planet?",
-    options: [
-      { id: "opt-2-1", label: "Mars", points: 10 },
-      { id: "opt-2-2", label: "Venus", points: 0 },
-      { id: "opt-2-3", label: "Jupiter", points: 0 },
-      { id: "opt-2-4", label: "Saturn", points: 0 },
-    ],
-  },
-  {
-    id: 3,
-    name: "Who wrote 'Romeo and Juliet'?",
-    options: [
-      { id: "opt-3-1", label: "Charles Dickens", points: 0 },
-      { id: "opt-3-2", label: "William Shakespeare", points: 10 },
-      { id: "opt-3-3", label: "Jane Austen", points: 0 },
-      { id: "opt-3-4", label: "Mark Twain", points: 0 },
-    ],
-  },
-];
+import { useGetQuizQuestions } from "./-apis";
+import { useQuery } from "@tanstack/react-query";
+import type { TQuizAnswer, TQuizQuestion } from "./-types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
@@ -79,7 +49,10 @@ function QuizQuestionsPage() {
 
   const { id } = Route.useParams();
   // const navigate = useNavigate();
-
+  const { data, isLoading } = useQuery(useGetQuizQuestions(id));
+  console.log("👉 ~ QuizQuestionsPage ~ data:", data);
+  const questions = data?.data || [];
+  const meta = data?.meta;
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([
@@ -90,22 +63,22 @@ function QuizQuestionsPage() {
 
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
-  const [questions, setQuestions] = useState(DEMO_QUESTIONS);
-  const getQuestionPosition = (id: number) => {
-    return questions.findIndex((q: any) => q.id === id);
-  };
+  // const [questions, setQuestions] = useState(DEMO_QUESTIONS);
+  // const getQuestionPosition = (id: number) => {
+  //   return questions.findIndex((q: any) => q.id === id);
+  // };
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     console.log("👉 ~ handleDragEnd ~ active, over:", active, over);
     if (active.id === over.id) return;
-    setQuestions((questions) => {
-      const oldPosition = getQuestionPosition(active.id);
-      const newPosition = getQuestionPosition(over.id);
-      return arrayMove(questions, oldPosition, newPosition);
-    });
+    // setQuestions((questions) => {
+    //   const oldPosition = getQuestionPosition(active.id);
+    //   const newPosition = getQuestionPosition(over.id);
+    //   return arrayMove(questions, oldPosition, newPosition);
+    // });
   };
 
-  function SortableOption({ option }: { option: any }) {
+  function SortableOption({ option }: { option: TQuizAnswer }) {
     const {
       attributes,
       listeners,
@@ -135,15 +108,21 @@ function QuizQuestionsPage() {
         >
           <GripVertical className="h-3 w-3 text-muted-foreground" />
         </button>
-        <span className="text-sm flex-1">{option.label}</span>
+        <span className="text-sm flex-1">{option.answer_text}</span>
         <Badge variant="outline" className="font-mono text-xs">
           {option.points} pts
         </Badge>
       </div>
     );
   }
-
-  function Question({ question, index }: { question: any; index: number }) {
+  if (isLoading) return <div>Loading...</div>;
+  function Question({
+    question,
+    index,
+  }: {
+    question: TQuizQuestion;
+    index: number;
+  }) {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: question.id });
     const style = {
@@ -155,28 +134,28 @@ function QuizQuestionsPage() {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
 
-      setQuestions((currentQuestions) => {
-        const updatedQuestions = [...currentQuestions];
-        const questionToUpdate = updatedQuestions.find(
-          (q) => q.id === question.id
-        );
+      // setQuestions((currentQuestions) => {
+      //   const updatedQuestions = [...currentQuestions];
+      //   const questionToUpdate = updatedQuestions.find(
+      //     (q) => q.id === question.id
+      //   );
 
-        if (questionToUpdate) {
-          const oldIndex = questionToUpdate.options.findIndex(
-            (opt: any) => opt.id === active.id
-          );
-          const newIndex = questionToUpdate.options.findIndex(
-            (opt: any) => opt.id === over.id
-          );
+      //   if (questionToUpdate) {
+      //     const oldIndex = questionToUpdate.options.findIndex(
+      //       (opt: any) => opt.id === active.id
+      //     );
+      //     const newIndex = questionToUpdate.options.findIndex(
+      //       (opt: any) => opt.id === over.id
+      //     );
 
-          const newOptions = [...questionToUpdate.options];
-          const [movedOption] = newOptions.splice(oldIndex, 1);
-          newOptions.splice(newIndex, 0, movedOption);
-          questionToUpdate.options = newOptions;
-        }
+      //     const newOptions = [...questionToUpdate.options];
+      //     const [movedOption] = newOptions.splice(oldIndex, 1);
+      //     newOptions.splice(newIndex, 0, movedOption);
+      //     questionToUpdate.options = newOptions;
+      //   }
 
-        return updatedQuestions;
-      });
+      //   return updatedQuestions;
+      // });
     };
 
     return (
@@ -203,7 +182,7 @@ function QuizQuestionsPage() {
                   {index + 1}
                 </span>
                 <span className="font-medium line-clamp-1">
-                  {question.name}
+                  {question.question_text}
                 </span>
               </span>
             </AccordionTrigger>
@@ -211,7 +190,7 @@ function QuizQuestionsPage() {
 
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="mr-2">
-              {question.options.length} Options
+              {question.answers.length} Options
             </Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -223,7 +202,7 @@ function QuizQuestionsPage() {
                 <DropdownMenuItem asChild>
                   <Link
                     to="/quizzes/$id/questions/$questionID/edit"
-                    params={{ id: "1", questionID: "1" }}
+                    params={{ id, questionID: String(question.id) }}
                   >
                     <PenSquare />
                     Edit
@@ -255,10 +234,10 @@ function QuizQuestionsPage() {
                 collisionDetection={closestCorners}
               >
                 <SortableContext
-                  items={question.options}
+                  items={question.answers}
                   strategy={verticalListSortingStrategy}
                 >
-                  {question.options.map((option: any) => (
+                  {question.answers.map((option: TQuizAnswer) => (
                     <SortableOption key={option.id} option={option} />
                   ))}
                 </SortableContext>

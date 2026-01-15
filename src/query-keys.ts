@@ -11,4 +11,8 @@ export const QUERY_KEYS = {
   GET_RESULT_PAGE: (id: string | number) => ["get-result-page", id],
   GET_QUESTIONS: (quizId: string | number) => ["get-questions", quizId],
   GET_QUESTION: (id: string | number) => ["get-question", id],
+  GET_QUIZ_QUESTIONS: (quizId: string | number) => [
+    "get-quiz-questions",
+    quizId,
+  ],
 };

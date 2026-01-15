@@ -50,13 +50,13 @@ function ViewQuizPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/settings" params={{ id: "1" }}>
+                <Link to="/quizzes/$id/settings" params={{ id }}>
                   <Settings />
                   Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/questions" params={{ id: "1" }}>
+                <Link to="/quizzes/$id/questions" params={{ id }}>
                   <FileQuestionMark />
                   Questions
                 </Link>
@@ -64,7 +64,7 @@ function ViewQuizPage() {
               <DropdownMenuItem asChild>
                 <Link
                   to="/quizzes/$id/result-pages"
-                  params={{ id: "1" }}
+                  params={{ id }}
                   search={DEFAULT_PAGINATION}
                 >
                   <FileText />
@@ -72,13 +72,13 @@ function ViewQuizPage() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/leads" params={{ id: "1" }}>
+                <Link to="/quizzes/$id/leads" params={{ id }}>
                   <Users />
                   Leads & Results
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/statistics" params={{ id: "1" }}>
+                <Link to="/quizzes/$id/statistics" params={{ id }}>
                   <BarChart />
                   Statistics
                 </Link>
