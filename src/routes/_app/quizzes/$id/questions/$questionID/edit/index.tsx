@@ -1,8 +1,9 @@
-import { FormQuizQuestion } from "@/routes/_app/-components";
+// import { FormQuizQuestion } from "../../../-components";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { FormQuizQuestion } from "../../-components";
 
 export const Route = createFileRoute(
   "/_app/quizzes/$id/questions/$questionID/edit/"
@@ -11,7 +12,7 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const { id } = Route.useParams();
+  const { id, questionID } = Route.useParams();
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([
@@ -20,5 +21,9 @@ function RouteComponent() {
       { name: "Edit Quiz Question" },
     ]);
   }, []);
-  return <FormQuizQuestion type="update" id={""} />;
+  return (
+    <FormQuizQuestion
+      form_data={{ id: questionID, type: "update", quizId: id }}
+    />
+  );
 }

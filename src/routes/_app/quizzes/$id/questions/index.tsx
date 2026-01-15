@@ -272,8 +272,8 @@ function QuizQuestionsPage() {
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex items-center justify-end gap-4">
-        <Button asChild>
-          <Link to="/quizzes/$id/questions/create" params={{ id: "1" }}>
+        <Button asChild variant={"outline"}>
+          <Link to="/quizzes/$id/questions/create" params={{ id }}>
             <Plus />
             <AppButtonText>Add Question</AppButtonText>
           </Link>

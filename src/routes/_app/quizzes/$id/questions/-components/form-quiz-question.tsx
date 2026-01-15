@@ -1,10 +1,9 @@
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  FormQuizQuestionSchema,
-  type TFormQuizQuestionSchema,
-} from "../-types";
+
+import { useCreateQuestion, useGetQuestion, useUpdateQuestion } from "../-apis";
 import { FormImageUpload, FormInput } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { TFormType } from "@/types";
@@ -16,10 +15,15 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  FormQuizQuestionSchema,
+  type TFormQuizQuestionSchema,
+} from "../-types";
 
 type TProps = {
-  type: TFormType;
-  id: string | number;
+  form_data: { id?: string | number; type: TFormType; quizId: string | number };
 };
 
 type SortableOptionProps = {
@@ -85,8 +89,17 @@ function SortableOption({ id, index, control, onRemove }: SortableOptionProps) {
   );
 }
 
-export default function FormQuizQuestion({ type, id }: TProps) {
-  console.log("👉 ~ FormQuizQuestion ~ type, id:", type, id);
+export default function FormQuizQuestion({ form_data }: TProps) {
+  const router = useRouter();
+  const navigate = useNavigate();
+  const { id, type, quizId } = form_data;
+
+  // Fetch existing question
+  const { data: question } = useQuery({
+    ...useGetQuestion(id as string | number),
+    enabled: !!id && type === "update",
+  });
+
   const form = useForm<TFormQuizQuestionSchema>({
     resolver: zodResolver(FormQuizQuestionSchema),
     defaultValues: {
@@ -96,7 +109,22 @@ export default function FormQuizQuestion({ type, id }: TProps) {
     },
   });
 
-  const { control, handleSubmit } = form;
+  const { reset, control, handleSubmit } = form;
+
+  useEffect(() => {
+    if (type === "update" && question) {
+      reset({
+        name: question.name || question.question_text || "",
+        question_image: question.image || null,
+        options: (question.options || question.answers || []).map(
+          (opt: any) => ({
+            label: opt.label || opt.answer_text || "",
+            points: Number(opt.points) || 0,
+          })
+        ),
+      });
+    }
+  }, [question, type, reset]);
 
   const { fields, append, remove, move } = useFieldArray({
     control,
@@ -113,16 +141,48 @@ export default function FormQuizQuestion({ type, id }: TProps) {
     move(oldIndex, newIndex);
   };
 
+  const { mutate: createQuestion, isPending: isCreating } =
+    useCreateQuestion(quizId);
+  const { mutate: updateQuestion, isPending: isUpdating } =
+    useUpdateQuestion(quizId);
+
+  const handleCancel = () => {
+    router.history.back();
+  };
+
   const onSubmit = (data: TFormQuizQuestionSchema) => {
-    // Ensure points are numbers
-    const processedData = {
+    const payload = {
       ...data,
-      options: data.options.map((o) => ({
+      quiz_id: quizId,
+      options: data.options.map((o, index) => ({
         ...o,
         points: Number(o.points),
+        order: index,
       })),
     };
-    console.log("👉 ~ onSubmit ~ processedData:", processedData);
+
+    if (type === "update" && id) {
+      updateQuestion(
+        { ...payload, id },
+        {
+          onSuccess: () => {
+            navigate({
+              to: "/quizzes/$id/questions",
+              params: { id: String(quizId) },
+            });
+          },
+        }
+      );
+    } else {
+      createQuestion(payload, {
+        onSuccess: () => {
+          navigate({
+            to: "/quizzes/$id/questions",
+            params: { id: String(quizId) },
+          });
+        },
+      });
+    }
   };
 
   return (
@@ -185,7 +245,21 @@ export default function FormQuizQuestion({ type, id }: TProps) {
         </div>
       </form>
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
-        <Button type="submit" className="min-w-36" form="quiz-question-form">
+        <Button
+          type="button"
+          variant="outline"
+          className="min-w-36"
+          disabled={isCreating || isUpdating}
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          className="min-w-36"
+          form="quiz-question-form"
+          loading={isCreating || isUpdating}
+        >
           {type === "update" ? "Update" : "Create"}
         </Button>
       </CardAction>
