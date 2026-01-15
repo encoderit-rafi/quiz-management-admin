@@ -5,14 +5,14 @@ import { useEffect } from "react";
 import type { TPtah } from "@/types";
 import { FormResultPage } from "../-components";
 
-export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(
-  {
-    component: EditResultPage,
-  }
-);
+export const Route = createFileRoute(
+  "/_app/quizzes/$id/result-pages/edit/$resultID"
+)({
+  component: EditResultPage,
+});
 
 function EditResultPage() {
-  const { id, id: resultPageId } = Route.useParams();
+  const { id, resultID } = Route.useParams();
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([
@@ -23,7 +23,7 @@ function EditResultPage() {
       },
       {
         name: "Quiz Result Details",
-        path: `/quizzes/${id}/result-pages/view/${resultPageId}` as TPtah,
+        path: `/quizzes/${id}/result-pages/view/${resultID}` as TPtah,
       },
       {
         name: "Edit Result Page",
@@ -34,7 +34,7 @@ function EditResultPage() {
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <FormResultPage
-        form_data={{ id: resultPageId, type: "update", quizId: id }}
+        form_data={{ id: resultID, type: "update", quizId: id }}
       />
     </div>
   );

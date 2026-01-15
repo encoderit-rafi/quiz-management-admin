@@ -16,7 +16,9 @@ export const useUpdateResultPage = () => {
     },
     onSuccess: (_, variables) => {
       toast.success("Result page updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["get-result-pages"] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.GET_RESULT_PAGES({}),
+      });
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.GET_RESULT_PAGE(variables.id as string | number),
       });

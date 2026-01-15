@@ -25,8 +25,8 @@ import { Route as AppQuizzesIdLeadsIndexRouteImport } from './routes/_app/quizze
 import { Route as AppQuizzesIdEditIndexRouteImport } from './routes/_app/quizzes/$id/edit/index'
 import { Route as AppQuizzesIdResultPagesCreateIndexRouteImport } from './routes/_app/quizzes/$id/result-pages/create/index'
 import { Route as AppQuizzesIdQuestionsCreateIndexRouteImport } from './routes/_app/quizzes/$id/questions/create/index'
-import { Route as AppQuizzesIdResultPagesViewIdRouteImport } from './routes/_app/quizzes/$id/result-pages/view/$id'
-import { Route as AppQuizzesIdResultPagesEditIdRouteImport } from './routes/_app/quizzes/$id/result-pages/edit/$id'
+import { Route as AppQuizzesIdResultPagesViewResultIDRouteImport } from './routes/_app/quizzes/$id/result-pages/view/$resultID'
+import { Route as AppQuizzesIdResultPagesEditResultIDRouteImport } from './routes/_app/quizzes/$id/result-pages/edit/$resultID'
 import { Route as AppQuizzesIdQuestionsQuestionIDEditIndexRouteImport } from './routes/_app/quizzes/$id/questions/$questionID/edit/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -113,16 +113,16 @@ const AppQuizzesIdQuestionsCreateIndexRoute =
     path: '/quizzes/$id/questions/create/',
     getParentRoute: () => AppRouteRoute,
   } as any)
-const AppQuizzesIdResultPagesViewIdRoute =
-  AppQuizzesIdResultPagesViewIdRouteImport.update({
-    id: '/quizzes/$id/result-pages/view/$id',
-    path: '/quizzes/$id/result-pages/view/$id',
+const AppQuizzesIdResultPagesViewResultIDRoute =
+  AppQuizzesIdResultPagesViewResultIDRouteImport.update({
+    id: '/quizzes/$id/result-pages/view/$resultID',
+    path: '/quizzes/$id/result-pages/view/$resultID',
     getParentRoute: () => AppRouteRoute,
   } as any)
-const AppQuizzesIdResultPagesEditIdRoute =
-  AppQuizzesIdResultPagesEditIdRouteImport.update({
-    id: '/quizzes/$id/result-pages/edit/$id',
-    path: '/quizzes/$id/result-pages/edit/$id',
+const AppQuizzesIdResultPagesEditResultIDRoute =
+  AppQuizzesIdResultPagesEditResultIDRouteImport.update({
+    id: '/quizzes/$id/result-pages/edit/$resultID',
+    path: '/quizzes/$id/result-pages/edit/$resultID',
     getParentRoute: () => AppRouteRoute,
   } as any)
 const AppQuizzesIdQuestionsQuestionIDEditIndexRoute =
@@ -145,8 +145,8 @@ export interface FileRoutesByFullPath {
   '/quizzes/$id/settings': typeof AppQuizzesIdSettingsIndexRoute
   '/quizzes/$id/statistics': typeof AppQuizzesIdStatisticsIndexRoute
   '/quizzes/$id/view': typeof AppQuizzesIdViewIndexRoute
-  '/quizzes/$id/result-pages/edit/$id': typeof AppQuizzesIdResultPagesEditIdRoute
-  '/quizzes/$id/result-pages/view/$id': typeof AppQuizzesIdResultPagesViewIdRoute
+  '/quizzes/$id/result-pages/edit/$resultID': typeof AppQuizzesIdResultPagesEditResultIDRoute
+  '/quizzes/$id/result-pages/view/$resultID': typeof AppQuizzesIdResultPagesViewResultIDRoute
   '/quizzes/$id/questions/create': typeof AppQuizzesIdQuestionsCreateIndexRoute
   '/quizzes/$id/result-pages/create': typeof AppQuizzesIdResultPagesCreateIndexRoute
   '/quizzes/$id/questions/$questionID/edit': typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
@@ -164,8 +164,8 @@ export interface FileRoutesByTo {
   '/quizzes/$id/settings': typeof AppQuizzesIdSettingsIndexRoute
   '/quizzes/$id/statistics': typeof AppQuizzesIdStatisticsIndexRoute
   '/quizzes/$id/view': typeof AppQuizzesIdViewIndexRoute
-  '/quizzes/$id/result-pages/edit/$id': typeof AppQuizzesIdResultPagesEditIdRoute
-  '/quizzes/$id/result-pages/view/$id': typeof AppQuizzesIdResultPagesViewIdRoute
+  '/quizzes/$id/result-pages/edit/$resultID': typeof AppQuizzesIdResultPagesEditResultIDRoute
+  '/quizzes/$id/result-pages/view/$resultID': typeof AppQuizzesIdResultPagesViewResultIDRoute
   '/quizzes/$id/questions/create': typeof AppQuizzesIdQuestionsCreateIndexRoute
   '/quizzes/$id/result-pages/create': typeof AppQuizzesIdResultPagesCreateIndexRoute
   '/quizzes/$id/questions/$questionID/edit': typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
@@ -186,8 +186,8 @@ export interface FileRoutesById {
   '/_app/quizzes/$id/settings/': typeof AppQuizzesIdSettingsIndexRoute
   '/_app/quizzes/$id/statistics/': typeof AppQuizzesIdStatisticsIndexRoute
   '/_app/quizzes/$id/view/': typeof AppQuizzesIdViewIndexRoute
-  '/_app/quizzes/$id/result-pages/edit/$id': typeof AppQuizzesIdResultPagesEditIdRoute
-  '/_app/quizzes/$id/result-pages/view/$id': typeof AppQuizzesIdResultPagesViewIdRoute
+  '/_app/quizzes/$id/result-pages/edit/$resultID': typeof AppQuizzesIdResultPagesEditResultIDRoute
+  '/_app/quizzes/$id/result-pages/view/$resultID': typeof AppQuizzesIdResultPagesViewResultIDRoute
   '/_app/quizzes/$id/questions/create/': typeof AppQuizzesIdQuestionsCreateIndexRoute
   '/_app/quizzes/$id/result-pages/create/': typeof AppQuizzesIdResultPagesCreateIndexRoute
   '/_app/quizzes/$id/questions/$questionID/edit/': typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
@@ -207,8 +207,8 @@ export interface FileRouteTypes {
     | '/quizzes/$id/settings'
     | '/quizzes/$id/statistics'
     | '/quizzes/$id/view'
-    | '/quizzes/$id/result-pages/edit/$id'
-    | '/quizzes/$id/result-pages/view/$id'
+    | '/quizzes/$id/result-pages/edit/$resultID'
+    | '/quizzes/$id/result-pages/view/$resultID'
     | '/quizzes/$id/questions/create'
     | '/quizzes/$id/result-pages/create'
     | '/quizzes/$id/questions/$questionID/edit'
@@ -226,8 +226,8 @@ export interface FileRouteTypes {
     | '/quizzes/$id/settings'
     | '/quizzes/$id/statistics'
     | '/quizzes/$id/view'
-    | '/quizzes/$id/result-pages/edit/$id'
-    | '/quizzes/$id/result-pages/view/$id'
+    | '/quizzes/$id/result-pages/edit/$resultID'
+    | '/quizzes/$id/result-pages/view/$resultID'
     | '/quizzes/$id/questions/create'
     | '/quizzes/$id/result-pages/create'
     | '/quizzes/$id/questions/$questionID/edit'
@@ -247,8 +247,8 @@ export interface FileRouteTypes {
     | '/_app/quizzes/$id/settings/'
     | '/_app/quizzes/$id/statistics/'
     | '/_app/quizzes/$id/view/'
-    | '/_app/quizzes/$id/result-pages/edit/$id'
-    | '/_app/quizzes/$id/result-pages/view/$id'
+    | '/_app/quizzes/$id/result-pages/edit/$resultID'
+    | '/_app/quizzes/$id/result-pages/view/$resultID'
     | '/_app/quizzes/$id/questions/create/'
     | '/_app/quizzes/$id/result-pages/create/'
     | '/_app/quizzes/$id/questions/$questionID/edit/'
@@ -373,18 +373,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppQuizzesIdQuestionsCreateIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/quizzes/$id/result-pages/view/$id': {
-      id: '/_app/quizzes/$id/result-pages/view/$id'
-      path: '/quizzes/$id/result-pages/view/$id'
-      fullPath: '/quizzes/$id/result-pages/view/$id'
-      preLoaderRoute: typeof AppQuizzesIdResultPagesViewIdRouteImport
+    '/_app/quizzes/$id/result-pages/view/$resultID': {
+      id: '/_app/quizzes/$id/result-pages/view/$resultID'
+      path: '/quizzes/$id/result-pages/view/$resultID'
+      fullPath: '/quizzes/$id/result-pages/view/$resultID'
+      preLoaderRoute: typeof AppQuizzesIdResultPagesViewResultIDRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/quizzes/$id/result-pages/edit/$id': {
-      id: '/_app/quizzes/$id/result-pages/edit/$id'
-      path: '/quizzes/$id/result-pages/edit/$id'
-      fullPath: '/quizzes/$id/result-pages/edit/$id'
-      preLoaderRoute: typeof AppQuizzesIdResultPagesEditIdRouteImport
+    '/_app/quizzes/$id/result-pages/edit/$resultID': {
+      id: '/_app/quizzes/$id/result-pages/edit/$resultID'
+      path: '/quizzes/$id/result-pages/edit/$resultID'
+      fullPath: '/quizzes/$id/result-pages/edit/$resultID'
+      preLoaderRoute: typeof AppQuizzesIdResultPagesEditResultIDRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/quizzes/$id/questions/$questionID/edit/': {
@@ -407,8 +407,8 @@ interface AppRouteRouteChildren {
   AppQuizzesIdSettingsIndexRoute: typeof AppQuizzesIdSettingsIndexRoute
   AppQuizzesIdStatisticsIndexRoute: typeof AppQuizzesIdStatisticsIndexRoute
   AppQuizzesIdViewIndexRoute: typeof AppQuizzesIdViewIndexRoute
-  AppQuizzesIdResultPagesEditIdRoute: typeof AppQuizzesIdResultPagesEditIdRoute
-  AppQuizzesIdResultPagesViewIdRoute: typeof AppQuizzesIdResultPagesViewIdRoute
+  AppQuizzesIdResultPagesEditResultIDRoute: typeof AppQuizzesIdResultPagesEditResultIDRoute
+  AppQuizzesIdResultPagesViewResultIDRoute: typeof AppQuizzesIdResultPagesViewResultIDRoute
   AppQuizzesIdQuestionsCreateIndexRoute: typeof AppQuizzesIdQuestionsCreateIndexRoute
   AppQuizzesIdResultPagesCreateIndexRoute: typeof AppQuizzesIdResultPagesCreateIndexRoute
   AppQuizzesIdQuestionsQuestionIDEditIndexRoute: typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
@@ -424,8 +424,10 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppQuizzesIdSettingsIndexRoute: AppQuizzesIdSettingsIndexRoute,
   AppQuizzesIdStatisticsIndexRoute: AppQuizzesIdStatisticsIndexRoute,
   AppQuizzesIdViewIndexRoute: AppQuizzesIdViewIndexRoute,
-  AppQuizzesIdResultPagesEditIdRoute: AppQuizzesIdResultPagesEditIdRoute,
-  AppQuizzesIdResultPagesViewIdRoute: AppQuizzesIdResultPagesViewIdRoute,
+  AppQuizzesIdResultPagesEditResultIDRoute:
+    AppQuizzesIdResultPagesEditResultIDRoute,
+  AppQuizzesIdResultPagesViewResultIDRoute:
+    AppQuizzesIdResultPagesViewResultIDRoute,
   AppQuizzesIdQuestionsCreateIndexRoute: AppQuizzesIdQuestionsCreateIndexRoute,
   AppQuizzesIdResultPagesCreateIndexRoute:
     AppQuizzesIdResultPagesCreateIndexRoute,

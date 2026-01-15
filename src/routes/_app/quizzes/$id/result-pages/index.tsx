@@ -56,8 +56,8 @@ export default function RouteComponent() {
   // Column definitions
   const columns: ColumnDef<TResultPageSchema>[] = [
     {
-      header: "Name",
-      accessorKey: "name",
+      header: "Title",
+      accessorKey: "title",
     },
     {
       header: "Score Range",
@@ -80,17 +80,16 @@ export default function RouteComponent() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link
-                  // to="/result-pages/view/$id"
-                  to="/quizzes/$id/result-pages/view/$id"
-                  params={{ id: String(page.id) }}
+                  to="/quizzes/$id/result-pages/view/$resultID"
+                  params={{ id, resultID: String(page.id) }}
                 >
                   <Eye /> View
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
-                  to="/quizzes/$id/result-pages/edit/$id"
-                  params={{ id: String(page.id) }}
+                  to="/quizzes/$id/result-pages/edit/$resultID"
+                  params={{ id, resultID: String(page.id) }}
                 >
                   <PenSquare /> Edit
                 </Link>
@@ -128,7 +127,7 @@ export default function RouteComponent() {
         <Button asChild variant={"outline"}>
           <Link
             to="/quizzes/$id/result-pages/create"
-            params={{ id: "1" }}
+            params={{ id: String(id) }}
             className="flex items-center"
           >
             <Plus />
@@ -158,7 +157,7 @@ export default function RouteComponent() {
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
         item_name="Result Page"
-        loading={false}
+        loading={deleteMutation.isPending}
         onConfirm={handleDelete}
       />
     </div>

@@ -1,51 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import type { TResultPageSchema } from "../-types"; // Added type import
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react"; // Removed Loader2, Trash2
+import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
 import type { TPtah } from "@/types";
-import { ButtonGroup } from "@/components/ui/button-group";
 
-export const Route = createFileRoute("/_app/quizzes/$id/result-pages/view/$id")(
-  {
-    component: ViewResultPage,
-  }
-);
+export const Route = createFileRoute(
+  "/_app/quizzes/$id/result-pages/view/$resultID"
+)({
+  component: ViewResultPage,
+});
 
-// Static demo data
-const DEMO_RESULT_PAGES: TResultPageSchema[] = [
-  {
-    id: 1,
-    name: "Success Page",
-    min_score: 80,
-    max_score: 100,
-    content:
-      "<p><strong>Congratulations!</strong> You have successfully passed the quiz with an excellent score.</p><p>Your performance demonstrates a strong understanding of the material. Keep up the great work!</p>",
-  },
-  {
-    id: 2,
-    name: "Average Page",
-    min_score: 50,
-    max_score: 79,
-    content:
-      "<p><strong>Good job!</strong> You have passed the quiz.</p><p>While your score is good, there's still room for improvement. Consider reviewing the material and practicing more to achieve an even better result next time.</p>",
-  },
-  {
-    id: 3,
-    name: "Failure Page",
-    min_score: 0,
-    max_score: 49,
-    content:
-      "<p><strong>Thank you for taking the quiz.</strong></p><p>Unfortunately, you did not pass this time. Don't be discouraged! Review the material, practice more, and try again. You can do it!</p>",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { useGetResultPage } from "../-apis";
 
 function ViewResultPage() {
-  const { id } = Route.useParams();
+  const { id, resultID } = Route.useParams();
+  console.log("👉 ~ ViewResultPage ~ id, resultID:", id, resultID);
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([
@@ -59,7 +33,16 @@ function ViewResultPage() {
       },
     ]);
   }, []);
-  const resultPage = DEMO_RESULT_PAGES.find((p) => String(p.id) === String(id));
+
+  const { data: resultPage, isLoading } = useQuery(useGetResultPage(resultID));
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   if (!resultPage) {
     return (
@@ -72,22 +55,15 @@ function ViewResultPage() {
   return (
     <>
       <CardHeader className="flex items-center gap-2 justify-end">
-        <ButtonGroup>
-          <Button asChild variant={"outline"}>
-            <Link to="/quizzes/$id/result-pages/edit/$id" params={{ id }}>
-              <Edit />
-              <AppButtonText>Edit Result Page</AppButtonText>
-            </Link>
-          </Button>
-          <Button
-            variant={"outline"}
-            // size={"icon"}
-            className="hover:text-destructive text-destructive"
+        <Button asChild variant={"outline"}>
+          <Link
+            to="/quizzes/$id/result-pages/edit/$resultID"
+            params={{ id, resultID }}
           >
-            <Trash2 />
-            {/* Delete */}
-          </Button>
-        </ButtonGroup>
+            <Edit />
+            <AppButtonText>Edit Result Page</AppButtonText>
+          </Link>
+        </Button>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -98,9 +74,9 @@ function ViewResultPage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="text-sm font-medium">Page Name</div>
+                <div className="text-sm font-medium">Page Title</div>
                 <div className="text-sm text-muted-foreground">
-                  {resultPage.name}
+                  {resultPage.title}
                 </div>
               </div>
               <div>

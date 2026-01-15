@@ -57,11 +57,12 @@ export const FormResultPage = ({ form_data }: TProps) => {
     handleSubmit,
     formState: { errors },
   } = form;
-  console.log("👉 ~ FormResultPage ~ errors:", errors);
+  console.log("👉 ~ FormResultPage ~ errors:::", errors);
 
   useEffect(() => {
     if (type === "update" && resultPage) {
       reset({
+        quiz_id: resultPage.quiz_id || quizId,
         title: resultPage.title || "",
         score_range: [resultPage.min_score || 0, resultPage.max_score || 100],
         content: resultPage.content || "",

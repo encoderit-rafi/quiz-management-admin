@@ -121,7 +121,11 @@ export default function RouteComponent() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/questions" params={{ id: quizId }}>
+                <Link
+                  to="/quizzes/$id/questions"
+                  params={{ id: quizId }}
+                  search={DEFAULT_PAGINATION}
+                >
                   <FileQuestionMark />
                   Questions
                 </Link>
