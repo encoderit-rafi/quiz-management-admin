@@ -82,7 +82,7 @@ function LeadsListPage() {
       Array.isArray(data) && data.length > 0 ? data : DEMO_LEADS,
   });
 
-  const exportLeads = useExportLeads();
+  const exportLeads = useExportLeads(id);
 
   return (
     <div className="space-y-6 p-4">
