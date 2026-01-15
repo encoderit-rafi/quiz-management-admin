@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CardContent } from "@/components/ui/card";
-import { useEffect } from "react";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormLead, FormResultDelivery } from "./-components";
 
@@ -12,14 +9,6 @@ export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
 
 function QuizSettingsPage() {
   const { id } = Route.useParams();
-  const { setBreadcrumb } = useBreadcrumb();
-
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      { name: "Quiz Settings" },
-    ]);
-  }, [id, setBreadcrumb]);
 
   return (
     <CardContent className="flex-1 flex flex-col overflow-hidden">

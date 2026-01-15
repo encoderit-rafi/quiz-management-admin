@@ -4,9 +4,6 @@ import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import { useEffect } from "react";
-import type { TPtah } from "@/types";
 
 export const Route = createFileRoute(
   "/_app/quizzes/$id/result-pages/view/$resultID"
@@ -19,20 +16,6 @@ import { useGetResultPage } from "../-apis";
 
 function ViewResultPage() {
   const { id, resultID } = Route.useParams();
-  console.log("👉 ~ ViewResultPage ~ id, resultID:", id, resultID);
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      {
-        name: "Quiz Result Pages",
-        path: `/quizzes/${id}/result-pages/` as TPtah,
-      },
-      {
-        name: "Result Page Details",
-      },
-    ]);
-  }, []);
 
   const { data: resultPage, isLoading } = useQuery(useGetResultPage(resultID));
 

@@ -33,7 +33,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
 import {
   useGetQuizQuestions,
@@ -69,14 +68,6 @@ function QuizQuestionsPage() {
   }, [data]);
 
   const meta = data?.meta;
-
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      { name: "Quiz Questions" },
-    ]);
-  }, [id, setBreadcrumb]);
 
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
   const deleteMutation = useDeleteQuestion(id);

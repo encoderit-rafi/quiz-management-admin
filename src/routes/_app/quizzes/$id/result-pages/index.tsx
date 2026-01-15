@@ -14,13 +14,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useGetResultPages, useDeleteResultPage } from "./-apis";
 import type { TResultPageSchema } from "./-types";
 import { ResultPageSearchSchema } from "./-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
   component: RouteComponent,
@@ -29,13 +27,7 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
 
 export default function RouteComponent() {
   const { id } = Route.useParams();
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      { name: "Quiz Result Pages" },
-    ]);
-  }, []);
+
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [deleteId, setDeleteId] = useState<number | string | null>(null);

@@ -12,48 +12,19 @@ import {
 } from "lucide-react";
 import { useGetStatistics } from "./-apis";
 import { StatCard } from "./-components";
-import type { TStatisticsSchema } from "./-types";
 import { useGetAllQuizzes } from "../../../-apis";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/statistics/")({
   component: StatisticsPage,
 });
 
-const DEMO_QUIZZES = [
-  { id: 1, title: "General Knowledge Quiz" },
-  { id: 2, title: "Customer Feedback Survey" },
-  { id: 3, title: "Product Preference Test" },
-];
-
-const DEMO_STATS: TStatisticsSchema = {
-  views: 1250,
-  starts: 980,
-  completions: 750,
-  drop_off_rate: 12,
-  avg_time: "2m 45s",
-  conversion_rate: 76,
-};
-
 function StatisticsPage() {
-  const { id } = Route.useParams();
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      {
-        name: "Quiz Statistics",
-      },
-    ]);
-  }, []);
   const [selectedQuizId, setSelectedQuizId] = useState<string>("");
 
   // Fetch all quizzes for the dropdown
   const { data: quizzes, isLoading: isLoadingQuizzes } = useQuery({
     ...useGetAllQuizzes(),
-    select: (data: any) =>
-      Array.isArray(data) && data.length > 0 ? data : DEMO_QUIZZES,
+    select: (data: any) => (Array.isArray(data) && data.length > 0 ? data : []),
   });
 
   // Set default selection when quizzes load
@@ -66,7 +37,7 @@ function StatisticsPage() {
   // Fetch statistics for selected quiz
   const { data: stats, isLoading: isLoadingStats } = useQuery({
     ...useGetStatistics(selectedQuizId),
-    select: (data: any) => data || DEMO_STATS,
+    select: (data: any) => data || [],
   });
 
   return (
