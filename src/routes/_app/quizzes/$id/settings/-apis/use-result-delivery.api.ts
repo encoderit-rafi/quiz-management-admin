@@ -3,32 +3,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import type { TFormResultDeliverySchema } from "../-types";
-
-export const useGetResultDelivery = (quizId: string | number) => {
-  return {
-    queryKey: ["result-delivery", quizId],
-    queryFn: async () => {
-      const res = await api.get(`/quiz/${quizId}/result-delivery-settings`);
-      return res.data?.data;
-    },
-    enabled: !!quizId,
-  };
-};
+import { QUERY_KEYS } from "@/query-keys";
+import omitEmpty from "omit-empty";
 
 export const useUpdateResultDelivery = (quizId: string | number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-result-delivery", quizId],
     mutationFn: async (body: TFormResultDeliverySchema) => {
-      const res = await api.put(
+      const data = omitEmpty(body);
+      const payload = data.id ? { ...data, _method: "PUT" } : data;
+      const res = await api.post(
         `/quiz/${quizId}/result-delivery-settings`,
-        body
+        payload
       );
       return res.data;
     },
     onSuccess: () => {
       toast.success("Result delivery settings updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["result-delivery", quizId] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.GET_RESULT_DELIVERY_SETTINGS(quizId),
+      });
     },
     onError: (error) => {
       const fallback = "Failed to update result delivery settings.";

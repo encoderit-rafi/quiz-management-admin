@@ -11,8 +11,6 @@ type TFormSwitchProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   TTransformedValues = TFieldValues,
 > = TFormController<TFieldValues, TName, TTransformedValues> & {
-  label?: string;
-  description?: string;
   disabled?: boolean;
 };
 

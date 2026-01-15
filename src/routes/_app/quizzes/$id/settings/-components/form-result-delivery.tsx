@@ -8,10 +8,10 @@ import {
   FormResultDeliverySchema,
   type TFormResultDeliverySchema,
 } from "../-types";
-// import { useGetResultDelivery, useUpdateResultDelivery } from "../-apis";
 import { DEFAULT_RESULT_DELIVERY_DATA } from "../-data";
 import { CardAction } from "@/components/ui/card";
 import { useGetResultDelivery, useUpdateResultDelivery } from "../-apis";
+import { Label } from "@/components/ui/label";
 
 type TProps = {
   quizId: string | number;
@@ -23,16 +23,25 @@ export default function FormResultDelivery({ quizId }: TProps) {
 
   const form = useForm<TFormResultDeliverySchema>({
     resolver: zodResolver(FormResultDeliverySchema),
-    defaultValues: DEFAULT_RESULT_DELIVERY_DATA(quizId),
+    defaultValues: DEFAULT_RESULT_DELIVERY_DATA,
   });
 
-  const { control, handleSubmit, reset } = form;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = form;
+  console.log("👉 ~ FormResultDelivery ~ errors:", errors);
 
   useEffect(() => {
     if (settings) {
       reset({
+        id: settings.id || "",
         quiz_id: quizId,
-        ...settings,
+        enable_email_result: !!settings.enable_email_result,
+        enable_pdf_download: !!settings.enable_pdf_download,
+        enable_link_share: !!settings.enable_link_share,
       });
     }
   }, [settings, reset, quizId]);
@@ -44,35 +53,27 @@ export default function FormResultDelivery({ quizId }: TProps) {
   if (isLoading) return <div>Loading result delivery settings...</div>;
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormSwitch
-            control={control}
-            name="enable_email_result"
-            label="Enable Email Results"
-            description="Send quiz results to users via email."
-          />
-          <FormSwitch
-            control={control}
-            name="enable_pdf_download"
-            label="Enable PDF Download"
-            description="Allow users to download their results as a PDF."
-          />
-          <FormSwitch
-            control={control}
-            name="enable_link_share"
-            label="Enable Link Share"
-            description="Allow users to share their result link."
-          />
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-6">
+        <Label htmlFor="enable_email_result">
+          <FormSwitch control={control} name="enable_email_result" />
+          Email
+        </Label>
+        <Label htmlFor="enable_pdf_download">
+          <FormSwitch control={control} name="enable_pdf_download" />
+          PDF Download
+        </Label>
+        <Label htmlFor="enable_link_share">
+          <FormSwitch control={control} name="enable_link_share" />
+          Link Share
+        </Label>
+      </div>
 
-        <CardAction className="flex justify-end pt-4">
-          <Button type="submit" loading={isPending} className="min-w-36">
-            Save Result Settings
-          </Button>
-        </CardAction>
-      </form>
-    </div>
+      <CardAction className="flex justify-end pt-4">
+        <Button type="submit" loading={isPending} className="min-w-36">
+          Save
+        </Button>
+      </CardAction>
+    </form>
   );
 }

@@ -105,7 +105,6 @@ export default function FormLead({ quizId }: TProps) {
                   <FormSwitch
                     control={control}
                     name={`fields.${index}.required`}
-                    label=""
                   />
                 </TableCell>
               </TableRow>

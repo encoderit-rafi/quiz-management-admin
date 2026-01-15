@@ -4,13 +4,15 @@ import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import type { TFormLeadSchema } from "../-types";
 import { QUERY_KEYS } from "@/query-keys";
+import omitEmpty from "omit-empty";
 
 export const useUpdateLeadSettings = (quizId: string | number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-lead-settings", quizId],
     mutationFn: async (body: TFormLeadSchema) => {
-      const payload = body.id ? { ...body, _method: "PUT" } : body;
+      const data = omitEmpty(body);
+      const payload = data.id ? { ...data, _method: "PUT" } : data;
       const res = await api.post(`/quiz/${quizId}/lead-form-settings`, payload);
       return res.data;
     },
