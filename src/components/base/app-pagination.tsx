@@ -89,7 +89,7 @@ const AppPagination = ({
         >
           Showing <span className="text-foreground">{start}</span> to{" "}
           <span className="text-foreground">{end}</span> of{" "}
-          <span className="text-foreground">{total}</span> products
+          <span className="text-foreground">{total}</span> items
         </p>
       </div>
       <Pagination className="w-fit max-sm:mx-0">

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,52 +33,42 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { FORM_DATA } from "@/data";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
-
-const DEMO_QUESTIONS = [
-  {
-    id: 1,
-    name: "What is the capital of France?",
-    options: [
-      { id: "opt-1-1", label: "London", points: 0 },
-      { id: "opt-1-2", label: "Berlin", points: 0 },
-      { id: "opt-1-3", label: "Paris", points: 10 },
-      { id: "opt-1-4", label: "Madrid", points: 0 },
-    ],
-  },
-  {
-    id: 2,
-    name: "Which planet is known as the Red Planet?",
-    options: [
-      { id: "opt-2-1", label: "Mars", points: 10 },
-      { id: "opt-2-2", label: "Venus", points: 0 },
-      { id: "opt-2-3", label: "Jupiter", points: 0 },
-      { id: "opt-2-4", label: "Saturn", points: 0 },
-    ],
-  },
-  {
-    id: 3,
-    name: "Who wrote 'Romeo and Juliet'?",
-    options: [
-      { id: "opt-3-1", label: "Charles Dickens", points: 0 },
-      { id: "opt-3-2", label: "William Shakespeare", points: 10 },
-      { id: "opt-3-3", label: "Jane Austen", points: 0 },
-      { id: "opt-3-4", label: "Mark Twain", points: 0 },
-    ],
-  },
-];
+import {
+  useGetQuizQuestions,
+  useDeleteQuestion,
+  useArrangeOrder,
+} from "./-apis";
+import { useQuery } from "@tanstack/react-query";
+import type { TQuizAnswer, TQuizQuestion } from "./-types";
+import { SearchSchema } from "../../../-types";
+import AppSearch from "@/components/base/app-search";
+import AppPagination from "@/components/base/app-pagination";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
+  validateSearch: SearchSchema,
 });
 
 function QuizQuestionsPage() {
-  // useSetRoute({ name: "Quiz Questions", path: Route.fullPath });
-
   const { id } = Route.useParams();
-  // const navigate = useNavigate();
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
+  const { data, isLoading, refetch } = useQuery(
+    useGetQuizQuestions(id, search)
+  );
+
+  const [localQuestions, setLocalQuestions] = useState<TQuizQuestion[]>([]);
+
+  useEffect(() => {
+    if (data?.data) {
+      setLocalQuestions(data.data);
+    }
+  }, [data]);
+
+  const meta = data?.meta;
 
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
@@ -86,26 +76,41 @@ function QuizQuestionsPage() {
       { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
       { name: "Quiz Questions" },
     ]);
-  }, []);
+  }, [id, setBreadcrumb]);
 
-  const [deleteForm, setDeleteForm] = useState(FORM_DATA);
+  const [deleteId, setDeleteId] = useState<number | string | null>(null);
+  const deleteMutation = useDeleteQuestion(id);
 
-  const [questions, setQuestions] = useState(DEMO_QUESTIONS);
-  const getQuestionPosition = (id: number) => {
-    return questions.findIndex((q: any) => q.id === id);
+  const handleDelete = () => {
+    if (deleteId !== null) {
+      deleteMutation.mutate(deleteId, {
+        onSuccess: () => {
+          setDeleteId(null);
+          refetch();
+        },
+      });
+    }
   };
+
+  const arrangeQuestionMutation = useArrangeOrder("Question", () => refetch());
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    console.log("👉 ~ handleDragEnd ~ active, over:", active, over);
-    if (active.id === over.id) return;
-    setQuestions((questions) => {
-      const oldPosition = getQuestionPosition(active.id);
-      const newPosition = getQuestionPosition(over.id);
-      return arrayMove(questions, oldPosition, newPosition);
+    if (!over || active.id === over.id) return;
+
+    setLocalQuestions((items) => {
+      const oldIndex = items.findIndex((i) => i.id === active.id);
+      const newIndex = items.findIndex((i) => i.id === over.id);
+      const newItems = arrayMove(items, oldIndex, newIndex);
+
+      // Call API to persist order
+      arrangeQuestionMutation.mutate(newItems.map((i) => i.id));
+
+      return newItems;
     });
   };
 
-  function SortableOption({ option }: { option: any }) {
+  function SortableOption({ option }: { option: TQuizAnswer }) {
     const {
       attributes,
       listeners,
@@ -135,7 +140,7 @@ function QuizQuestionsPage() {
         >
           <GripVertical className="h-3 w-3 text-muted-foreground" />
         </button>
-        <span className="text-sm flex-1">{option.label}</span>
+        <span className="text-sm flex-1">{option.answer_text}</span>
         <Badge variant="outline" className="font-mono text-xs">
           {option.points} pts
         </Badge>
@@ -143,7 +148,15 @@ function QuizQuestionsPage() {
     );
   }
 
-  function Question({ question, index }: { question: any; index: number }) {
+  if (isLoading) return <div>Loading...</div>;
+
+  function Question({
+    question,
+    index,
+  }: {
+    question: TQuizQuestion;
+    index: number;
+  }) {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: question.id });
     const style = {
@@ -151,40 +164,33 @@ function QuizQuestionsPage() {
       transform: CSS.Transform.toString(transform),
     };
 
+    const arrangeAnswerMutation = useArrangeOrder("Answer", () => refetch());
+
     const handleOptionDragEnd = (event: any) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
 
-      setQuestions((currentQuestions) => {
-        const updatedQuestions = [...currentQuestions];
-        const questionToUpdate = updatedQuestions.find(
-          (q) => q.id === question.id
-        );
+      const oldIndex = question.answers.findIndex((i) => i.id === active.id);
+      const newIndex = question.answers.findIndex((i) => i.id === over.id);
+      const newAnswers = arrayMove(question.answers, oldIndex, newIndex);
 
-        if (questionToUpdate) {
-          const oldIndex = questionToUpdate.options.findIndex(
-            (opt: any) => opt.id === active.id
-          );
-          const newIndex = questionToUpdate.options.findIndex(
-            (opt: any) => opt.id === over.id
-          );
+      // Call API to persist order
+      arrangeAnswerMutation.mutate(newAnswers.map((i) => i.id));
 
-          const newOptions = [...questionToUpdate.options];
-          const [movedOption] = newOptions.splice(oldIndex, 1);
-          newOptions.splice(newIndex, 0, movedOption);
-          questionToUpdate.options = newOptions;
-        }
-
-        return updatedQuestions;
-      });
+      // Local update for immediate feedback
+      setLocalQuestions((prev) =>
+        prev.map((q) =>
+          q.id === question.id ? { ...q, answers: newAnswers } : q
+        )
+      );
     };
 
     return (
       <AccordionItem
         ref={setNodeRef}
         style={style}
-        key={index}
-        value={`item-${index}`}
+        key={question.id}
+        value={String(question.id)}
         className="px-4 border-b last:border-0"
       >
         <div className="flex items-center gap-2 py-4">
@@ -200,18 +206,21 @@ function QuizQuestionsPage() {
             <AccordionTrigger className="hover:no-underline py-0">
               <span className="flex items-center gap-2 text-left">
                 <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
-                  {index + 1}
+                  {index + 1 + (search.page - 1) * search.per_page}
                 </span>
                 <span className="font-medium line-clamp-1">
-                  {question.name}
+                  {question.question_text}
                 </span>
               </span>
             </AccordionTrigger>
           </div>
 
           <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="mr-2">
-              {question.options.length} Options
+            <Badge variant={question.is_active ? "default" : "secondary"}>
+              {question.is_active ? "Active" : "Inactive"}
+            </Badge>
+            <Badge variant="outline" className="mr-2">
+              {question.answers.length} Options
             </Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -223,22 +232,17 @@ function QuizQuestionsPage() {
                 <DropdownMenuItem asChild>
                   <Link
                     to="/quizzes/$id/questions/$questionID/edit"
-                    params={{ id: "1", questionID: "1" }}
+                    params={{ id, questionID: String(question.id) }}
                   >
-                    <PenSquare />
+                    <PenSquare className="mr-2 h-4 w-4" />
                     Edit
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  // className="text-destructive focus:text-destructive"
                   variant="destructive"
                   onClick={() => {
-                    setDeleteForm({
-                      type: "delete",
-                      title: "Delete Question",
-                      description:
-                        "Are you sure you want to delete this question?",
-                      id: question.id,
-                    });
+                    setDeleteId(question.id);
                   }}
                 >
                   <Trash2 className="mr-2 h-4 w-4" /> Delete
@@ -247,7 +251,7 @@ function QuizQuestionsPage() {
             </DropdownMenu>
           </div>
         </div>
-        <AccordionContent className="pk-4 pb-4">
+        <AccordionContent className="px-4 pb-4">
           <div className="pl-8 space-y-2">
             <div className="grid gap-2">
               <DndContext
@@ -255,10 +259,10 @@ function QuizQuestionsPage() {
                 collisionDetection={closestCorners}
               >
                 <SortableContext
-                  items={question.options}
+                  items={question.answers}
                   strategy={verticalListSortingStrategy}
                 >
-                  {question.options.map((option: any) => (
+                  {question.answers.map((option: TQuizAnswer) => (
                     <SortableOption key={option.id} option={option} />
                   ))}
                 </SortableContext>
@@ -269,41 +273,74 @@ function QuizQuestionsPage() {
       </AccordionItem>
     );
   }
+
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex items-center justify-end gap-4">
-        <Button asChild>
-          <Link to="/quizzes/$id/questions/create" params={{ id: "1" }}>
-            <Plus />
+      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <AppSearch
+          props={{
+            input: {
+              placeholder: "Search question...",
+              value: search.q,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                navigate({
+                  search: { ...search, q: e.target.value },
+                  replace: true,
+                });
+              },
+            },
+          }}
+        />
+        <Button asChild variant={"outline"}>
+          <Link to="/quizzes/$id/questions/create" params={{ id }}>
+            <Plus className="mr-2 h-4 w-4" />
             <AppButtonText>Add Question</AppButtonText>
           </Link>
         </Button>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex-1 overflow-y-auto">
         <Accordion type="multiple" className="w-full">
           <DndContext
             onDragEnd={handleDragEnd}
             collisionDetection={closestCorners}
           >
             <SortableContext
-              items={questions}
+              items={localQuestions}
               strategy={verticalListSortingStrategy}
             >
-              {questions.map((question, index) => (
-                <Question question={question} index={index} />
+              {localQuestions.map((question, index) => (
+                <Question key={question.id} question={question} index={index} />
               ))}
             </SortableContext>
           </DndContext>
         </Accordion>
-        <AppDeleteDialog
-          open={deleteForm.type === "delete"}
-          onOpenChange={() => setDeleteForm(FORM_DATA)}
-          onConfirm={() => {}}
-          item_name={deleteForm.title}
-          loading={false}
-        />
       </CardContent>
+
+      <div className="p-4 border-t">
+        <AppPagination
+          total={meta?.total || 0}
+          perPage={search.per_page}
+          page={search.page}
+          onPageChange={(page: number) =>
+            navigate({ search: { ...search, page }, replace: true })
+          }
+          onPerPageChange={(per_page: string) =>
+            navigate({
+              search: { ...search, per_page: Number(per_page), page: 1 },
+              replace: true,
+            })
+          }
+        />
+      </div>
+
+      <AppDeleteDialog
+        open={!!deleteId}
+        onOpenChange={(open: boolean) => !open && setDeleteId(null)}
+        onConfirm={handleDelete}
+        item_name="Question"
+        loading={deleteMutation.isPending}
+      />
     </div>
   );
 }
