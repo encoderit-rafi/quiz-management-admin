@@ -86,7 +86,7 @@ function StatisticsPage() {
             isLoading={isLoadingStats}
             description="Total completed submissions"
           />
-          {stats.drop_off_rate && <StatCard
+          {stats?.drop_off_rate && <StatCard
             title="Drop-off Rate"
             value={stats ? `${stats.drop_off_rate}%` : undefined}
             icon={ArrowDownRight}
@@ -95,12 +95,12 @@ function StatisticsPage() {
           />}
           <StatCard
             title="Avg. Time Spent"
-            value={stats?.total_time_spent}
+            value={stats?.average_time_spent_formatted}
             icon={Clock}
             isLoading={isLoadingStats}
             description="Average duration per completion"
           />
-          {stats.conversion_rate && <StatCard
+          {stats?.conversion_rate && <StatCard
             title="Conversion Rate"
             value={stats ? `${stats.conversion_rate}%` : 0}
             icon={TrendingUp}
