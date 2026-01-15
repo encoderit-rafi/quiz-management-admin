@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { FormResultPage } from "../-components";
-import { useGetResultPage } from "../-apis";
+// import { FormResultPage } from "../-components";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import { useEffect } from "react";
 import type { TPtah } from "@/types";
+import { FormResultPage } from "../-components";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(
   {
@@ -13,7 +12,7 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/edit/$id")(
 );
 
 function EditResultPage() {
-  const { id } = Route.useParams();
+  const { id, id: resultPageId } = Route.useParams();
   const { setBreadcrumb } = useBreadcrumb();
   useEffect(() => {
     setBreadcrumb([
@@ -24,22 +23,18 @@ function EditResultPage() {
       },
       {
         name: "Quiz Result Details",
-        path: `/quizzes/${id}/result-pages/view/${id}` as TPtah,
+        path: `/quizzes/${id}/result-pages/view/${resultPageId}` as TPtah,
       },
       {
         name: "Edit Result Page",
       },
     ]);
   }, []);
-  const { data: resultPage } = useQuery(useGetResultPage(id));
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <FormResultPage
-        type="update"
-        initialData={resultPage}
-        onSuccess={() => {}}
-        onCancel={() => {}}
+        form_data={{ id: resultPageId, type: "update", quizId: id }}
       />
     </div>
   );

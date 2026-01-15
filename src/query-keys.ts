@@ -7,4 +7,6 @@ export const QUERY_KEYS = {
     "get-result-delivery-settings",
     id,
   ],
+  GET_RESULT_PAGES: (params: any) => ["get-result-pages", params],
+  GET_RESULT_PAGE: (id: string | number) => ["get-result-page", id],
 };

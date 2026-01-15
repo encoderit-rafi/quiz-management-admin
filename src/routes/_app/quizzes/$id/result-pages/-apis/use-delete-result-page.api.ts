@@ -11,7 +11,7 @@ export const useDeleteResultPage = () => {
     },
     onSuccess: () => {
       toast.success("Result page deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["result-pages"] });
+      queryClient.invalidateQueries({ queryKey: ["get-result-pages"] });
     },
     onError: (error) => {
       const fallback = "Failed to delete result page.";

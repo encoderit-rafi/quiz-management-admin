@@ -12,7 +12,7 @@ export const useCreateResultPage = () => {
     },
     onSuccess: () => {
       toast.success("Result page created successfully!");
-      queryClient.invalidateQueries({ queryKey: ["result-pages"] });
+      queryClient.invalidateQueries({ queryKey: ["get-result-pages"] });
     },
     onError: (error) => {
       const fallback = "Failed to create result page.";

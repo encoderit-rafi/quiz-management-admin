@@ -12,10 +12,9 @@ export const useUpdateResultDelivery = (quizId: string | number) => {
     mutationKey: ["update-result-delivery", quizId],
     mutationFn: async (body: TFormResultDeliverySchema) => {
       const data = omitEmpty(body);
-      const payload = data.id ? { ...data, _method: "PUT" } : data;
       const res = await api.post(
         `/quiz/${quizId}/result-delivery-settings`,
-        payload
+        data
       );
       return res.data;
     },

@@ -12,8 +12,7 @@ export const useUpdateLeadSettings = (quizId: string | number) => {
     mutationKey: ["update-lead-settings", quizId],
     mutationFn: async (body: TFormLeadSchema) => {
       const data = omitEmpty(body);
-      const payload = data.id ? { ...data, _method: "PUT" } : data;
-      const res = await api.post(`/quiz/${quizId}/lead-form-settings`, payload);
+      const res = await api.post(`/quiz/${quizId}/lead-form-settings`, data);
       return res.data;
     },
     onSuccess: () => {

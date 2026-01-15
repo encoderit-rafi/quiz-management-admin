@@ -1,11 +1,20 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { ResultPageSchema, type TResultPageSchema } from "../-types";
-import { useCreateResultPage, useUpdateResultPage } from "../-apis";
+import {
+  useCreateResultPage,
+  useGetResultPage,
+  useUpdateResultPage,
+} from "../-apis";
 import { FormInput, FormSlider, FormTiptap } from "@/components/form";
 import { CardContent, CardAction } from "@/components/ui/card";
 import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
+import type { TFormType } from "@/types";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import { DEFAULT_PAGINATION } from "@/consts";
 
 const ResultPageFormSchema = ResultPageSchema.omit({
   min_score: true,
@@ -16,47 +25,89 @@ const ResultPageFormSchema = ResultPageSchema.omit({
 
 type TResultPageFormSchema = z.infer<typeof ResultPageFormSchema>;
 
-interface FormResultPageProps {
-  initialData?: TResultPageSchema;
-  type?: "create" | "update";
-  onSuccess: () => void;
-  onCancel: () => void;
-}
+type TProps = {
+  form_data: { id?: string | number; type: TFormType; quizId: string | number };
+};
 
-export const FormResultPage = ({
-  initialData,
-  type = "create",
-  onSuccess,
-}: FormResultPageProps) => {
+export const FormResultPage = ({ form_data }: TProps) => {
+  console.log("👉 ~ FormResultPage ~ form_data:", form_data);
+  const router = useRouter();
+  const navigate = useNavigate();
+  const { id, type, quizId } = form_data;
+
+  // Fetch existing result page
+  const { data: resultPage } = useQuery({
+    ...useGetResultPage(id as string | number),
+    enabled: !!id && type === "update",
+  });
+
   const form = useForm<TResultPageFormSchema>({
     resolver: zodResolver(ResultPageFormSchema),
     defaultValues: {
-      name: initialData?.name || "",
-      score_range: [initialData?.min_score || 0, initialData?.max_score || 100],
-      content: initialData?.content || "",
+      quiz_id: quizId,
+      title: "",
+      score_range: [0, 100],
+      content: "",
     },
   });
 
-  const { control, handleSubmit } = form;
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+  console.log("👉 ~ FormResultPage ~ errors:", errors);
+
+  useEffect(() => {
+    if (type === "update" && resultPage) {
+      reset({
+        title: resultPage.title || "",
+        score_range: [resultPage.min_score || 0, resultPage.max_score || 100],
+        content: resultPage.content || "",
+      });
+    }
+  }, [resultPage, type, reset]);
 
   const { mutate: createResultPage, isPending: isCreating } =
     useCreateResultPage();
   const { mutate: updateResultPage, isPending: isUpdating } =
     useUpdateResultPage();
 
+  const handelCancel = () => {
+    router.history.back();
+  };
+
   const onSubmit = (data: TResultPageFormSchema) => {
     const { score_range, ...rest } = data;
     const payload: TResultPageSchema = {
       ...rest,
+      quiz_id: quizId,
       min_score: score_range[0],
       max_score: score_range[1],
     } as TResultPageSchema;
 
-    if (type === "update" && initialData?.id) {
-      payload.id = initialData.id;
-      updateResultPage(payload, { onSuccess });
+    if (type === "update" && id) {
+      payload.id = id;
+      updateResultPage(payload, {
+        onSuccess: () => {
+          navigate({
+            to: "/quizzes/$id/result-pages",
+            params: { id: String(quizId) },
+            search: DEFAULT_PAGINATION,
+          });
+        },
+      });
     } else {
-      createResultPage(payload, { onSuccess });
+      createResultPage(payload, {
+        onSuccess: () => {
+          navigate({
+            to: "/quizzes/$id/result-pages",
+            params: { id: String(quizId) },
+            search: DEFAULT_PAGINATION,
+          });
+        },
+      });
     }
   };
 
@@ -71,9 +122,9 @@ export const FormResultPage = ({
       >
         <div className="grid gap-4">
           <FormInput
-            name="name"
+            name="title"
             control={control}
-            label="Page Name"
+            label="Page Title"
             placeholder="e.g. High Score Result"
           />
 
@@ -98,8 +149,22 @@ export const FormResultPage = ({
         </div>
       </form>
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
-        <Button type="submit" form="result-page-form" loading={isLoading}>
-          {type === "create" ? "Create Page" : "Save Changes"}
+        <Button
+          type="button"
+          variant="outline"
+          className="min-w-36"
+          disabled={isLoading}
+          onClick={handelCancel}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          form="result-page-form"
+          loading={isLoading}
+          className="min-w-36"
+        >
+          {type === "create" ? "Create Page" : "Update Page"}
         </Button>
       </CardAction>
     </CardContent>

@@ -27,30 +27,6 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
   validateSearch: ResultPageSearchSchema,
 });
 
-// Demo data for fallback
-const DEMO_RESULT_PAGES: TResultPageSchema[] = [
-  {
-    id: 1,
-    name: "Success Page",
-    min_score: 80,
-    max_score: 100,
-    content: "<p>Congratulations! You passed!</p>",
-  },
-  {
-    id: 2,
-    name: "Average Page",
-    min_score: 50,
-    max_score: 79,
-    content: "<p>Good job, but keep practicing.</p>",
-  },
-  {
-    id: 3,
-    name: "Failure Page",
-    min_score: 0,
-    max_score: 50,
-  },
-];
-
 export default function RouteComponent() {
   const { id } = Route.useParams();
   const { setBreadcrumb } = useBreadcrumb();
@@ -64,9 +40,9 @@ export default function RouteComponent() {
   const search = Route.useSearch();
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
-  const {
-    data: resultPages = { data: DEMO_RESULT_PAGES, meta: { total: 0 } },
-  } = useQuery(useGetResultPages(search));
+  const { data: resultPages = { data: [], meta: { total: 0 } } } = useQuery(
+    useGetResultPages(search)
+  );
 
   const deleteMutation = useDeleteResultPage();
 
@@ -161,10 +137,7 @@ export default function RouteComponent() {
         </Button>
       </div>
 
-      <AppTable
-        data={resultPages?.data || DEMO_RESULT_PAGES}
-        columns={columns}
-      />
+      <AppTable data={resultPages?.data} columns={columns} />
 
       <AppPagination
         total={resultPages?.meta?.total || 0}
