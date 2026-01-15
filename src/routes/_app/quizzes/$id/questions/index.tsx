@@ -35,13 +35,16 @@ import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 import type { TPtah } from "@/types";
-import { useGetQuizQuestions, useDeleteQuestion } from "./-apis";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useGetQuizQuestions,
+  useDeleteQuestion,
+  useArrangeOrder,
+} from "./-apis";
+import { useQuery } from "@tanstack/react-query";
 import type { TQuizAnswer, TQuizQuestion } from "./-types";
 import { SearchSchema } from "../../../-types";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
-import { QUERY_KEYS } from "@/query-keys";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
@@ -52,7 +55,6 @@ function QuizQuestionsPage() {
   const { id } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-  const queryClient = useQueryClient();
 
   const { data, isLoading, refetch } = useQuery(
     useGetQuizQuestions(id, search)
@@ -90,6 +92,8 @@ function QuizQuestionsPage() {
     }
   };
 
+  const arrangeQuestionMutation = useArrangeOrder("Question", () => refetch());
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -97,9 +101,13 @@ function QuizQuestionsPage() {
     setLocalQuestions((items) => {
       const oldIndex = items.findIndex((i) => i.id === active.id);
       const newIndex = items.findIndex((i) => i.id === over.id);
-      return arrayMove(items, oldIndex, newIndex);
+      const newItems = arrayMove(items, oldIndex, newIndex);
+
+      // Call API to persist order
+      arrangeQuestionMutation.mutate(newItems.map((i) => i.id));
+
+      return newItems;
     });
-    // Note: To persist this, you'd need an API call to update order
   };
 
   function SortableOption({ option }: { option: TQuizAnswer }) {
@@ -156,10 +164,25 @@ function QuizQuestionsPage() {
       transform: CSS.Transform.toString(transform),
     };
 
+    const arrangeAnswerMutation = useArrangeOrder("Answer", () => refetch());
+
     const handleOptionDragEnd = (event: any) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
-      // Drag and drop logic for options would go here
+
+      const oldIndex = question.answers.findIndex((i) => i.id === active.id);
+      const newIndex = question.answers.findIndex((i) => i.id === over.id);
+      const newAnswers = arrayMove(question.answers, oldIndex, newIndex);
+
+      // Call API to persist order
+      arrangeAnswerMutation.mutate(newAnswers.map((i) => i.id));
+
+      // Local update for immediate feedback
+      setLocalQuestions((prev) =>
+        prev.map((q) =>
+          q.id === question.id ? { ...q, answers: newAnswers } : q
+        )
+      );
     };
 
     return (

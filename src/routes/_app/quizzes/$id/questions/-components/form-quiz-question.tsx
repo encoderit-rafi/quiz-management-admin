@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
 import { useCreateQuestion, useGetQuestion, useUpdateQuestion } from "../-apis";
-import { FormImageUpload, FormInput, FormSwitch } from "@/components/form";
+import { FormImageUpload, FormInput } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { TFormType } from "@/types";
 import { CardAction, CardContent } from "@/components/ui/card";
