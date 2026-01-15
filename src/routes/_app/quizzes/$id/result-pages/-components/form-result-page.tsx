@@ -93,20 +93,27 @@ export const FormResultPage = ({ form_data }: TProps) => {
       updateResultPage(payload, {
         onSuccess: () => {
           navigate({
-            to: "/quizzes/$id/result-pages",
-            params: { id: String(quizId) },
-            search: DEFAULT_PAGINATION,
+            to: "/quizzes/$id/result-pages/view/$resultID",
+            params: { id: String(quizId), resultID: String(id) },
           });
         },
       });
     } else {
       createResultPage(payload, {
-        onSuccess: () => {
-          navigate({
-            to: "/quizzes/$id/result-pages",
-            params: { id: String(quizId) },
-            search: DEFAULT_PAGINATION,
-          });
+        onSuccess: (res) => {
+          const resultID = res?.data?.id || res?.id;
+          if (resultID) {
+            navigate({
+              to: "/quizzes/$id/result-pages/view/$resultID",
+              params: { id: String(quizId), resultID: String(resultID) },
+            });
+          } else {
+            navigate({
+              to: "/quizzes/$id/result-pages",
+              params: { id: String(quizId) },
+              search: DEFAULT_PAGINATION,
+            });
+          }
         },
       });
     }
