@@ -13,11 +13,32 @@ export const Route = createFileRoute(
 
 import { useQuery } from "@tanstack/react-query";
 import { useGetResultPage } from "../-apis";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import { useGetQuiz } from "@/routes/_app/-apis";
+import { useEffect } from "react";
+import type { TPath } from "@/types";
 
 function ViewResultPage() {
   const { id, resultID } = Route.useParams();
-
+  const { data: quiz } = useQuery(useGetQuiz(id));
+  const { setBreadcrumb } = useBreadcrumb();
   const { data: resultPage, isLoading } = useQuery(useGetResultPage(resultID));
+
+  useEffect(() => {
+    setBreadcrumb([
+      {
+        name: quiz?.name || "",
+        path: `/quizzes/${id}/view` as TPath,
+      },
+      {
+        name: "Result Pages",
+        path: `/quizzes/${id}/result-pages` as TPath,
+      },
+      {
+        name: resultPage?.title || "",
+      },
+    ]);
+  }, [quiz, resultPage]);
 
   if (isLoading) {
     return (
