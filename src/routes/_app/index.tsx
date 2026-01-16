@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PenSquare,
   Trash2,
@@ -31,6 +31,7 @@ import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
+import { useActiveQuiz } from "@/store";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -40,6 +41,11 @@ export const Route = createFileRoute("/_app/")({
 // Demo data (fallback)
 
 export default function RouteComponent() {
+  const { setActiveQuiz } = useActiveQuiz();
+  useEffect(() => {
+    setActiveQuiz({ quiz: { id: "", name: "" } });
+  }, []);
+
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
@@ -63,6 +69,9 @@ export default function RouteComponent() {
       }
     );
   };
+  // const handelSetActiveQuiz = (quiz: TQuizSchema) => {
+  //   setActiveQuiz({ quiz });
+  // };
 
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
@@ -97,25 +106,25 @@ export default function RouteComponent() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
                   <Eye />
                   View
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/edit" params={{ id: quizId }}>
                   <PenSquare />
                   Edit
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/settings" params={{ id: quizId }}>
                   <Settings />
                   Settings
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link
                   to="/quizzes/$id/questions"
                   params={{ id: quizId }}
@@ -125,7 +134,7 @@ export default function RouteComponent() {
                   Questions
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link
                   to="/quizzes/$id/result-pages"
                   params={{ id: quizId }}
@@ -135,7 +144,7 @@ export default function RouteComponent() {
                   Result Pages
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link
                   to="/quizzes/$id/leads"
                   params={{ id: quizId }}
@@ -145,7 +154,7 @@ export default function RouteComponent() {
                   Leads & Results
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/statistics" params={{ id: quizId }}>
                   <BarChart />
                   Statistics
