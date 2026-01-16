@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
 import { LeadSearchSchema } from "./-types";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import { useEffect, useState } from "react";
-import type { TPtah } from "@/types";
+import { useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import AppTable from "@/components/base/app-table";
 import AppSearch from "@/components/base/app-search";
@@ -32,16 +30,6 @@ function LeadsListPage() {
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
-  const { setBreadcrumb } = useBreadcrumb();
-
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      {
-        name: "Leads & Results",
-      },
-    ]);
-  }, []);
 
   const { data: response = { data: [], meta: { total: 0 } } } = useQuery(
     useGetLeads({

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PenSquare,
   Trash2,
@@ -31,8 +31,8 @@ import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
-// import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-// import type { TPtah } from "@/types";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -42,7 +42,10 @@ export const Route = createFileRoute("/_app/")({
 // Demo data (fallback)
 
 export default function RouteComponent() {
-  // const { setBreadcrumb } = useBreadcrumb();
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([]);
+  }, []);
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
@@ -55,18 +58,23 @@ export default function RouteComponent() {
   const meta = response?.meta;
 
   const { mutate: deleteQuiz, isPending: isDeletePending } = useDeleteQuiz();
-  // const handelBreadcrumb = (
-  //   name: string,
-  //   id: string | number,
-  //   module: string = ""
-  // ) => {
-  //   setBreadcrumb(
-  //     [
-  //       { name: name, path: `/quizzes/${id}/view` as TPtah },
-  //       { name: module },
-  //     ].filter((item) => item.name)
-  //   );
-  // };
+  const handelBreadcrumb = ({
+    quiz,
+    module = "",
+  }: {
+    quiz: {
+      name: string;
+      id: string | number;
+    };
+    module?: string;
+  }) => {
+    setBreadcrumb(
+      [
+        { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPtah },
+        { name: module },
+      ].filter((item) => item.name)
+    );
+  };
   const handleConfirmDelete = () => {
     if (!deleteForm.id) return;
     deleteQuiz(
@@ -112,25 +120,37 @@ export default function RouteComponent() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() => handelBreadcrumb({ quiz })}
+              >
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
                   <Eye />
                   View
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() => handelBreadcrumb({ quiz, module: "Edit" })}
+              >
                 <Link to="/quizzes/$id/edit" params={{ id: quizId }}>
                   <PenSquare />
                   Edit
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() => handelBreadcrumb({ quiz, module: "Settings" })}
+              >
                 <Link to="/quizzes/$id/settings" params={{ id: quizId }}>
                   <Settings />
                   Settings
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() => handelBreadcrumb({ quiz, module: "Questions" })}
+              >
                 <Link
                   to="/quizzes/$id/questions"
                   params={{ id: quizId }}
@@ -140,7 +160,12 @@ export default function RouteComponent() {
                   Questions
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() =>
+                  handelBreadcrumb({ quiz, module: "Result Pages" })
+                }
+              >
                 <Link
                   to="/quizzes/$id/result-pages"
                   params={{ id: quizId }}
@@ -150,13 +175,25 @@ export default function RouteComponent() {
                   Result Pages
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/leads" params={{ id: quizId }}>
+              <DropdownMenuItem
+                asChild
+                onClick={() =>
+                  handelBreadcrumb({ quiz, module: "Leads & Results" })
+                }
+              >
+                <Link
+                  to="/quizzes/$id/leads"
+                  params={{ id: quizId }}
+                  search={DEFAULT_PAGINATION}
+                >
                   <Users />
                   Leads & Results
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem
+                asChild
+                onClick={() => handelBreadcrumb({ quiz, module: "Statistics" })}
+              >
                 <Link to="/quizzes/$id/statistics" params={{ id: quizId }}>
                   <BarChart />
                   Statistics
