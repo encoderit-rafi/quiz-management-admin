@@ -1,14 +1,10 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  // DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  // DropdownMenuLabel,
-  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   BarChart,
   Edit,
@@ -16,16 +12,29 @@ import {
   FileText,
   LogOut,
   Menu,
-  // MoreHorizontal,
   Settings,
   Users,
 } from "lucide-react";
 import { useActiveQuiz } from "@/store";
+import { useToken } from "@/store/use-token.store";
 import { Button } from "../ui/button";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { cn } from "@/utils";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 export default function NavUser() {
+  const theme = localStorage.getItem("theme");
   const {
     activeQuiz: { quiz },
   } = useActiveQuiz();
@@ -34,21 +43,61 @@ export default function NavUser() {
     select: (state) => state.location,
   });
   const path = pathname.split("/")[3];
-  console.log("👉 ~ NavUser ~ path:", path);
+
+  const { setToken } = useToken();
+  const navigate = useNavigate();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  const confirmLogout = () => {
+    setToken(null);
+    localStorage.clear();
+    localStorage.setItem("theme", theme || "dark");
+    navigate({ to: "/login" });
+    setShowLogoutDialog(false);
+  };
+
+  if (!id) {
+    return (
+      <>
+        <Button
+          variant={"outline"}
+          size="icon"
+          onClick={() => setShowLogoutDialog(true)}
+        >
+          <LogOut className="text-destructive" />
+        </Button>
+        <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                You will be logged out of your account.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmLogout}
+                className="bg-destructive hover:bg-destructive/80 text-white"
+              >
+                <LogOut />
+                Log out
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+    );
+  }
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {id ? (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button variant={"outline"} size="icon">
             <Menu />
           </Button>
-        ) : (
-          <Button variant={"outline"} size="icon">
-            <LogOut className="text-destructive" />
-          </Button>
-        )}
-      </DropdownMenuTrigger>
-      {id && (
+        </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="space-y-1 p-1">
           <DropdownMenuItem
             asChild
@@ -129,12 +178,36 @@ export default function NavUser() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">
+          <DropdownMenuItem
+            variant="destructive"
+            onClick={() => setShowLogoutDialog(true)}
+          >
             <LogOut />
             Log out
           </DropdownMenuItem>
         </DropdownMenuContent>
-      )}
-    </DropdownMenu>
+      </DropdownMenu>
+
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You will be logged out of your account.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmLogout}
+              className="bg-destructive hover:bg-destructive/80 text-white"
+            >
+              <LogOut />
+              Log out
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
