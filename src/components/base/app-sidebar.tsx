@@ -22,8 +22,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
   ];
 
-  // function isActiveLink(items: TPtah[]): boolean {
-  //   return items.includes(pathname as TPtah);
+  // function isActiveLink(items: TPath[]): boolean {
+  //   return items.includes(pathname as TPath);
   // }
 
   // Update active route when pathname changes

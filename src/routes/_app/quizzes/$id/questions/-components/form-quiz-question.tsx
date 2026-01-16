@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCreateQuestion, useGetQuestion, useUpdateQuestion } from "../-apis";
 import { FormImageUpload, FormInput } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
-import type { TFormType } from "@/types";
+import type { TFormType, TPath } from "@/types";
 import { CardAction, CardContent } from "@/components/ui/card";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
@@ -22,6 +22,7 @@ import {
   FormQuizQuestionSchema,
   type TFormQuizQuestionSchema,
 } from "../-types";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 
 type TProps = {
   form_data: { id?: string | number; type: TFormType; quizId: string | number };
@@ -91,9 +92,12 @@ function SortableOption({ id, index, control, onRemove }: SortableOptionProps) {
 }
 
 export default function FormQuizQuestion({ form_data }: TProps) {
-  const router = useRouter();
-  const navigate = useNavigate();
   const { id, type, quizId } = form_data;
+
+  const router = useRouter();
+  const { breadcrumb, setBreadcrumb } = useBreadcrumb();
+
+  const navigate = useNavigate();
 
   // Fetch existing question
   const { data: question } = useQuery({
@@ -112,7 +116,34 @@ export default function FormQuizQuestion({ form_data }: TProps) {
   });
 
   const { reset, control, handleSubmit } = form;
-
+  useEffect(() => {
+    if (type == "create") {
+      setBreadcrumb([
+        breadcrumb[0],
+        {
+          name: "Questions",
+          path: `/quizzes/${quizId}/questions` as TPath,
+        },
+        {
+          name: "Create",
+        },
+      ]);
+    } else if (type == "update") {
+      setBreadcrumb([
+        breadcrumb[0],
+        {
+          name: "Questions",
+          path: `/quizzes/${quizId}/questions` as TPath,
+        },
+        {
+          name: question?.question_text || "",
+        },
+        {
+          name: "Edit",
+        },
+      ]);
+    }
+  }, [type, question]);
   useEffect(() => {
     if (type === "update" && question) {
       reset({

@@ -32,7 +32,7 @@ import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
+import type { TPath } from "@/types";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -70,7 +70,7 @@ export default function RouteComponent() {
   }) => {
     setBreadcrumb(
       [
-        { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPtah },
+        { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPath },
         { name: module },
       ].filter((item) => item.name)
     );

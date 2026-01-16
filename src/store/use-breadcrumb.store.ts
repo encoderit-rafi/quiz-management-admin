@@ -1,12 +1,12 @@
 // import { type LucideIcon } from "lucide-react";
-// import type { TPtah } from "@/types";
-import type { TPtah } from "@/types";
+// import type { TPath } from "@/types";
+import type { TPath } from "@/types";
 import { create } from "zustand";
 
 type TBreadcrumb = {
   // icon?: LucideIcon;
   name: string;
-  path?: TPtah;
+  path?: TPath;
 }[];
 
 type TBreadcrumbStore = {

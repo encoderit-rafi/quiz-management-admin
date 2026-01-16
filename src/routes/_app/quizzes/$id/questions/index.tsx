@@ -43,6 +43,9 @@ import type { TQuizAnswer, TQuizQuestion } from "./-types";
 import { SearchSchema } from "../../../-types";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
+import { useGetQuiz } from "@/routes/_app/-apis";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import type { TPath } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
@@ -51,6 +54,20 @@ export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
 
 function QuizQuestionsPage() {
   const { id } = Route.useParams();
+  const { data: quiz } = useQuery(useGetQuiz(id));
+  const { setBreadcrumb } = useBreadcrumb();
+  useEffect(() => {
+    setBreadcrumb([
+      {
+        name: quiz?.name || "",
+        path: `/quizzes/${id}/view` as TPath,
+        // path: `` as TPath,
+      },
+      {
+        name: "Questiions",
+      },
+    ]);
+  }, [quiz]);
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const [searchValue, setSearchValue] = useState(search.search || "");
@@ -69,14 +86,17 @@ function QuizQuestionsPage() {
 
   const meta = data?.meta;
 
-  const [deleteId, setDeleteId] = useState<number | string | null>(null);
+  const [deleteForm, setDeleteForm] = useState<{
+    id: number | string;
+    name: string;
+  } | null>(null);
   const deleteMutation = useDeleteQuestion(id);
 
   const handleDelete = () => {
-    if (deleteId !== null) {
-      deleteMutation.mutate(deleteId, {
+    if (deleteForm?.id && deleteForm.name) {
+      deleteMutation.mutate(deleteForm.id, {
         onSuccess: () => {
-          setDeleteId(null);
+          setDeleteForm(null);
           refetch();
         },
       });
@@ -233,7 +253,10 @@ function QuizQuestionsPage() {
                   // className="text-destructive focus:text-destructive"
                   variant="destructive"
                   onClick={() => {
-                    setDeleteId(question.id);
+                    setDeleteForm({
+                      id: question.id,
+                      name: question.question_text,
+                    });
                   }}
                 >
                   <Trash2 className="mr-2 h-4 w-4" /> Delete
@@ -336,10 +359,10 @@ function QuizQuestionsPage() {
       </div>
 
       <AppDeleteDialog
-        open={!!deleteId}
-        onOpenChange={(open: boolean) => !open && setDeleteId(null)}
+        open={!!deleteForm}
+        onOpenChange={(open: boolean) => !open && setDeleteForm(null)}
         onConfirm={handleDelete}
-        item_name="Question"
+        item_name={deleteForm?.name || ""}
         loading={deleteMutation.isPending}
       />
     </div>

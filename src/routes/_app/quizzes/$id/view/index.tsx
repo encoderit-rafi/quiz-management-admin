@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
+import type { TPath } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useGetQuiz } from "../../../-apis";
 import { useEffect } from "react";
@@ -37,7 +37,7 @@ function ViewQuizPage() {
     if (!quiz) return;
     setBreadcrumb(
       [
-        { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPtah },
+        { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPath },
         { name: module },
       ].filter((item) => item.name)
     );
@@ -45,7 +45,7 @@ function ViewQuizPage() {
   useEffect(() => {
     if (!quiz) return;
     setBreadcrumb([
-      { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPtah },
+      { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPath },
     ]);
   }, [quiz]);
 
