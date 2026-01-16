@@ -77,7 +77,9 @@ function LeadsListPage() {
     ]);
   }, []);
   const { data: leads } = useQuery({
-    ...useGetLeads(),
+    ...useGetLeads({
+      'quiz_id': id,
+    }),
     select: (data: any) =>
       Array.isArray(data) && data.length > 0 ? data : DEMO_LEADS,
   });
