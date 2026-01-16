@@ -1,18 +1,17 @@
 import { api } from "@/axios";
 import { queryOptions } from "@tanstack/react-query";
+import type { TMetaSchema } from "@/types";
+import type { TLeadResultSchema } from "../-types";
 
 export const useGetLeads = (params?: any) => {
   return queryOptions({
     queryKey: ["leads", params],
-    queryFn: async () => {
-      // In a real app this would be: await api.get("/leads", { params });
-      // For now we will rely on demo data injection similarly to others if API fails
-      try {
-        const { data } = await api.get("/quiz-submissions", { params });
-        return data;
-      } catch (e) {
-        return null; // Return null so we can fallback to demo data
-      }
+    queryFn: async (): Promise<{
+      data: TLeadResultSchema[];
+      meta: TMetaSchema;
+    }> => {
+      const response = await api.get("/quiz-submissions", { params });
+      return response.data?.data;
     },
   });
 };
