@@ -13,6 +13,7 @@ import {
   BarChart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CardHeader, CardContent } from "@/components/ui/card";
 import { FORM_DATA } from "@/data/form";
 import type { TQuizSchema } from "./-types";
 import { SearchSchema } from "./-types";
@@ -183,8 +184,8 @@ export default function RouteComponent() {
   ];
 
   return (
-    <div className="space-y-4 p-4">
-      <div className="flex items-center justify-between gap-4">
+    <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
         <AppSearch
           onSearch={() => {
             navigate({
@@ -209,30 +210,34 @@ export default function RouteComponent() {
         />
         <Button asChild variant={"outline"}>
           <Link to="/quizzes/create" className="flex items-center">
-            <Plus />
+            <Plus className="mr-2 h-4 w-4" />
             <AppButtonText>Add Quiz</AppButtonText>
           </Link>
         </Button>
-      </div>
+      </CardHeader>
 
-      <div className="rounded-md border">
-        <AppTable data={quizzes} columns={columns} />
-      </div>
+      <CardContent className="flex-1 overflow-y-auto">
+        <div className="rounded-md border">
+          <AppTable data={quizzes} columns={columns} />
+        </div>
+      </CardContent>
 
-      <AppPagination
-        total={meta?.total || 0}
-        perPage={search.per_page}
-        page={search.page}
-        onPageChange={(page) =>
-          navigate({ search: { ...search, page }, replace: true })
-        }
-        onPerPageChange={(per_page) =>
-          navigate({
-            search: { ...search, per_page: Number(per_page), page: 1 },
-            replace: true,
-          })
-        }
-      />
+      <div className="p-4 border-t">
+        <AppPagination
+          total={meta?.total || 0}
+          perPage={search.per_page}
+          page={search.page}
+          onPageChange={(page) =>
+            navigate({ search: { ...search, page }, replace: true })
+          }
+          onPerPageChange={(per_page) =>
+            navigate({
+              search: { ...search, per_page: Number(per_page), page: 1 },
+              replace: true,
+            })
+          }
+        />
+      </div>
       {/* Delete Dialog */}
       <AppDeleteDialog
         open={deleteForm.type === "delete"}
