@@ -1,6 +1,5 @@
 import AppThemeToggle from "./app-theme-toggle";
 import NavUser from "./nav-user";
-import AppBreadcrumb from "./app-breadcrumb";
 import { Link } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { AudioWaveform } from "lucide-react";

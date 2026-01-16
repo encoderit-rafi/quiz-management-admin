@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
 import { LeadSearchSchema } from "./-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import AppTable from "@/components/base/app-table";
 import AppSearch from "@/components/base/app-search";
@@ -19,9 +19,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { useGetQuiz } from "@/routes/_app/-apis";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPath } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/leads/")({
   component: LeadsListPage,
@@ -33,20 +30,6 @@ function LeadsListPage() {
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
-  const { data: quiz } = useQuery(useGetQuiz(id));
-  const { setBreadcrumb } = useBreadcrumb();
-
-  useEffect(() => {
-    setBreadcrumb([
-      {
-        name: quiz?.name || "",
-        path: `/quizzes/${id}/view` as TPath,
-      },
-      {
-        name: "Leads & Results",
-      },
-    ]);
-  }, [quiz]);
 
   const { data: response = { data: [], meta: { total: 0 } } } = useQuery(
     useGetLeads({

@@ -12,11 +12,9 @@ import { FormInput, FormSlider, FormTiptap } from "@/components/form";
 import { CardContent, CardAction } from "@/components/ui/card";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
-import type { TFormType, TPath } from "@/types";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
-import { useGetQuiz } from "@/routes/_app/-apis";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import type { TFormType } from "@/types";
 
 const ResultPageFormSchema = ResultPageSchema.omit({
   min_score: true,
@@ -36,48 +34,12 @@ export const FormResultPage = ({ form_data }: TProps) => {
   const router = useRouter();
   const navigate = useNavigate();
   const { id, type, quizId } = form_data;
-  const { data: quiz } = useQuery(useGetQuiz(quizId));
-  const { setBreadcrumb } = useBreadcrumb();
 
   // Fetch existing result page
   const { data: resultPage } = useQuery({
     ...useGetResultPage(id as string | number),
     enabled: !!id && type === "update",
   });
-  useEffect(() => {
-    if (type == "create") {
-      setBreadcrumb([
-        {
-          name: quiz?.name || "",
-          path: `/quizzes/${id}/view` as TPath,
-        },
-        {
-          name: "Result Pages",
-          path: `/quizzes/${id}/result-pages` as TPath,
-        },
-        {
-          name: "Create",
-        },
-      ]);
-    } else if (type == "update") {
-      setBreadcrumb([
-        {
-          name: quiz?.name || "",
-          path: `/quizzes/${id}/view` as TPath,
-        },
-        {
-          name: "Result Pages",
-          path: `/quizzes/${id}/result-pages` as TPath,
-        },
-        {
-          name: resultPage?.title || "",
-        },
-        {
-          name: "Edit",
-        },
-      ]);
-    }
-  }, [quiz]);
 
   const form = useForm<TResultPageFormSchema>({
     resolver: zodResolver(ResultPageFormSchema),

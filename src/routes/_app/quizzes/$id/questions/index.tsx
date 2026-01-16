@@ -43,9 +43,6 @@ import type { TQuizAnswer, TQuizQuestion } from "./-types";
 import { SearchSchema } from "../../../-types";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
-import { useGetQuiz } from "@/routes/_app/-apis";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPath } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
@@ -54,20 +51,6 @@ export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
 
 function QuizQuestionsPage() {
   const { id } = Route.useParams();
-  const { data: quiz } = useQuery(useGetQuiz(id));
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      {
-        name: quiz?.name || "",
-        path: `/quizzes/${id}/view` as TPath,
-        // path: `` as TPath,
-      },
-      {
-        name: "Questiions",
-      },
-    ]);
-  }, [quiz]);
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const [searchValue, setSearchValue] = useState(search.search || "");

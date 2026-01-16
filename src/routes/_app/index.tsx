@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   PenSquare,
   Trash2,
@@ -31,8 +31,6 @@ import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPath } from "@/types";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -42,10 +40,6 @@ export const Route = createFileRoute("/_app/")({
 // Demo data (fallback)
 
 export default function RouteComponent() {
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([]);
-  }, []);
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
@@ -58,23 +52,6 @@ export default function RouteComponent() {
   const meta = response?.meta;
 
   const { mutate: deleteQuiz, isPending: isDeletePending } = useDeleteQuiz();
-  const handelBreadcrumb = ({
-    quiz,
-    module = "",
-  }: {
-    quiz: {
-      name: string;
-      id: string | number;
-    };
-    module?: string;
-  }) => {
-    setBreadcrumb(
-      [
-        { name: quiz.name, path: `/quizzes/${quiz.id}/view` as TPath },
-        { name: module },
-      ].filter((item) => item.name)
-    );
-  };
   const handleConfirmDelete = () => {
     if (!deleteForm.id) return;
     deleteQuiz(
@@ -120,37 +97,25 @@ export default function RouteComponent() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                asChild
-                onClick={() => handelBreadcrumb({ quiz })}
-              >
+              <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
                   <Eye />
                   View
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                onClick={() => handelBreadcrumb({ quiz, module: "Edit" })}
-              >
+              <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/edit" params={{ id: quizId }}>
                   <PenSquare />
                   Edit
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                onClick={() => handelBreadcrumb({ quiz, module: "Settings" })}
-              >
+              <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/settings" params={{ id: quizId }}>
                   <Settings />
                   Settings
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                onClick={() => handelBreadcrumb({ quiz, module: "Questions" })}
-              >
+              <DropdownMenuItem asChild>
                 <Link
                   to="/quizzes/$id/questions"
                   params={{ id: quizId }}
@@ -160,12 +125,7 @@ export default function RouteComponent() {
                   Questions
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                onClick={() =>
-                  handelBreadcrumb({ quiz, module: "Result Pages" })
-                }
-              >
+              <DropdownMenuItem asChild>
                 <Link
                   to="/quizzes/$id/result-pages"
                   params={{ id: quizId }}
@@ -175,12 +135,7 @@ export default function RouteComponent() {
                   Result Pages
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                onClick={() =>
-                  handelBreadcrumb({ quiz, module: "Leads & Results" })
-                }
-              >
+              <DropdownMenuItem asChild>
                 <Link
                   to="/quizzes/$id/leads"
                   params={{ id: quizId }}
@@ -190,10 +145,7 @@ export default function RouteComponent() {
                   Leads & Results
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                onClick={() => handelBreadcrumb({ quiz, module: "Statistics" })}
-              >
+              <DropdownMenuItem asChild>
                 <Link to="/quizzes/$id/statistics" params={{ id: quizId }}>
                   <BarChart />
                   Statistics
