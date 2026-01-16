@@ -1,8 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { useToken, useCurrentUser } from "../../store";
-import { useEffect } from "react";
-import { getAuthProfile } from "./-api";
-import { useQuery } from "@tanstack/react-query";
+import { useToken } from "../../store";
 import { DEFAULT_PAGINATION } from "@/consts";
 
 export const Route = createFileRoute("/_auth")({

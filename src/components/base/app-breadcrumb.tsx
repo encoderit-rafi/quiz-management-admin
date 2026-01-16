@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+import { AudioWaveform } from "lucide-react";
 
 export default function AppBreadcrumb() {
   const { breadcrumb } = useBreadcrumb();
@@ -19,7 +20,12 @@ export default function AppBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/" search={DEFAULT_PAGINATION}>
+            <Link
+              to="/"
+              search={DEFAULT_PAGINATION}
+              className="flex items-center gap-2"
+            >
+              <AudioWaveform />
               Quiz Management
             </Link>
           </BreadcrumbLink>

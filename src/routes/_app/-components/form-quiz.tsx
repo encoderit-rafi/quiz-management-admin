@@ -17,6 +17,7 @@ import { CardAction, CardContent } from "@/components/ui/card";
 import { DEFAULT_QUIZ_DATA } from "../-data";
 import type { TFormType } from "@/types";
 import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useBreadcrumb } from "@/store/use-breadcrumb.store";
 type TProps = {
   form_data: { id: string | number; type: TFormType };
 };
@@ -24,7 +25,16 @@ type TProps = {
 export default function FormQuiz({ form_data }: TProps) {
   const router = useRouter();
   const navigate = useNavigate();
+  const { setBreadcrumb } = useBreadcrumb();
   const { id, type } = form_data;
+  useEffect(() => {
+    if (type != "create") return;
+    setBreadcrumb([
+      {
+        name: "Create",
+      },
+    ]);
+  }, [type]);
   // Fetch existing quiz
   const { data: quiz } = useQuery({
     ...useGetQuiz(id),
