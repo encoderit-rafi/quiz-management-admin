@@ -12,6 +12,7 @@ import { DEFAULT_RESULT_DELIVERY_DATA } from "../-data";
 import { CardAction } from "@/components/ui/card";
 import { useGetResultDelivery, useUpdateResultDelivery } from "../-apis";
 import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 type TProps = {
   quizId: string | number;
@@ -53,23 +54,51 @@ export default function FormResultDelivery({ quizId }: TProps) {
   if (isLoading) return <div>Loading result delivery settings...</div>;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-6">
-        <Label htmlFor="enable_email_result">
-          <FormSwitch control={control} name="enable_email_result" />
-          Email
-        </Label>
-        <Label htmlFor="enable_pdf_download">
-          <FormSwitch control={control} name="enable_pdf_download" />
-          PDF Download
-        </Label>
-        <Label htmlFor="enable_link_share">
-          <FormSwitch control={control} name="enable_link_share" />
-          Link Share
-        </Label>
-      </div>
-
-      <CardAction className="flex justify-end pt-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-5xl">
+      <Table className="border rounded-lg">
+        <TableBody>
+          <TableRow>
+            <TableCell className="">
+              <Label
+                htmlFor="enable_email_result"
+                className="flex items-center gap-2 "
+              >
+                <div className="">
+                  <FormSwitch control={control} name="enable_email_result" />
+                </div>
+                Email
+              </Label>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="">
+              <Label
+                htmlFor="enable_pdf_download"
+                className="flex items-center gap-2 "
+              >
+                <div className="">
+                  <FormSwitch control={control} name="enable_pdf_download" />
+                </div>
+                PDF Download
+              </Label>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="">
+              <Label
+                htmlFor="enable_link_share"
+                className="flex items-center gap-2 "
+              >
+                <div className="">
+                  <FormSwitch control={control} name="enable_link_share" />
+                </div>
+                Link Share
+              </Label>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+      <CardAction className="flex justify-end pt-10">
         <Button type="submit" loading={isPending} className="min-w-36">
           Save
         </Button>

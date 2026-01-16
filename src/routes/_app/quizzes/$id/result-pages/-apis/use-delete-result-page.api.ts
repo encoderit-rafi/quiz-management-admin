@@ -2,6 +2,7 @@ import { api } from "@/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
+import { QUERY_KEYS } from "@/query-keys";
 
 export const useDeleteResultPage = () => {
   const queryClient = useQueryClient();
@@ -11,7 +12,9 @@ export const useDeleteResultPage = () => {
     },
     onSuccess: () => {
       toast.success("Result page deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["get-result-pages"] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.GET_RESULT_PAGES({}),
+      });
     },
     onError: (error) => {
       const fallback = "Failed to delete result page.";

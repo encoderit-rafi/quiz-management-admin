@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import type { TResultPageSchema } from "../-types";
+import { QUERY_KEYS } from "@/query-keys";
 
 export const useCreateResultPage = () => {
   const queryClient = useQueryClient();
@@ -12,7 +13,9 @@ export const useCreateResultPage = () => {
     },
     onSuccess: () => {
       toast.success("Result page created successfully!");
-      queryClient.invalidateQueries({ queryKey: ["get-result-pages"] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.GET_RESULT_PAGES({}),
+      });
     },
     onError: (error) => {
       const fallback = "Failed to create result page.";

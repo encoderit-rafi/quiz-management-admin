@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   PenSquare,
   Trash2,
@@ -31,7 +31,8 @@ import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+// import { useBreadcrumb } from "@/store/use-breadcrumb.store";
+// import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -41,12 +42,10 @@ export const Route = createFileRoute("/_app/")({
 // Demo data (fallback)
 
 export default function RouteComponent() {
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([]);
-  }, []);
+  // const { setBreadcrumb } = useBreadcrumb();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
+  const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
   // Use the new queryOptions pattern
@@ -56,7 +55,18 @@ export default function RouteComponent() {
   const meta = response?.meta;
 
   const { mutate: deleteQuiz, isPending: isDeletePending } = useDeleteQuiz();
-
+  // const handelBreadcrumb = (
+  //   name: string,
+  //   id: string | number,
+  //   module: string = ""
+  // ) => {
+  //   setBreadcrumb(
+  //     [
+  //       { name: name, path: `/quizzes/${id}/view` as TPtah },
+  //       { name: module },
+  //     ].filter((item) => item.name)
+  //   );
+  // };
   const handleConfirmDelete = () => {
     if (!deleteForm.id) return;
     deleteQuiz(
@@ -121,7 +131,11 @@ export default function RouteComponent() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/quizzes/$id/questions" params={{ id: quizId }}>
+                <Link
+                  to="/quizzes/$id/questions"
+                  params={{ id: quizId }}
+                  search={DEFAULT_PAGINATION}
+                >
                   <FileQuestionMark />
                   Questions
                 </Link>
@@ -174,16 +188,24 @@ export default function RouteComponent() {
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between gap-4">
         <AppSearch
+          onSearch={() => {
+            navigate({
+              search: { ...search, search: searchValue, page: 1 },
+              replace: true,
+            });
+          }}
+          onClear={() => {
+            setSearchValue("");
+            navigate({
+              search: { ...search, search: "", page: 1 },
+              replace: true,
+            });
+          }}
           props={{
             input: {
               placeholder: "Search quiz...",
-              value: search.q,
-              onChange: (e) => {
-                navigate({
-                  search: { ...search, q: e.target.value },
-                  replace: true,
-                });
-              },
+              value: searchValue,
+              onChange: (e) => setSearchValue(e.target.value),
             },
           }}
         />
@@ -199,22 +221,20 @@ export default function RouteComponent() {
         <AppTable data={quizzes} columns={columns} />
       </div>
 
-      {meta && meta.last_page > 1 && (
-        <AppPagination
-          total={meta?.total || 0}
-          perPage={search.per_page}
-          page={search.page}
-          onPageChange={(page) =>
-            navigate({ search: { ...search, page }, replace: true })
-          }
-          onPerPageChange={(per_page) =>
-            navigate({
-              search: { ...search, per_page: Number(per_page), page: 1 },
-              replace: true,
-            })
-          }
-        />
-      )}
+      <AppPagination
+        total={meta?.total || 0}
+        perPage={search.per_page}
+        page={search.page}
+        onPageChange={(page) =>
+          navigate({ search: { ...search, page }, replace: true })
+        }
+        onPerPageChange={(per_page) =>
+          navigate({
+            search: { ...search, per_page: Number(per_page), page: 1 },
+            replace: true,
+          })
+        }
+      />
       {/* Delete Dialog */}
       <AppDeleteDialog
         open={deleteForm.type === "delete"}

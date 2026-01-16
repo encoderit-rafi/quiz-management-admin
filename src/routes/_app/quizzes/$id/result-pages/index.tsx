@@ -14,13 +14,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useGetResultPages, useDeleteResultPage } from "./-apis";
 import type { TResultPageSchema } from "./-types";
 import { ResultPageSearchSchema } from "./-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
   component: RouteComponent,
@@ -29,15 +27,10 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
 
 export default function RouteComponent() {
   const { id } = Route.useParams();
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      { name: "Quiz Result Pages" },
-    ]);
-  }, []);
+
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
+  const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
   const { data: resultPages = { data: [], meta: { total: 0 } } } = useQuery(
@@ -56,8 +49,8 @@ export default function RouteComponent() {
   // Column definitions
   const columns: ColumnDef<TResultPageSchema>[] = [
     {
-      header: "Name",
-      accessorKey: "name",
+      header: "Title",
+      accessorKey: "title",
     },
     {
       header: "Score Range",
@@ -80,17 +73,16 @@ export default function RouteComponent() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link
-                  // to="/result-pages/view/$id"
-                  to="/quizzes/$id/result-pages/view/$id"
-                  params={{ id: String(page.id) }}
+                  to="/quizzes/$id/result-pages/view/$resultID"
+                  params={{ id, resultID: String(page.id) }}
                 >
                   <Eye /> View
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
-                  to="/quizzes/$id/result-pages/edit/$id"
-                  params={{ id: String(page.id) }}
+                  to="/quizzes/$id/result-pages/edit/$resultID"
+                  params={{ id, resultID: String(page.id) }}
                 >
                   <PenSquare /> Edit
                 </Link>
@@ -112,23 +104,31 @@ export default function RouteComponent() {
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between gap-4">
         <AppSearch
+          onSearch={() => {
+            navigate({
+              search: { ...search, search: searchValue, page: 1 },
+              replace: true,
+            });
+          }}
+          onClear={() => {
+            setSearchValue("");
+            navigate({
+              search: { ...search, search: "", page: 1 },
+              replace: true,
+            });
+          }}
           props={{
             input: {
               placeholder: "Search quiz...",
-              value: search.q,
-              onChange: (e) => {
-                navigate({
-                  search: { ...search, q: e.target.value },
-                  replace: true,
-                });
-              },
+              value: searchValue,
+              onChange: (e) => setSearchValue(e.target.value),
             },
           }}
         />
         <Button asChild variant={"outline"}>
           <Link
             to="/quizzes/$id/result-pages/create"
-            params={{ id: "1" }}
+            params={{ id: String(id) }}
             className="flex items-center"
           >
             <Plus />
@@ -158,7 +158,7 @@ export default function RouteComponent() {
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
         item_name="Result Page"
-        loading={false}
+        loading={deleteMutation.isPending}
         onConfirm={handleDelete}
       />
     </div>

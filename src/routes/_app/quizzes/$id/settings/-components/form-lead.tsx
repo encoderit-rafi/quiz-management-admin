@@ -16,6 +16,7 @@ import { FormLeadSchema, type TFormLeadSchema } from "../-types";
 import { CardAction } from "@/components/ui/card";
 import { useGetLeadSettings, useUpdateLeadSettings } from "../-apis";
 import { DEFAULT_LEAD_OPTIONS } from "../-data";
+import { Label } from "@/components/ui/label";
 
 type TProps = {
   quizId: string | number;
@@ -74,12 +75,15 @@ export default function FormLead({ quizId }: TProps) {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 w-full max-w-5xl"
+      >
         <Table className="border rounded-lg">
           <TableHeader className="bg-muted/50">
             <TableRow>
               <TableHead>Field Name</TableHead>
-              <TableHead>Required</TableHead>
+              <TableHead className="text-end">Required</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -93,12 +97,16 @@ export default function FormLead({ quizId }: TProps) {
                     <input {...control.register(`fields.${index}.label`)} />
                     <input {...control.register(`fields.${index}.type`)} />
                   </div>
-                  <FormCheckbox
-                    control={control}
-                    name={`fields.${index}.enabled`}
-                    label=""
-                  />
-                  {field.label}
+                  <Label
+                    htmlFor={`fields.${index}.enabled`}
+                    className="flex items-center gap-2"
+                  >
+                    <FormCheckbox
+                      control={control}
+                      name={`fields.${index}.enabled`}
+                    />
+                    {field.label}
+                  </Label>
                 </TableCell>
 
                 <TableCell>

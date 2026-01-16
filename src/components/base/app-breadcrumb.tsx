@@ -1,4 +1,3 @@
-import { HomeIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 import {
@@ -20,13 +19,8 @@ export default function AppBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link
-              to="/"
-              search={DEFAULT_PAGINATION}
-              className="flex items-center gap-2"
-            >
-              <HomeIcon aria-hidden="true" className="size-5" />
-              <span className="text-base">Quiz Management</span>
+            <Link to="/" search={DEFAULT_PAGINATION}>
+              Quiz Management
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>

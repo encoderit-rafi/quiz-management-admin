@@ -10,8 +10,6 @@ import {
   Users,
 } from "lucide-react";
 import { CardQuiz } from "../../../-components";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import { useEffect } from "react";
 import { MoreHorizontalIcon } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -27,10 +25,6 @@ export const Route = createFileRoute("/_app/quizzes/$id/view/")({
 
 function ViewQuizPage() {
   const { id } = Route.useParams();
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([{ name: "View Quiz" }]);
-  }, []);
 
   return (
     <>

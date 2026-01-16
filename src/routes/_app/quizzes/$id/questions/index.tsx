@@ -33,8 +33,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { useBreadcrumb } from "@/store/use-breadcrumb.store";
-import type { TPtah } from "@/types";
 import {
   useGetQuizQuestions,
   useDeleteQuestion,
@@ -55,6 +53,7 @@ function QuizQuestionsPage() {
   const { id } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
+  const [searchValue, setSearchValue] = useState(search.search || "");
 
   const { data, isLoading, refetch } = useQuery(
     useGetQuizQuestions(id, search)
@@ -69,14 +68,6 @@ function QuizQuestionsPage() {
   }, [data]);
 
   const meta = data?.meta;
-
-  const { setBreadcrumb } = useBreadcrumb();
-  useEffect(() => {
-    setBreadcrumb([
-      { name: "View Quiz", path: `/quizzes/${id}/view/` as TPtah },
-      { name: "Quiz Questions" },
-    ]);
-  }, [id, setBreadcrumb]);
 
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
   const deleteMutation = useDeleteQuestion(id);
@@ -278,15 +269,25 @@ function QuizQuestionsPage() {
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
         <AppSearch
+          onSearch={() => {
+            navigate({
+              search: { ...search, search: searchValue, page: 1 },
+              replace: true,
+            });
+          }}
+          onClear={() => {
+            setSearchValue("");
+            navigate({
+              search: { ...search, search: "", page: 1 },
+              replace: true,
+            });
+          }}
           props={{
             input: {
               placeholder: "Search question...",
-              value: search.q,
+              value: searchValue,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                navigate({
-                  search: { ...search, q: e.target.value },
-                  replace: true,
-                });
+                setSearchValue(e.target.value);
               },
             },
           }}
