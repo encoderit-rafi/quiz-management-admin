@@ -1,5 +1,5 @@
 import { api } from "@/axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { isAxiosError } from "axios";
 
@@ -7,7 +7,6 @@ export const useArrangeOrder = (
   model_name: "Question" | "Answer",
   onSuccess?: () => void
 ) => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["arrange-order", model_name],
     mutationFn: async (items: (string | number)[]) => {
