@@ -4,7 +4,7 @@ import AppBreadcrumb from "./app-breadcrumb";
 
 export default function Navbar() {
   return (
-    <header className="bg-background flex py-1 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon] justify-between sidebar-wrapper:h-12 px-2 md:px-4">
+    <header className="bg-background flex py-2 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon] justify-between sidebar-wrapper:h-12 px-2 md:px-4">
       <div className="flex items-center gap-2">
         <AppBreadcrumb />
       </div>

@@ -51,7 +51,7 @@ function ViewQuizPage() {
 
   return (
     <>
-      <CardHeader className="flex items-center gap-2 justify-end">
+      <CardHeader className="flex items-center gap-2 justify-end py-1">
         <ButtonGroup>
           <Button variant="outline" asChild>
             <Link
