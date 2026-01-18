@@ -145,7 +145,7 @@ function LeadsListPage() {
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
         <AppSearch
           onSearch={() => {
             navigate({
@@ -168,8 +168,12 @@ function LeadsListPage() {
             },
           }}
         />
-        <Button onClick={exportLeads} variant={"outline"}>
-          <Download className="mr-2 h-4 w-4" />
+        <Button
+          onClick={exportLeads}
+          variant={"outline"}
+          className="flex items-center"
+        >
+          <Download className="" />
           <AppButtonText>Export CSV</AppButtonText>
         </Button>
       </CardHeader>

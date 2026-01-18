@@ -273,7 +273,7 @@ function QuizQuestionsPage() {
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
         <AppSearch
           onSearch={() => {
             navigate({
@@ -299,8 +299,12 @@ function QuizQuestionsPage() {
           }}
         />
         <Button asChild variant={"outline"}>
-          <Link to="/quizzes/$id/questions/create" params={{ id }}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Link
+            to="/quizzes/$id/questions/create"
+            params={{ id }}
+            className="flex items-center"
+          >
+            <Plus className="" />
             <AppButtonText>Add Question</AppButtonText>
           </Link>
         </Button>

@@ -101,7 +101,7 @@ export default function RouteComponent() {
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex flex-col md:flex-row items-center justify-between gap-4">
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
         <AppSearch
           onSearch={() => {
             navigate({
@@ -130,7 +130,7 @@ export default function RouteComponent() {
             params={{ id: String(id) }}
             className="flex items-center"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="" />
             <AppButtonText>Add Result Page</AppButtonText>
           </Link>
         </Button>
