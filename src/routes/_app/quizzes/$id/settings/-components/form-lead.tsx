@@ -17,6 +17,7 @@ import { CardAction } from "@/components/ui/card";
 import { useGetLeadSettings, useUpdateLeadSettings } from "../-apis";
 import { DEFAULT_LEAD_OPTIONS } from "../-data";
 import { Label } from "@/components/ui/label";
+import AppLoading from "@/components/base/app-loading";
 
 type TProps = {
   quizId: string | number;
@@ -71,7 +72,7 @@ export default function FormLead({ quizId }: TProps) {
     updateSettings(data);
   };
 
-  if (isLoading) return <div>Loading lead settings...</div>;
+  if (isLoading) return <AppLoading />;
 
   return (
     <div className="space-y-6">

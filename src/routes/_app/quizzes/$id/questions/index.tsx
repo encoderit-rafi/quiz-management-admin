@@ -43,6 +43,7 @@ import type { TQuizAnswer, TQuizQuestion } from "./-types";
 import { SearchSchema } from "../../../-types";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
+import AppLoading from "@/components/base/app-loading";
 
 export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
   component: QuizQuestionsPage,
@@ -141,8 +142,6 @@ function QuizQuestionsPage() {
       </div>
     );
   }
-
-  if (isLoading) return <div>Loading...</div>;
 
   function Question({
     question,
@@ -308,21 +307,29 @@ function QuizQuestionsPage() {
       </CardHeader>
 
       <CardContent className="flex-1 overflow-y-auto">
-        <Accordion type="multiple" className="w-full">
-          <DndContext
-            onDragEnd={handleDragEnd}
-            collisionDetection={closestCorners}
-          >
-            <SortableContext
-              items={localQuestions}
-              strategy={verticalListSortingStrategy}
+        {isLoading ? (
+          <AppLoading />
+        ) : (
+          <Accordion type="multiple" className="w-full">
+            <DndContext
+              onDragEnd={handleDragEnd}
+              collisionDetection={closestCorners}
             >
-              {localQuestions.map((question, index) => (
-                <Question key={question.id} question={question} index={index} />
-              ))}
-            </SortableContext>
-          </DndContext>
-        </Accordion>
+              <SortableContext
+                items={localQuestions}
+                strategy={verticalListSortingStrategy}
+              >
+                {localQuestions.map((question, index) => (
+                  <Question
+                    key={question.id}
+                    question={question}
+                    index={index}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </Accordion>
+        )}
       </CardContent>
 
       <div className="p-4 border-t">

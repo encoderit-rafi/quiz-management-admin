@@ -33,6 +33,7 @@ import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useActiveQuiz } from "@/store";
+import AppLoading from "@/components/base/app-loading";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -53,7 +54,8 @@ export default function RouteComponent() {
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
 
   // Use the new queryOptions pattern
-  const { data: response } = useQuery(useGetAllQuizzes(search));
+  const { data: response, isLoading } = useQuery(useGetAllQuizzes(search));
+
   const quizzes = response?.data ?? [];
   console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
   const meta = response?.meta;
@@ -217,9 +219,13 @@ export default function RouteComponent() {
       </CardHeader>
 
       <CardContent className="flex-1 overflow-y-auto">
-        <div className="rounded-md border">
-          <AppTable data={quizzes} columns={columns} />
-        </div>
+        {isLoading ? (
+          <AppLoading />
+        ) : (
+          <div className="rounded-md border">
+            <AppTable data={quizzes} columns={columns} />
+          </div>
+        )}
       </CardContent>
 
       <div className="p-4 border-t">

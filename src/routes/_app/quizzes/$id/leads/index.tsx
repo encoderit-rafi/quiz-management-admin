@@ -11,6 +11,8 @@ import AppTable from "@/components/base/app-table";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
+import AppLoading from "@/components/base/app-loading";
+
 import {
   Dialog,
   DialogContent,
@@ -32,12 +34,13 @@ function LeadsListPage() {
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
 
-  const { data: response = { data: [], meta: { total: 0 } } } = useQuery(
-    useGetLeads({
-      quiz_id: id,
-      ...search,
-    })
-  );
+  const { data: response = { data: [], meta: { total: 0 } }, isLoading } =
+    useQuery(
+      useGetLeads({
+        quiz_id: id,
+        ...search,
+      })
+    );
 
   const leads = response?.data ?? [];
   const meta = response?.meta;
@@ -179,9 +182,13 @@ function LeadsListPage() {
       </CardHeader>
 
       <CardContent className="flex-1 overflow-y-auto">
-        <div className="rounded-md border">
-          <AppTable data={leads} columns={columns} />
-        </div>
+        {isLoading ? (
+          <AppLoading />
+        ) : (
+          <div className="rounded-md border">
+            <AppTable data={leads} columns={columns} />
+          </div>
+        )}
       </CardContent>
 
       <div className="p-4 border-t">

@@ -14,6 +14,8 @@ import {
   FormTextarea,
 } from "@/components/form";
 import { CardAction, CardContent } from "@/components/ui/card";
+import AppLoading from "@/components/base/app-loading";
+
 import { DEFAULT_QUIZ_DATA } from "../-data";
 import type { TFormType } from "@/types";
 import { useNavigate, useRouter } from "@tanstack/react-router";
@@ -26,7 +28,7 @@ export default function FormQuiz({ form_data }: TProps) {
   const navigate = useNavigate();
   const { id, type } = form_data;
   // Fetch existing quiz
-  const { data: quiz } = useQuery({
+  const { data: quiz, isLoading: isFetchLoading } = useQuery({
     ...useGetQuiz(id),
     enabled: !!id && type === "update",
   });
@@ -82,78 +84,83 @@ export default function FormQuiz({ form_data }: TProps) {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
-            <FormInput
-              name="name"
-              control={control}
-              label="Quiz Name"
-              placeholder="Enter quiz name"
-            />
-            <FormInput
-              name="title"
-              control={control}
-              label="Title"
-              placeholder="Enter quiz title"
-            />
+        {isFetchLoading ? (
+          <AppLoading />
+        ) : (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
+              <FormInput
+                name="name"
+                control={control}
+                label="Quiz Name"
+                placeholder="Enter quiz name"
+              />
+              <FormInput
+                name="title"
+                control={control}
+                label="Title"
+                placeholder="Enter quiz title"
+              />
 
-            <FormInput
-              name="heading"
-              control={control}
-              label="Heading"
-              placeholder="Enter heading"
-            />
+              <FormInput
+                name="heading"
+                control={control}
+                label="Heading"
+                placeholder="Enter heading"
+              />
 
-            <FormInput
-              name="cta_text"
-              control={control}
-              label="CTA Text"
-              placeholder="Enter CTA text"
-            />
-            <FormImageUpload
-              name="logo"
-              control={control}
-              label="Logo"
-              description="Upload logo here."
-            />
+              <FormInput
+                name="cta_text"
+                control={control}
+                label="CTA Text"
+                placeholder="Enter CTA text"
+              />
+              <FormImageUpload
+                name="logo"
+                control={control}
+                label="Logo"
+                description="Upload logo here."
+              />
 
-            <FormImageUpload
-              name="background_image"
+              <FormImageUpload
+                name="background_image"
+                control={control}
+                label="Background Image"
+                description="Upload background image here."
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
+              <FormColorPicker
+                control={control}
+                name="primary_color"
+                label="Primary Color"
+                placeholder="#3b82f6"
+                defaultColor="#3b82f6"
+              />
+              <FormColorPicker
+                name="secondary_color"
+                control={control}
+                label="Secondary Color"
+                placeholder="#8b5cf6"
+                defaultColor="#8b5cf6"
+              />
+            </div>
+            <FormTextarea
+              name="description"
               control={control}
-              label="Background Image"
-              description="Upload background image here."
+              label="Description"
+              placeholder="Enter description"
+            />
+            <FormTiptap
+              name="landing_page_text"
+              control={control}
+              label="Footer Text"
             />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4  bg-muted/5">
-            <FormColorPicker
-              control={control}
-              name="primary_color"
-              label="Primary Color"
-              placeholder="#3b82f6"
-              defaultColor="#3b82f6"
-            />
-            <FormColorPicker
-              name="secondary_color"
-              control={control}
-              label="Secondary Color"
-              placeholder="#8b5cf6"
-              defaultColor="#8b5cf6"
-            />
-          </div>
-          <FormTextarea
-            name="description"
-            control={control}
-            label="Description"
-            placeholder="Enter description"
-          />
-          <FormTiptap
-            name="landing_page_text"
-            control={control}
-            label="Footer Text"
-          />
-        </div>
+        )}
       </form>
+
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
         <Button
           type="button"

@@ -13,6 +13,7 @@ import { CardAction } from "@/components/ui/card";
 import { useGetResultDelivery, useUpdateResultDelivery } from "../-apis";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import AppLoading from "@/components/base/app-loading";
 
 type TProps = {
   quizId: string | number;
@@ -51,7 +52,7 @@ export default function FormResultDelivery({ quizId }: TProps) {
     updateSettings(data);
   };
 
-  if (isLoading) return <div>Loading result delivery settings...</div>;
+  if (isLoading) return <AppLoading />;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-5xl">

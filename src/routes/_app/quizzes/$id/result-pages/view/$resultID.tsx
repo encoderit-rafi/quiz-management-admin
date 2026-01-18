@@ -4,6 +4,7 @@ import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react"; // Removed Loader2, Trash2
 import AppButtonText from "@/components/base/app-button-text";
+import AppLoading from "@/components/base/app-loading";
 
 export const Route = createFileRoute(
   "/_app/quizzes/$id/result-pages/view/$resultID"
@@ -18,15 +19,7 @@ function ViewResultPage() {
   const { id, resultID } = Route.useParams();
   const { data: resultPage, isLoading } = useQuery(useGetResultPage(resultID));
 
-  if (isLoading) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
-
-  if (!resultPage) {
+  if (!resultPage && !isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
         <p className="text-muted-foreground">Result page not found.</p>
@@ -49,35 +42,39 @@ function ViewResultPage() {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        <div className="grid gap-6">
-          <section className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">
-              General Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <div className="text-sm font-medium">Page Title</div>
-                <div className="text-sm text-muted-foreground">
-                  {resultPage.title}
+        {isLoading ? (
+          <AppLoading />
+        ) : (
+          <div className="grid gap-6">
+            <section className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">
+                General Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm font-medium">Page Title</div>
+                  <div className="text-sm text-muted-foreground">
+                    {resultPage?.title}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium">Score Range</div>
+                  <div className="text-sm text-muted-foreground">
+                    {resultPage?.min_score} - {resultPage?.max_score} points
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-sm font-medium">Score Range</div>
-                <div className="text-sm text-muted-foreground">
-                  {resultPage.min_score} - {resultPage.max_score} points
-                </div>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">Content</h3>
-            <div
-              className="prose prose-sm max-w-none dark:prose-invert"
-              dangerouslySetInnerHTML={{ __html: resultPage.content || "" }}
-            />
-          </section>
-        </div>
+            <section className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">Content</h3>
+              <div
+                className="prose prose-sm max-w-none dark:prose-invert"
+                dangerouslySetInnerHTML={{ __html: resultPage?.content || "" }}
+              />
+            </section>
+          </div>
+        )}
       </CardContent>
     </>
   );

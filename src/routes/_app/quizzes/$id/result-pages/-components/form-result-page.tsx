@@ -12,6 +12,8 @@ import { FormInput, FormSlider, FormTiptap } from "@/components/form";
 import { CardContent, CardAction } from "@/components/ui/card";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
+import AppLoading from "@/components/base/app-loading";
+
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
 import type { TFormType } from "@/types";
@@ -36,7 +38,7 @@ export const FormResultPage = ({ form_data }: TProps) => {
   const { id, type, quizId } = form_data;
 
   // Fetch existing result page
-  const { data: resultPage } = useQuery({
+  const { data: resultPage, isLoading: isFetchLoading } = useQuery({
     ...useGetResultPage(id as string | number),
     enabled: !!id && type === "update",
   });
@@ -128,34 +130,39 @@ export const FormResultPage = ({ form_data }: TProps) => {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
-        <div className="grid gap-4">
-          <FormInput
-            name="title"
-            control={control}
-            label="Page Title"
-            placeholder="e.g. High Score Result"
-          />
+        {isFetchLoading ? (
+          <AppLoading />
+        ) : (
+          <div className="grid gap-4">
+            <FormInput
+              name="title"
+              control={control}
+              label="Page Title"
+              placeholder="e.g. High Score Result"
+            />
 
-          <FormSlider
-            name="score_range"
-            control={control}
-            label="Score Range"
-            min={0}
-            max={100}
-            step={1}
-            description="Define the percentage range (0-100) for which this result page should be shown."
-            formatValue={(vals) => `${vals[0]} - ${vals[1]}%`}
-          />
+            <FormSlider
+              name="score_range"
+              control={control}
+              label="Score Range"
+              min={0}
+              max={100}
+              step={1}
+              description="Define the percentage range (0-100) for which this result page should be shown."
+              formatValue={(vals) => `${vals[0]} - ${vals[1]}%`}
+            />
 
-          <FormTiptap
-            name="content"
-            control={control}
-            label="Page Content"
-            description="Design your result page content here."
-            variant="advance"
-          />
-        </div>
+            <FormTiptap
+              name="content"
+              control={control}
+              label="Page Content"
+              description="Design your result page content here."
+              variant="advance"
+            />
+          </div>
+        )}
       </form>
+
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
         <Button
           type="button"

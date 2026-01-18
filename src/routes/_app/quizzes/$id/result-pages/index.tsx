@@ -20,6 +20,7 @@ import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
+import AppLoading from "@/components/base/app-loading";
 
 export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
   component: RouteComponent,
@@ -33,9 +34,8 @@ export default function RouteComponent() {
   const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
-  const { data: resultPages = { data: [], meta: { total: 0 } } } = useQuery(
-    useGetResultPages(search)
-  );
+  const { data: resultPages = { data: [], meta: { total: 0 } }, isLoading } =
+    useQuery(useGetResultPages(search));
 
   const deleteMutation = useDeleteResultPage();
 
@@ -137,7 +137,11 @@ export default function RouteComponent() {
       </CardHeader>
 
       <CardContent className="flex-1 overflow-y-auto">
-        <AppTable data={resultPages?.data} columns={columns} />
+        {isLoading ? (
+          <AppLoading />
+        ) : (
+          <AppTable data={resultPages?.data} columns={columns} />
+        )}
       </CardContent>
 
       <div className="p-4 border-t">

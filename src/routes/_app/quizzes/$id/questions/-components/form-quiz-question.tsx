@@ -8,6 +8,8 @@ import { FormImageUpload, FormInput } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { TFormType } from "@/types";
 import { CardAction, CardContent } from "@/components/ui/card";
+import AppLoading from "@/components/base/app-loading";
+
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -97,7 +99,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
   const navigate = useNavigate();
 
   // Fetch existing question
-  const { data: question } = useQuery({
+  const { data: question, isLoading: isFetchLoading } = useQuery({
     ...useGetQuestion(id as string | number),
     enabled: !!id && type === "update",
   });
@@ -197,66 +199,65 @@ export default function FormQuizQuestion({ form_data }: TProps) {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 flex-1 overflow-y-auto p-1 pr-4"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormImageUpload
-            name="image"
-            control={control}
-            label="Question Image"
-            description="Upload or drag a question image"
-          />
-          {/* <div className="flex items-center justify-end">
-            <FormSwitch
-              name="is_active"
+        {isFetchLoading ? (
+          <AppLoading />
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormImageUpload
+                name="image"
+                control={control}
+                label="Question Image"
+                description="Upload or drag a question image"
+              />
+            </div>
+
+            <FormInput
+              name="question_text"
               control={control}
-              label="Active Status"
-              description="Whether this question is active in the quiz"
+              label="Question Text"
+              placeholder="Enter question"
             />
-          </div> */}
-        </div>
 
-        <FormInput
-          name="question_text"
-          control={control}
-          label="Question Text"
-          placeholder="Enter question"
-        />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Answers</label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => append({ answer_text: "", points: 0 })}
+                >
+                  <Plus className="h-3 w-3 mr-1" /> Add Answer
+                </Button>
+              </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">Answers</label>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => append({ answer_text: "", points: 0 })}
-            >
-              <Plus className="h-3 w-3 mr-1" /> Add Answer
-            </Button>
-          </div>
-
-          <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-            <DndContext
-              onDragEnd={handleDragEnd}
-              collisionDetection={closestCenter}
-            >
-              <SortableContext
-                items={fields}
-                strategy={verticalListSortingStrategy}
-              >
-                {fields.map((field, index) => (
-                  <SortableOption
-                    key={field.id}
-                    id={field.id}
-                    index={index}
-                    control={control}
-                    onRemove={() => remove(index)}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </div>
-        </div>
+              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                <DndContext
+                  onDragEnd={handleDragEnd}
+                  collisionDetection={closestCenter}
+                >
+                  <SortableContext
+                    items={fields}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {fields.map((field, index) => (
+                      <SortableOption
+                        key={field.id}
+                        id={field.id}
+                        index={index}
+                        control={control}
+                        onRemove={() => remove(index)}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
+              </div>
+            </div>
+          </>
+        )}
       </form>
+
       <CardAction className="pt-4 w-full flex justify-end items-center gap-2">
         <Button
           type="button"

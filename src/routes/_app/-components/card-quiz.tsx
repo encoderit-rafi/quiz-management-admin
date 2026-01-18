@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { useQuery } from "@tanstack/react-query";
 import { useGetQuiz } from "../-apis";
-import { Loader2 } from "lucide-react";
+import AppLoading from "@/components/base/app-loading";
 import { getImageUrl } from "@/utils";
 
 type TProps = {
@@ -21,11 +21,7 @@ export default function CardQuiz({ form_data }: TProps) {
   const { data: quiz, isLoading } = useQuery(useGetQuiz(form_data.id));
 
   if (isLoading) {
-    return (
-      <CardContent className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </CardContent>
-    );
+    return <AppLoading />;
   }
 
   if (!quiz) {
