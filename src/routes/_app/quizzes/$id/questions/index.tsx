@@ -210,9 +210,6 @@ function QuizQuestionsPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Badge variant={question.is_active ? "default" : "secondary"}>
-              {question.is_active ? "Active" : "Inactive"}
-            </Badge>
             <Badge variant="outline" className="mr-2">
               {question.answers.length} Options
             </Badge>
