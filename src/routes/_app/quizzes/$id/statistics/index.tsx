@@ -73,15 +73,15 @@ function StatisticsPage() {
             isLoading={isLoadingStats}
             description="Average duration per completion"
           />
-          {stats?.conversion_rate && (
-            <StatCard
-              title="Conversion Rate"
-              value={stats ? `${stats.conversion_rate}%` : 0}
-              icon={TrendingUp}
-              isLoading={isLoadingStats}
-              description="Views to completion ratio"
-            />
-          )}
+          {/* {stats?.conversion_rate && (
+          )} */}
+          <StatCard
+            title="Conversion Rate"
+            value={stats ? `${stats.conversion_rate}%` : 0}
+            icon={TrendingUp}
+            isLoading={isLoadingStats}
+            description="Views to completion ratio"
+          />
         </div>
       )}
     </div>
