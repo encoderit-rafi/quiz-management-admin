@@ -11,7 +11,10 @@ export const useCreateQuestion = (quizId: string | number) => {
   return useMutation({
     mutationKey: ["create-question", quizId],
     mutationFn: async (body: any) => {
-      const data = omitEmpty({ ...body });
+      const data = omitEmpty({
+        ...body,
+        multiselect: body.multiselect ? 1 : 0,
+      });
       // console.log("👉 ~ useCreateQuestion ~ data:", data);
       // return;
       const payload = serialize(data, { indices: true });

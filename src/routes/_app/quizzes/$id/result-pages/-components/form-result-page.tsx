@@ -8,7 +8,7 @@ import {
   useGetResultPage,
   useUpdateResultPage,
 } from "../-apis";
-import { FormInput, FormSlider, FormTiptap } from "@/components/form";
+import { FormInput, FormTiptap } from "@/components/form";
 import { CardContent, CardAction } from "@/components/ui/card";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
@@ -18,11 +18,12 @@ import { useNavigate, useRouter } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
 import type { TFormType } from "@/types";
 
-const ResultPageFormSchema = ResultPageSchema.omit({
-  min_score: true,
-  max_score: true,
-}).extend({
-  score_range: z.array(z.number()).length(2),
+const ResultPageFormSchema = ResultPageSchema.extend({
+  min_score: z.coerce.number().min(0, "Min score must be 0 or greater"),
+  max_score: z.coerce.number().min(0, "Max score must be 0 or greater"),
+}).refine((data) => data.max_score > data.min_score, {
+  message: "Max score must be greater than min score",
+  path: ["max_score"],
 });
 
 type TResultPageFormSchema = z.infer<typeof ResultPageFormSchema>;
@@ -44,11 +45,12 @@ export const FormResultPage = ({ form_data }: TProps) => {
   });
 
   const form = useForm<TResultPageFormSchema>({
-    resolver: zodResolver(ResultPageFormSchema),
+    resolver: zodResolver(ResultPageFormSchema) as any,
     defaultValues: {
       quiz_id: quizId,
       title: "",
-      score_range: [0, 100],
+      min_score: 0,
+      max_score: 100,
       content: "",
     },
   });
@@ -66,7 +68,8 @@ export const FormResultPage = ({ form_data }: TProps) => {
       reset({
         quiz_id: resultPage.quiz_id || quizId,
         title: resultPage.title || "",
-        score_range: [resultPage.min_score || 0, resultPage.max_score || 100],
+        min_score: resultPage.min_score || 0,
+        max_score: resultPage.max_score || 100,
         content: resultPage.content || "",
       });
     }
@@ -82,12 +85,9 @@ export const FormResultPage = ({ form_data }: TProps) => {
   };
 
   const onSubmit = (data: TResultPageFormSchema) => {
-    const { score_range, ...rest } = data;
     const payload: TResultPageSchema = {
-      ...rest,
+      ...data,
       quiz_id: quizId,
-      min_score: score_range[0],
-      max_score: score_range[1],
     } as TResultPageSchema;
 
     if (type === "update" && id) {
@@ -141,16 +141,29 @@ export const FormResultPage = ({ form_data }: TProps) => {
               placeholder="e.g. High Score Result"
             />
 
-            <FormSlider
-              name="score_range"
-              control={control}
-              label="Score Range"
-              min={0}
-              max={100}
-              step={1}
-              description="Define the percentage range (0-100) for which this result page should be shown."
-              formatValue={(vals) => `${vals[0]} - ${vals[1]}%`}
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Score Range</label>
+              <div className="flex">
+                <FormInput
+                  name="min_score"
+                  control={control}
+                  type="number"
+                  placeholder="From"
+                  className="rounded-e-none focus:z-10 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                />
+                <FormInput
+                  name="max_score"
+                  control={control}
+                  type="number"
+                  placeholder="To"
+                  className="-ms-px rounded-s-none focus:z-10 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Define the percentage range (0-100) for which this result page
+                should be shown.
+              </p>
+            </div>
 
             <FormTiptap
               name="content"

@@ -16,6 +16,7 @@ export const useUpdateQuestion = (quizId: string | number) => {
       const data = omitEmpty({
         ...rest,
         image: typeof body.image === "string" ? undefined : body.image,
+        multiselect: body.multiselect ? 1 : 0,
       });
       const payload = serialize(data, { indices: true });
       payload.append("_method", "PUT");

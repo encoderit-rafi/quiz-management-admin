@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
 import { useCreateQuestion, useGetQuestion, useUpdateQuestion } from "../-apis";
-import { FormImageUpload, FormInput } from "@/components/form";
+import { FormImageUpload, FormInput, FormSwitch } from "@/components/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { TFormType } from "@/types";
 import { CardAction, CardContent } from "@/components/ui/card";
@@ -24,6 +24,7 @@ import {
   FormQuizQuestionSchema,
   type TFormQuizQuestionSchema,
 } from "../-types";
+import { Label } from "@/components/ui/label";
 
 type TProps = {
   form_data: { id?: string | number; type: TFormType; quizId: string | number };
@@ -65,6 +66,7 @@ function SortableOption({ id, index, control, onRemove }: SortableOptionProps) {
       </button>
 
       <div className="flex-1">
+        {/* <input type="hidden" name={`answers.${index}.id`} value={id} /> */}
         <FormInput
           name={`answers.${index}.answer_text`}
           control={control}
@@ -117,16 +119,17 @@ export default function FormQuizQuestion({ form_data }: TProps) {
   const { reset, control, handleSubmit } = form;
   useEffect(() => {
     if (type === "update" && question) {
+      console.log("👉 ~ FormQuizQuestion ~ question:", question);
       reset({
         question_text: question.question_text || question.name || "",
         image: question.image || null,
+        multiselect: question.multiselect,
         // is_active: !!(question.is_active ?? true),
-        answers: (question.answers || question.options || []).map(
-          (opt: any) => ({
-            answer_text: opt.answer_text || opt.label || "",
-            points: opt.points ?? 0,
-          })
-        ),
+        answers: (question.answers || []).map((opt: any) => ({
+          id: opt.id,
+          answer_text: opt.answer_text || opt.label || "",
+          points: opt.points ?? 0,
+        })),
       });
     }
   }, [question, type, reset]);
@@ -165,7 +168,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
       })),
       // is_active: true,
     };
-
+    console.log("👉 ~ onSubmit ~ payload:", payload);
     if (type === "update" && id) {
       updateQuestion(
         { ...payload, id },
@@ -177,7 +180,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
               search: DEFAULT_PAGINATION,
             });
           },
-        }
+        },
       );
     } else {
       createQuestion(payload, {
@@ -218,7 +221,20 @@ export default function FormQuizQuestion({ form_data }: TProps) {
               label="Question Text"
               placeholder="Enter question"
             />
-
+            <div className="flex items-center">
+              <Label
+                htmlFor="multiselect"
+                className="text-sm font-medium text-nowrap"
+              >
+                <FormSwitch
+                  name="multiselect"
+                  control={control}
+                  // label="Multiselect"
+                  // description="Allow multiple answers"
+                />
+                Answer Multiselect
+              </Label>
+            </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium">Answers</label>
