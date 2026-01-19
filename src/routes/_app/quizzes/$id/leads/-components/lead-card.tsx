@@ -19,7 +19,7 @@ export const LeadCard = ({ data }: LeadCardProps) => {
       <div className="p-6">
         <div className="flex flex-row items-center justify-between space-y-0 pb-2">
           <span className="text-sm font-medium leading-none tracking-tight text-muted-foreground">
-            {data.quiz_title}
+            {data.quiz.name}
           </span>
           <FileQuestion className="h-4 w-4 text-muted-foreground" />
         </div>
@@ -32,7 +32,7 @@ export const LeadCard = ({ data }: LeadCardProps) => {
         <p className="text-xs text-muted-foreground mt-1">
           Result:{" "}
           <span className="text-foreground font-medium">
-            {data.result_page.name}
+            {data.resultPage?.title || "N/A"}
           </span>
         </p>
       </div>
@@ -51,19 +51,19 @@ export const LeadCard = ({ data }: LeadCardProps) => {
                       {index + 1}
                     </span>
                     <p className="text-sm font-medium leading-tight text-foreground/90">
-                      {answer.question}
+                      {answer.question.question_text}
                     </p>
                   </div>
                   <div className="flex items-center justify-between pl-6">
                     <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                       <CheckCircle className="size-3.5 text-primary" />
-                      <span>{answer.answer}</span>
+                      <span>Option ID: {answer.answer_id}</span>
                     </div>
                     <Badge
                       variant="secondary"
                       className="bg-muted text-[10px] font-bold h-5 px-1.5"
                     >
-                      +{answer.points}
+                      +{answer.points_earned}
                     </Badge>
                   </div>
                 </div>
