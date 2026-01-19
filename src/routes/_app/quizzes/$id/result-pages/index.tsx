@@ -35,7 +35,7 @@ export default function RouteComponent() {
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
   const { data: resultPages = { data: [], meta: { total: 0 } }, isLoading } =
-    useQuery(useGetResultPages(search));
+    useQuery(useGetResultPages({ ...search, quiz_id: id }));
 
   const deleteMutation = useDeleteResultPage();
 
@@ -55,7 +55,7 @@ export default function RouteComponent() {
       header: "Score Range",
       accessorKey: "min_score",
       cell: ({ row }) =>
-        `${row.original.min_score} - ${row.original.max_score}%`,
+        `${row.original.min_score} - ${row.original.max_score}`,
     },
     {
       id: "actions",

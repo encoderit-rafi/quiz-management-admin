@@ -11,6 +11,7 @@ import {
   FileText,
   Users,
   BarChart,
+  Copy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent } from "@/components/ui/card";
@@ -34,6 +35,7 @@ import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { useActiveQuiz } from "@/store";
 import AppLoading from "@/components/base/app-loading";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -69,7 +71,7 @@ export default function RouteComponent() {
         onSuccess: () => {
           setDeleteForm(FORM_DATA);
         },
-      }
+      },
     );
   };
   // const handelSetActiveQuiz = (quiz: TQuizSchema) => {
@@ -93,6 +95,28 @@ export default function RouteComponent() {
     {
       header: "Views",
       accessorKey: "views",
+    },
+    {
+      header: "URL",
+      accessorKey: "uuid",
+      cell: ({ row }) => {
+        const data = row.getValue("uuid") as string;
+        const uuid = `http://localhost:3000/?quiz_id=${data}`;
+
+        return (
+          <div className="flex items-center gap-3 whitespace-nowrap">
+            <span className="font-medium text-foreground">{uuid}</span>
+            <Copy
+              className="size-4 cursor-pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(uuid);
+                toast.success(`${uuid} copied`);
+              }}
+            />
+          </div>
+        );
+      },
+      size: 180,
     },
 
     {
