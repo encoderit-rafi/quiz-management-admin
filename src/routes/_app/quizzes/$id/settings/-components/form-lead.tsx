@@ -52,11 +52,12 @@ export default function FormLead({ quizId }: TProps) {
     if (settings && settings.fields) {
       const fields = DEFAULT_LEAD_OPTIONS.map((option) => {
         const state = settings.fields.find(
-          (f: { field_name: string }) => f.field_name === option.field_name
+          (f: { field_name: string }) => f.field_name === option.field_name,
         );
         return {
           ...option,
-          enabled: !!state,
+          // enabled: state ? state.enabled : option.enabled,
+          enabled: state ? state.enabled : option.enabled,
           required: state ? state.required : option.required,
         };
       });
