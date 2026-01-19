@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Download, Eye } from "lucide-react";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
@@ -13,13 +13,8 @@ import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppLoading from "@/components/base/app-loading";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { format } from "date-fns";
+import { ViewLeadDetail } from "./-components";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent } from "@/components/ui/card";
 
@@ -39,7 +34,7 @@ function LeadsListPage() {
       useGetLeads({
         quiz_id: id,
         ...search,
-      })
+      }),
     );
 
   const leads = response?.data ?? [];
@@ -50,99 +45,41 @@ function LeadsListPage() {
   // Column definitions
   const columns: ColumnDef<TLeadResultSchema>[] = [
     {
-      header: "Email",
-      accessorKey: "user_email",
-      cell: ({ row }) => row.original.user_email || "N/A",
+      header: "Name",
+      accessorKey: "user_data.name",
+      cell: ({ row }) => row.original.user_data.name || "Anonymous",
     },
     {
-      header: "Submission Date",
-      accessorKey: "submission_date",
-      cell: ({ row }) => {
-        const date = new Date(row.original.submission_date);
-        return date.toLocaleString();
-      },
+      header: "Email",
+      accessorKey: "user_data.email",
+      cell: ({ row }) => row.original.user_data.email || "N/A",
     },
     {
       header: "Score",
       accessorKey: "total_score",
       cell: ({ row }) => (
-        <Badge variant="outline">{row.original.total_score} pts</Badge>
+        <Badge variant="outline" className="font-mono">
+          {row.original.total_score} pts
+        </Badge>
       ),
     },
     {
       header: "Result Page",
-      accessorKey: "result_page",
-      cell: ({ row }) => row.original.result_page?.name || "N/A",
+      accessorKey: "resultPage.title",
+      cell: ({ row }) => row.original.resultPage?.title || "N/A",
+    },
+    {
+      header: "Date",
+      accessorKey: "completed_at",
+      cell: ({ row }) => {
+        if (!row.original.completed_at) return "N/A";
+        return format(new Date(row.original.completed_at), "PPP p");
+      },
     },
     {
       header: "Actions",
       id: "actions",
-      cell: ({ row }) => {
-        const lead = row.original;
-        return (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Eye className="h-4 w-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Submission Details</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-sm font-medium">Email</div>
-                    <div className="text-sm text-muted-foreground">
-                      {lead.user_email || "N/A"}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium">Score</div>
-                    <div className="text-sm text-muted-foreground">
-                      {lead.total_score} points
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium">Submission Date</div>
-                    <div className="text-sm text-muted-foreground">
-                      {new Date(lead.submission_date).toLocaleString()}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium">Result Page</div>
-                    <div className="text-sm text-muted-foreground">
-                      {lead.result_page?.name || "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm font-medium mb-2">Answers</div>
-                  <div className="space-y-2">
-                    {lead.answers?.map((answer, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3 rounded-md bg-muted/30 space-y-1"
-                      >
-                        <div className="text-sm font-medium">
-                          {answer.question}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          Answer: {answer.answer}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          Points: {answer.points}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        );
-      },
+      cell: ({ row }) => <ViewLeadDetail lead={row.original} />,
     },
   ];
 

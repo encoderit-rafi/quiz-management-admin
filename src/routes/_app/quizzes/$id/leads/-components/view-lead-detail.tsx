@@ -1,0 +1,186 @@
+import {
+  Eye,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Clock,
+  BarChart,
+  FileQuestion,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import type { TLeadResultSchema } from "../-types";
+import { format } from "date-fns";
+
+interface ViewLeadDetailProps {
+  lead: TLeadResultSchema;
+}
+
+export const ViewLeadDetail = ({ lead }: ViewLeadDetailProps) => {
+  const { user_data, quiz, answers, total_score, completed_at, started_at } =
+    lead;
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "N/A";
+    try {
+      return format(new Date(dateString), "PPP pp");
+    } catch {
+      return "Invalid Date";
+    }
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Eye className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-xl font-bold">
+            <User className="h-5 w-5 text-primary" />
+            Lead Submission Details
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6 pt-4">
+          {/* User Information Section */}
+          <section className="grid sm:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                User Information
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">
+                    {user_data.name || "Anonymous"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">{user_data.email || "N/A"}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">{user_data.phone || "N/A"}</span>
+                </div>
+                {user_data.address && (
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{user_data.address}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                Submission Meta
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground">
+                      Completed At
+                    </span>
+                    <span className="text-sm">{formatDate(completed_at)}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground">
+                      Started At
+                    </span>
+                    <span className="text-sm">{formatDate(started_at)}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <BarChart className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground">
+                      IP Address
+                    </span>
+                    <span className="text-sm">{lead.ip_address || "N/A"}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <Separator />
+
+          {/* Quiz Section */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                  Quiz Performance
+                </h3>
+                <p className="text-lg font-bold mt-1">{quiz.name}</p>
+              </div>
+              <div className="text-right">
+                <span className="text-sm text-muted-foreground block">
+                  Total Score
+                </span>
+                <Badge variant="default" className="text-sm font-mono">
+                  {total_score}
+                </Badge>
+              </div>
+            </div>
+          </section>
+
+          <Separator />
+
+          {/* Answers Section */}
+          <section className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Response Details
+            </h3>
+            <div className="space-y-3">
+              {answers.map((answer, index) => (
+                <div
+                  key={answer.id}
+                  className="p-3 rounded-md bg-muted/30 border border-muted/50 space-y-2"
+                >
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                      {index + 1}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold leading-tight">
+                        {answer.question.question_text}
+                      </p>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                          <FileQuestion className="size-3.5" />
+                          <span>Points Earned</span>
+                        </div>
+                        <Badge variant="secondary" className="font-mono">
+                          +{answer.points_earned}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};

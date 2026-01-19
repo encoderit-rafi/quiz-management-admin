@@ -101,7 +101,7 @@ export default function RouteComponent() {
       accessorKey: "uuid",
       cell: ({ row }) => {
         const data = row.getValue("uuid") as string;
-        const uuid = `http://localhost:3000/?quiz_id=${data}`;
+        const uuid = `https://quiz-management-users.appwrite.network/?quiz_id=${data}`;
 
         return (
           <div className="flex items-center gap-3 whitespace-nowrap">

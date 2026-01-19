@@ -111,19 +111,25 @@ export default function FormQuizQuestion({ form_data }: TProps) {
     defaultValues: {
       question_text: "",
       image: null,
-      // is_active: true,
+      multiselect: false,
       answers: [{ answer_text: "", points: 0 }],
     },
   });
 
-  const { reset, control, handleSubmit } = form;
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+  console.log("👉 ~ FormQuizQuestion ~ errors:", errors);
   useEffect(() => {
     if (type === "update" && question) {
       console.log("👉 ~ FormQuizQuestion ~ question:", question);
       reset({
         question_text: question.question_text || question.name || "",
         image: question.image || null,
-        multiselect: question.multiselect,
+        multiselect: question.multiselect || false,
         // is_active: !!(question.is_active ?? true),
         answers: (question.answers || []).map((opt: any) => ({
           id: opt.id,
