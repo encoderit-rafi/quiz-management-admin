@@ -12,6 +12,8 @@ import {
   Users,
   BarChart,
   Copy,
+  Loader2,
+  Code2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent } from "@/components/ui/card";
@@ -29,13 +31,21 @@ import AppTable from "@/components/base/app-table";
 import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import { useQuery } from "@tanstack/react-query";
-import { useGetAllQuizzes, useDeleteQuiz } from "./-apis";
+import { useGetAllQuizzes, useDeleteQuiz, useGetEmbedCode } from "./-apis";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
-import { DEFAULT_PAGINATION } from "@/consts";
+import { DEFAULT_PAGINATION, FRONTEND_URL } from "@/consts";
 import { useActiveQuiz } from "@/store";
 import AppLoading from "@/components/base/app-loading";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 export const Route = createFileRoute("/_app/")({
   component: RouteComponent,
@@ -54,9 +64,15 @@ export default function RouteComponent() {
   const search = Route.useSearch();
   const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteForm, setDeleteForm] = useState(FORM_DATA);
-
+  const [embedForm, setEmbedForm] = useState<{
+    type: "open" | "closed";
+    id: string;
+  }>({ type: "closed", id: "" });
   // Use the new queryOptions pattern
   const { data: response, isLoading } = useQuery(useGetAllQuizzes(search));
+  const { data: embedResponse, isLoading: embedLoading } = useQuery(
+    useGetEmbedCode(embedForm.id),
+  );
 
   const quizzes = response?.data ?? [];
   console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
@@ -101,7 +117,7 @@ export default function RouteComponent() {
       accessorKey: "uuid",
       cell: ({ row }) => {
         const data = row.getValue("uuid") as string;
-        const uuid = `https://quiz-management-users.appwrite.network/?quiz_id=${data}`;
+        const uuid = `${FRONTEND_URL}/?quiz_id=${data}`;
 
         return (
           <div className="flex items-center gap-3 whitespace-nowrap">
@@ -133,6 +149,14 @@ export default function RouteComponent() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => setEmbedForm({ type: "open", id: quiz.uuid })}
+              >
+                <div className="flex items-center gap-2">
+                  <Code2 />
+                  Embed
+                </div>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
                   <Eye />
@@ -276,6 +300,42 @@ export default function RouteComponent() {
         item_name={deleteForm.title}
         loading={isDeletePending}
       />
+      <Dialog
+        open={embedForm.type === "open"}
+        onOpenChange={() => setEmbedForm({ type: "closed", id: "" })}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Code2 />
+              Embed Code
+            </DialogTitle>
+            <DialogDescription>
+              Copy the code below and paste it into your website.
+            </DialogDescription>
+          </DialogHeader>
+          {embedLoading ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <div className="mt-4 flex items-start gap-2 relative">
+              <Textarea
+                value={embedResponse?.embed_code}
+                disabled
+                className="min-h-[100px] resize-none overflow-y-auto"
+              />
+              <Copy
+                className="size-4 cursor-pointer absolute top-2 right-2 z-10"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    embedResponse?.embed_code || "",
+                  );
+                  toast.success(`Code copied`);
+                }}
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

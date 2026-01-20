@@ -16,4 +16,5 @@ export const QUERY_KEYS = {
     quizId,
     params,
   ],
+  GET_EMBED_CODE: (quizId: string | number) => ["get-embed-code", quizId],
 };
