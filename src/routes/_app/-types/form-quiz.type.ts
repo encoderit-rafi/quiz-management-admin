@@ -21,6 +21,12 @@ export const FormQuizSchema = z.object({
   secondary_color: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
     message: "Invalid color format. Use hex color (e.g., #FF5733)",
   }),
+  submit_button_text: z
+    .string()
+    .min(1, { message: "Submit button text is required" }),
+  result_button_text: z
+    .string()
+    .min(1, { message: "Result button text is required" }),
 });
 
 export type TFormQuizSchema = z.infer<typeof FormQuizSchema>;

@@ -115,6 +115,18 @@ export default function FormQuiz({ form_data }: TProps) {
                 label="CTA Text"
                 placeholder="Enter CTA text"
               />
+              <FormInput
+                name="submit_button_text"
+                control={control}
+                label="Submit Button Text"
+                placeholder="Enter submit button text"
+              />
+              <FormInput
+                name="result_button_text"
+                control={control}
+                label="Result Button Text"
+                placeholder="Enter result button text"
+              />
               <FormImageUpload
                 name="logo"
                 control={control}
