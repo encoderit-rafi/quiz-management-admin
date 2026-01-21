@@ -71,7 +71,8 @@ export const QuizSchema = z.object({
 
   landing_page_text: z.string(), // HTML string
   cta_text: z.string(),
-
+  submit_button_text: z.string(),
+  result_button_text: z.string(),
   background_image: z.string().url().nullable(),
   logo: z.string().url().nullable(),
 

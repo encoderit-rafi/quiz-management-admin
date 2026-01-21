@@ -61,6 +61,18 @@ export default function CardQuiz({ form_data }: TProps) {
                 {quiz.cta_text || "N/A"}
               </div>
             </div>
+            <div>
+              <div className="text-sm font-medium">Submit Button Text</div>
+              <div className="text-sm text-muted-foreground">
+                {quiz?.submit_button_text || "N/A"}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium">Result Button Text</div>
+              <div className="text-sm text-muted-foreground">
+                {quiz?.result_button_text || "N/A"}
+              </div>
+            </div>
           </div>
           <div>
             <div className="text-sm font-medium">Description</div>
@@ -186,7 +198,7 @@ export default function CardQuiz({ form_data }: TProps) {
                                   {answer.points} pts
                                 </Badge>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </div>
