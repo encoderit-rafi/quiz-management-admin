@@ -6,6 +6,9 @@ export const FormResultDeliverySchema = z.object({
   enable_email_result: z.boolean(),
   enable_pdf_download: z.boolean(),
   enable_link_share: z.boolean(),
+  result_page_position: z.enum(["before", "after"], {
+    message: "Result page position is required",
+  }),
 });
 
 export type TFormResultDeliverySchema = z.infer<
@@ -18,4 +21,5 @@ export type TResultDeliveryResponse = {
   enable_email_result: boolean | number;
   enable_pdf_download: boolean | number;
   enable_link_share: boolean | number;
+  result_page_position: "before" | "after";
 };

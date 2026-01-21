@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { FormSwitch } from "@/components/form";
+import { FormSwitch, FormSelect } from "@/components/form";
 import {
   FormResultDeliverySchema,
   type TFormResultDeliverySchema,
@@ -44,6 +44,7 @@ export default function FormResultDelivery({ quizId }: TProps) {
         enable_email_result: !!settings.enable_email_result,
         enable_pdf_download: !!settings.enable_pdf_download,
         enable_link_share: !!settings.enable_link_share,
+        result_page_position: settings.result_page_position || "after",
       });
     }
   }, [settings, reset, quizId]);
@@ -95,6 +96,20 @@ export default function FormResultDelivery({ quizId }: TProps) {
                 </div>
                 Link Share
               </Label>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="">
+              <FormSelect
+                control={control}
+                name="result_page_position"
+                label="Result Page Position"
+                placeholder="Select position"
+                options={[
+                  { value: "before", label: "Before Lead Form" },
+                  { value: "after", label: "After Lead Form" },
+                ]}
+              />
             </TableCell>
           </TableRow>
         </TableBody>
