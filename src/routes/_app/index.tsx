@@ -107,6 +107,14 @@ export default function RouteComponent() {
     {
       header: "Description",
       accessorKey: "description",
+      cell: ({ row }) => {
+        const description = row.getValue("description") as string;
+        return (
+          <div className="max-w-sm truncate" title={description}>
+            {description}
+          </div>
+        );
+      },
     },
     {
       header: "Views",
