@@ -16,7 +16,7 @@ import { useGetResultPages, useDeleteResultPage } from "./-apis";
 import type { TResultPageSchema } from "./-types";
 import { ResultPageSearchSchema } from "./-types";
 import { useState } from "react";
-import AppSearch from "@/components/base/app-search";
+// import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
@@ -31,7 +31,7 @@ export default function RouteComponent() {
   const { id } = Route.useParams();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
-  const [searchValue, setSearchValue] = useState(search.search || "");
+  // const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
   const { data: resultPages = { data: [], meta: { total: 0 } }, isLoading } =
@@ -101,8 +101,8 @@ export default function RouteComponent() {
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between gap-4">
-        <AppSearch
+      <CardHeader className="flex flex-row items-center justify-end gap-4">
+        {/* <AppSearch
           onSearch={() => {
             navigate({
               search: { ...search, search: searchValue, page: 1 },
@@ -123,7 +123,7 @@ export default function RouteComponent() {
               onChange: (e) => setSearchValue(e.target.value),
             },
           }}
-        />
+        /> */}
         <Button asChild variant={"outline"}>
           <Link
             to="/quizzes/$id/result-pages/create"

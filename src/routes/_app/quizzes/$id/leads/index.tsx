@@ -8,7 +8,7 @@ import { LeadSearchSchema } from "./-types";
 import { useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import AppTable from "@/components/base/app-table";
-import AppSearch from "@/components/base/app-search";
+// import AppSearch from "@/components/base/app-search";
 import AppPagination from "@/components/base/app-pagination";
 import AppButtonText from "@/components/base/app-button-text";
 import AppLoading from "@/components/base/app-loading";
@@ -27,7 +27,7 @@ function LeadsListPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
-  const [searchValue, setSearchValue] = useState(search.search || "");
+  // const [searchValue, setSearchValue] = useState(search.search || "");
 
   const { data: response = { data: [], meta: { total: 0 } }, isLoading } =
     useQuery(
@@ -85,8 +85,8 @@ function LeadsListPage() {
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between gap-4">
-        <AppSearch
+      <CardHeader className="flex flex-row items-center justify-end gap-4">
+        {/* <AppSearch
           onSearch={() => {
             navigate({
               search: { ...search, search: searchValue, page: 1 },
@@ -107,7 +107,7 @@ function LeadsListPage() {
               onChange: (e) => setSearchValue(e.target.value),
             },
           }}
-        />
+        /> */}
         <Button
           onClick={exportLeads}
           variant={"outline"}
