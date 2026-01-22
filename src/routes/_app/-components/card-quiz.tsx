@@ -259,11 +259,13 @@ export default function CardQuiz({ form_data }: TProps) {
               <div className="space-y-2">
                 <div className="text-sm font-medium">Lead Form Fields</div>
                 <div className="flex flex-wrap gap-2">
-                  {quiz.leadFormSetting.fields.map((field: any, i: number) => (
-                    <Badge key={i} variant="secondary">
-                      {field.label} ({field.type})
-                    </Badge>
-                  ))}
+                  {quiz.leadFormSetting.fields
+                    .filter((field: any) => field.enabled)
+                    .map((field: any, i: number) => (
+                      <Badge key={i} variant="secondary">
+                        {field.label}
+                      </Badge>
+                    ))}
                 </div>
               </div>
             )}
