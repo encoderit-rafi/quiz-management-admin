@@ -164,6 +164,7 @@ export default function FormQuiz({ form_data }: TProps) {
               label="Description"
               placeholder="Enter description"
             />
+
             <FormTiptap
               name="landing_page_text"
               control={control}
