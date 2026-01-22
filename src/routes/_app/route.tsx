@@ -1,75 +1,39 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { AppSidebar } from "@/components/base/app-sidebar";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Navbar from "@/components/base/navbar";
-import { useToken } from "@/store";
-import { Card } from "@/components/ui/card";
-// import { useToken } from "@/store";
+import { useCurrentUser, useToken } from "@/store";
+import { useQuery } from "@tanstack/react-query";
+import { getAuthProfile } from "../_auth/-api";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_app")({
+  beforeLoad: () => {
+    const { token } = useToken.getState();
+    if (!token) {
+      throw redirect({ to: "/login" });
+    }
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  // const navigate = useNavigate();
-  const { token } = useToken();
-  console.log("👉 ~ RouteComponent ~ token:", token);
-  // const { setUser, clearUser } = useCurrentUser();
-  // const { initializeCompany, clearActiveCompany } = useActiveCompany();
-
-  // // fetch user profile from API
-  // const {
-  //   data: user,
-  //   isLoading,
-  //   isError,
-  // } = useUserProfile({
-  //   options: { enabled: !!token },
-  // });
-
-  // // handle user state changes
-  // useEffect(() => {
-  //   if (isError) {
-  //     // if fetch fails, clear all stores and redirect
-  //     setToken(null);
-  //     clearUser();
-  //     clearActiveCompany();
-  //     navigate({ to: "/login", replace: true });
-  //     return;
-  //   }
-
-  //   if (user) {
-  //     setUser(user);
-  //     initializeCompany();
-  //   }
-  // }, [user, isError]);
-
-  // // loading UI
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex h-screen items-center justify-center">
-  //       <Spinner key="bars" variant="bars" />
-  //     </div>
-  //   );
-  // }
-
-  // // guard: nothing to render if no user/token
-  // if (!token || !user) return null;
-
-  // main layout
-  // if (!Boolean(token)) return navigate({ to: "/login", replace: true });
-
+  const { setUser } = useCurrentUser();
+  const { data: user } = useQuery(getAuthProfile());
+  console.log("👉 ~ RouteComponent ~ user:", user);
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user]);
   return (
     <SidebarProvider>
       <div className="flex h-svh w-full overflow-hidden">
-        <div className="max-w-full">
-          <AppSidebar />
-        </div>
         <div className="flex flex-1 flex-col overflow-hidden">
           <Navbar />
-          <main className="flex-1 flex flex-col overflow-hidden p-4">
-            <Card className="flex-1 flex flex-col overflow-hidden shadow-none">
+          <main className="flex-1 flex flex-col overflow-hidden py-4">
+            <div className="flex-1 flex flex-col overflow-hidden shadow-none">
               <Outlet />
-            </Card>
+            </div>
           </main>
         </div>
       </div>

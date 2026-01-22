@@ -16,6 +16,7 @@ type TFormInputProps<
   placeholder?: string;
   description?: string;
   type?: HTMLInputTypeAttribute;
+  className?: string;
 };
 
 export const FormInput = <
@@ -29,6 +30,7 @@ export const FormInput = <
   type = "text",
   placeholder = "",
   description = "",
+  className = "",
 }: TFormInputProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -46,6 +48,7 @@ export const FormInput = <
               placeholder={placeholder}
               id={name}
               aria-invalid={invalid}
+              className={className}
             />
             {Boolean(description) && !invalid && (
               <FieldDescription>{description}</FieldDescription>

@@ -8,7 +8,6 @@ import { useLogin } from "../-apis";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/form";
 import { FormPasswordInput } from "@/components/form/form-password-input";
-import { Link } from "@tanstack/react-router";
 export const FormLogin = () => {
   //^ APIS
   const { mutate: login, isPending } = useLogin();
@@ -34,20 +33,13 @@ export const FormLogin = () => {
           label="Email"
           placeholder="m@example.com"
         />
-        <div className="flex flex-col gap-2 items-end">
-          <FormPasswordInput
-            control={control}
-            name="password"
-            label="Password"
-            placeholder="* * * * *"
-          />
-          <Link
-            to="/forgot-password"
-            className="font-thin duration-150 hover:underline text-sm"
-          >
-            Forgot password
-          </Link>
-        </div>
+        <FormPasswordInput
+          control={control}
+          name="password"
+          label="Password"
+          placeholder="* * * * *"
+        />
+
         <Button type="submit" className="w-full" loading={isPending}>
           Login
         </Button>

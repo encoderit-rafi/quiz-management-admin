@@ -9,12 +9,34 @@ import {
   Bold,
   Italic,
   Strikethrough,
-  Heading1,
-  Heading2,
-  Heading3,
+  TextType,
+  BulletList,
+  Columns,
+  CTAButton,
+  Link,
+  OrderedList,
+  HorizontalRule,
+  Image,
+  Table,
+  TaskList,
   Undo,
   Redo,
-} from "../base/tiptap";
+  HardBreak,
+  Underline,
+  Highlight,
+  // BubbleMenu,
+  FontFamily,
+  Color,
+  TextAlign,
+  Script,
+  Video,
+  Code,
+  CodeBlock,
+  // FontSize,
+} from "../tiptap";
+// ... existing imports ...
+
+// ... FormTiptap logic ...
 
 type TFormTiptapProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -24,6 +46,7 @@ type TFormTiptapProps<
   label?: string;
   description?: string;
   defaultValue?: string;
+  variant?: "simple" | "advance";
 };
 
 export const FormTiptap = <
@@ -36,6 +59,7 @@ export const FormTiptap = <
   label = "",
   description = "",
   defaultValue = "",
+  variant = "simple",
 }: TFormTiptapProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -59,20 +83,49 @@ export const FormTiptap = <
                 <div className="flex items-center gap-1 pr-2 mr-1">
                   <Bold />
                   <Italic />
+                  <Underline />
+                  <Highlight />
+                  <Link />
                   <Strikethrough />
+                  <HardBreak />
+                  <HorizontalRule />
                 </div>
 
                 <div className="flex items-center gap-1 pr-2 mr-1">
-                  <Heading1 />
-                  <Heading2 />
-                  <Heading3 />
+                  <TextType />
+                  <FontFamily />
+                  <Color />
+                  <TextAlign />
+                  <Script />
+                  <Code />
+                  <CodeBlock />
+                  {/* <FontSize /> */}
                 </div>
+
+                {variant === "advance" && (
+                  <>
+                    <div className="flex items-center gap-1 pr-2 mr-1">
+                      <BulletList />
+                      <OrderedList />
+                      <TaskList />
+                    </div>
+
+                    <div className="flex items-center gap-1 pr-2 mr-1">
+                      <Image />
+                      <Video />
+                      <Columns />
+                      <CTAButton />
+                      <Table />
+                    </div>
+                  </>
+                )}
 
                 <div className="flex items-center gap-1">
                   <Undo />
                   <Redo />
                 </div>
               </Toolbar>
+
               <Editor />
             </Tiptap>
             {Boolean(description) && !invalid && (

@@ -1,0 +1,56 @@
+import { z } from "zod";
+
+export const LeadResultSchema = z.object({
+  id: z.number(),
+  quiz_id: z.string(),
+  user_data: z.object({
+    name: z.string().nullable(),
+    email: z.string().nullable(),
+    phone: z.string().nullable(),
+    address: z.string().nullable(),
+  }),
+  total_score: z.number(),
+  result_page_id: z.string().nullable(),
+  share_link: z.string().nullable(),
+  ip_address: z.string().nullable(),
+  user_agent: z.string().nullable(),
+  started_at: z.string().nullable(),
+  completed_at: z.string().nullable(),
+  time_spent: z.string().nullable(),
+  quiz: z.object({
+    id: z.number(),
+    uuid: z.string(),
+    name: z.string(),
+    title: z.string().nullable(),
+    description: z.string().nullable(),
+    logo: z.string().nullable(),
+    background_image: z.string().nullable(),
+    primary_color: z.string().nullable(),
+    secondary_color: z.string().nullable(),
+  }),
+  resultPage: z
+    .object({
+      id: z.number(),
+      title: z.string(),
+      content: z.string().nullable(),
+      min_score: z.number().nullable(),
+      max_score: z.number().nullable(),
+    })
+    .nullable(),
+  answers: z.array(
+    z.object({
+      id: z.number(),
+      question_id: z.string(),
+      answer_id: z.string(),
+      points_earned: z.number(),
+      question: z.object({
+        id: z.number(),
+        question_text: z.string(),
+        image: z.string().nullable(),
+        multiselect: z.boolean(),
+      }),
+    }),
+  ),
+});
+
+export type TLeadResultSchema = z.infer<typeof LeadResultSchema>;

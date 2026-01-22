@@ -1,37 +1,58 @@
 import { cn } from "@/utils";
-import { Input } from "../ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "../ui/input-group";
+
 type TProps = {
   props?: {
-    div: React.ComponentProps<"div">;
-    input: React.ComponentProps<typeof Input>;
-    button: React.ComponentProps<"button">;
+    div?: React.ComponentProps<"div">;
+    input?: React.ComponentProps<"input">;
+    button?: React.ComponentProps<"button">;
   };
+  onSearch?: () => void;
+  onClear?: () => void;
 };
-export default function AppSearch({ props }: TProps) {
+
+export default function AppSearch({ props, onSearch, onClear }: TProps) {
+  const hasValue = props?.input?.value && String(props.input.value).length > 0;
+
   return (
-    <div
-      {...props?.div}
-      className={cn("flex rounded-md shadow-xs", props?.div.className)}
-    >
-      <Input
+    <InputGroup className={cn("w-full max-w-sm", props?.div?.className)}>
+      <InputGroupInput
         placeholder="Search..."
         {...props?.input}
-        className={cn(
-          "-me-px flex-1 rounded-e-none shadow-none focus-visible:z-10",
-          props?.input.className
-        )}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onSearch?.();
+          }
+          props?.input?.onKeyDown?.(e);
+        }}
       />
-      <button
-        aria-label="Search"
-        {...props?.button}
-        className={cn(
-          "inline-flex w-9 items-center justify-center rounded-e-md border border-input bg-background text-sm text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:bg-accent hover:text-accent-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-          props?.button.className
-        )}
-      >
-        <Search size={16} aria-hidden="true" />
-      </button>
-    </div>
+      {hasValue && (
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
+            size="icon-xs"
+            onClick={onClear}
+            aria-label="Clear search"
+          >
+            <X size={14} />
+          </InputGroupButton>
+        </InputGroupAddon>
+      )}
+      <InputGroupAddon align="inline-end">
+        <InputGroupButton
+          size="icon-xs"
+          onClick={onSearch}
+          aria-label="Search"
+          {...props?.button}
+        >
+          <Search size={14} />
+        </InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
   );
 }

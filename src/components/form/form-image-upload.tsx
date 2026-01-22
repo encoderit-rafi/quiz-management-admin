@@ -7,7 +7,7 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Button } from "../ui/button";
 import type { TFormController } from "@/types"; // adjust path
 import { ImagePreview } from "./image-preview";
-import { cn } from "@/utils";
+import { cn, getImageUrl } from "@/utils";
 
 type TFormImageUploadProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -43,7 +43,7 @@ export const FormImageUpload = <
             setPreviewUrl(url);
             return () => URL.revokeObjectURL(url);
           } else if (typeof value === "string") {
-            setPreviewUrl(value);
+            setPreviewUrl(getImageUrl(value));
           } else {
             setPreviewUrl(null);
           }
@@ -59,7 +59,6 @@ export const FormImageUpload = <
                   "flex flex-col gap-4 items-center justify-center text-muted-foreground w-full h-full aspect-video rounded-md cursor-pointer hover:bg-accent/50 transition-colors overflow-hidden",
                   {
                     "border-dashed border": !previewUrl,
-                    // "border": previewUrl,
                   }
                 )}
               >
@@ -78,13 +77,11 @@ export const FormImageUpload = <
                     <ImagePreview src={previewUrl} alt={`${label} preview`} />
                     <Button
                       type="button"
-                      variant="destructive"
+                      // variant="destructive"
                       size="icon"
-                      className="absolute top-2 right-2 rounded-full size-6
-                    "
+                      className="absolute bg-red-500/80 text-white hover:bg-red-500 top-2 right-2 rounded-full size-6 transition-colors"
                       onClick={() => onChange(null)}
                     >
-                      {/* <X className="h-4 w-4" /> */}
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -99,9 +96,6 @@ export const FormImageUpload = <
               </label>
             </div>
 
-            {/* {Boolean(description) && !invalid && (
-              <FieldDescription>{description}</FieldDescription>
-            )} */}
             {invalid && <FieldError errors={[error]} />}
           </Field>
         );

@@ -57,7 +57,9 @@ export const FormColorPicker = <
               />
             </div>
             {Boolean(description) && !invalid && (
-              <FieldDescription>{description}</FieldDescription>
+              <FieldDescription className="text-sm font-light">
+                {description}
+              </FieldDescription>
             )}
             {invalid && <FieldError errors={[error]} />}
           </Field>

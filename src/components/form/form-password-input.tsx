@@ -2,7 +2,6 @@ import { Controller } from "react-hook-form";
 import type { FieldPath, FieldValues } from "react-hook-form";
 
 import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
-// import type { HTMLInputTypeAttribute } from "react";
 
 import type { TFormController } from "../../types"; // adjust path
 import { PasswordInput } from "../ui/password-input";
@@ -39,11 +38,10 @@ export const FormPasswordInput = <
           <Field data-invalid={invalid}>
             {Boolean(label) && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
             <PasswordInput
-              {...field}
-              type="password"
-              placeholder={placeholder}
               id={name}
               aria-invalid={invalid}
+              placeholder={placeholder}
+              {...field}
             />
             {Boolean(description) && !invalid && (
               <FieldDescription>{description}</FieldDescription>

@@ -11,13 +11,23 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthResetPasswordIndexRouteImport } from './routes/_auth/reset-password/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as AuthForgotPasswordIndexRouteImport } from './routes/_auth/forgot-password/index'
-import { Route as AppQuizzesIndexRouteImport } from './routes/_app/_quizzes/index'
-import { Route as AppQuizzesQuizzesCreateIndexRouteImport } from './routes/_app/_quizzes/quizzes/create/index'
-import { Route as AppQuizzesQuizzesViewIdRouteImport } from './routes/_app/_quizzes/quizzes/view/$id'
-import { Route as AppQuizzesQuizzesEditIdRouteImport } from './routes/_app/_quizzes/quizzes/edit/$id'
+import { Route as AppQuizzesCreateIndexRouteImport } from './routes/_app/quizzes/create/index'
+import { Route as AppQuizzesIdViewIndexRouteImport } from './routes/_app/quizzes/$id/view/index'
+import { Route as AppQuizzesIdStatisticsIndexRouteImport } from './routes/_app/quizzes/$id/statistics/index'
+import { Route as AppQuizzesIdSettingsIndexRouteImport } from './routes/_app/quizzes/$id/settings/index'
+import { Route as AppQuizzesIdResultPagesIndexRouteImport } from './routes/_app/quizzes/$id/result-pages/index'
+import { Route as AppQuizzesIdQuestionsIndexRouteImport } from './routes/_app/quizzes/$id/questions/index'
+import { Route as AppQuizzesIdLeadsIndexRouteImport } from './routes/_app/quizzes/$id/leads/index'
+import { Route as AppQuizzesIdEditIndexRouteImport } from './routes/_app/quizzes/$id/edit/index'
+import { Route as AppQuizzesIdResultPagesCreateIndexRouteImport } from './routes/_app/quizzes/$id/result-pages/create/index'
+import { Route as AppQuizzesIdQuestionsCreateIndexRouteImport } from './routes/_app/quizzes/$id/questions/create/index'
+import { Route as AppQuizzesIdResultPagesViewResultIDRouteImport } from './routes/_app/quizzes/$id/result-pages/view/$resultID'
+import { Route as AppQuizzesIdResultPagesEditResultIDRouteImport } from './routes/_app/quizzes/$id/result-pages/edit/$resultID'
+import { Route as AppQuizzesIdQuestionsQuestionIDEditIndexRouteImport } from './routes/_app/quizzes/$id/questions/$questionID/edit/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
@@ -26,6 +36,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AuthResetPasswordIndexRoute = AuthResetPasswordIndexRouteImport.update({
   id: '/reset-password/',
@@ -42,57 +57,140 @@ const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexRouteImport.update({
   path: '/forgot-password/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AppQuizzesIndexRoute = AppQuizzesIndexRouteImport.update({
-  id: '/_quizzes/',
-  path: '/',
+const AppQuizzesCreateIndexRoute = AppQuizzesCreateIndexRouteImport.update({
+  id: '/quizzes/create/',
+  path: '/quizzes/create/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppQuizzesQuizzesCreateIndexRoute =
-  AppQuizzesQuizzesCreateIndexRouteImport.update({
-    id: '/_quizzes/quizzes/create/',
-    path: '/quizzes/create/',
+const AppQuizzesIdViewIndexRoute = AppQuizzesIdViewIndexRouteImport.update({
+  id: '/quizzes/$id/view/',
+  path: '/quizzes/$id/view/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppQuizzesIdStatisticsIndexRoute =
+  AppQuizzesIdStatisticsIndexRouteImport.update({
+    id: '/quizzes/$id/statistics/',
+    path: '/quizzes/$id/statistics/',
     getParentRoute: () => AppRouteRoute,
   } as any)
-const AppQuizzesQuizzesViewIdRoute = AppQuizzesQuizzesViewIdRouteImport.update({
-  id: '/_quizzes/quizzes/view/$id',
-  path: '/quizzes/view/$id',
+const AppQuizzesIdSettingsIndexRoute =
+  AppQuizzesIdSettingsIndexRouteImport.update({
+    id: '/quizzes/$id/settings/',
+    path: '/quizzes/$id/settings/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdResultPagesIndexRoute =
+  AppQuizzesIdResultPagesIndexRouteImport.update({
+    id: '/quizzes/$id/result-pages/',
+    path: '/quizzes/$id/result-pages/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdQuestionsIndexRoute =
+  AppQuizzesIdQuestionsIndexRouteImport.update({
+    id: '/quizzes/$id/questions/',
+    path: '/quizzes/$id/questions/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdLeadsIndexRoute = AppQuizzesIdLeadsIndexRouteImport.update({
+  id: '/quizzes/$id/leads/',
+  path: '/quizzes/$id/leads/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppQuizzesQuizzesEditIdRoute = AppQuizzesQuizzesEditIdRouteImport.update({
-  id: '/_quizzes/quizzes/edit/$id',
-  path: '/quizzes/edit/$id',
+const AppQuizzesIdEditIndexRoute = AppQuizzesIdEditIndexRouteImport.update({
+  id: '/quizzes/$id/edit/',
+  path: '/quizzes/$id/edit/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppQuizzesIdResultPagesCreateIndexRoute =
+  AppQuizzesIdResultPagesCreateIndexRouteImport.update({
+    id: '/quizzes/$id/result-pages/create/',
+    path: '/quizzes/$id/result-pages/create/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdQuestionsCreateIndexRoute =
+  AppQuizzesIdQuestionsCreateIndexRouteImport.update({
+    id: '/quizzes/$id/questions/create/',
+    path: '/quizzes/$id/questions/create/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdResultPagesViewResultIDRoute =
+  AppQuizzesIdResultPagesViewResultIDRouteImport.update({
+    id: '/quizzes/$id/result-pages/view/$resultID',
+    path: '/quizzes/$id/result-pages/view/$resultID',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdResultPagesEditResultIDRoute =
+  AppQuizzesIdResultPagesEditResultIDRouteImport.update({
+    id: '/quizzes/$id/result-pages/edit/$resultID',
+    path: '/quizzes/$id/result-pages/edit/$resultID',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppQuizzesIdQuestionsQuestionIDEditIndexRoute =
+  AppQuizzesIdQuestionsQuestionIDEditIndexRouteImport.update({
+    id: '/quizzes/$id/questions/$questionID/edit/',
+    path: '/quizzes/$id/questions/$questionID/edit/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AppQuizzesIndexRoute
+  '/': typeof AppIndexRoute
   '/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/login': typeof AuthLoginIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
-  '/quizzes/edit/$id': typeof AppQuizzesQuizzesEditIdRoute
-  '/quizzes/view/$id': typeof AppQuizzesQuizzesViewIdRoute
-  '/quizzes/create': typeof AppQuizzesQuizzesCreateIndexRoute
+  '/quizzes/create': typeof AppQuizzesCreateIndexRoute
+  '/quizzes/$id/edit': typeof AppQuizzesIdEditIndexRoute
+  '/quizzes/$id/leads': typeof AppQuizzesIdLeadsIndexRoute
+  '/quizzes/$id/questions': typeof AppQuizzesIdQuestionsIndexRoute
+  '/quizzes/$id/result-pages': typeof AppQuizzesIdResultPagesIndexRoute
+  '/quizzes/$id/settings': typeof AppQuizzesIdSettingsIndexRoute
+  '/quizzes/$id/statistics': typeof AppQuizzesIdStatisticsIndexRoute
+  '/quizzes/$id/view': typeof AppQuizzesIdViewIndexRoute
+  '/quizzes/$id/result-pages/edit/$resultID': typeof AppQuizzesIdResultPagesEditResultIDRoute
+  '/quizzes/$id/result-pages/view/$resultID': typeof AppQuizzesIdResultPagesViewResultIDRoute
+  '/quizzes/$id/questions/create': typeof AppQuizzesIdQuestionsCreateIndexRoute
+  '/quizzes/$id/result-pages/create': typeof AppQuizzesIdResultPagesCreateIndexRoute
+  '/quizzes/$id/questions/$questionID/edit': typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AppQuizzesIndexRoute
+  '/': typeof AppIndexRoute
   '/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/login': typeof AuthLoginIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
-  '/quizzes/edit/$id': typeof AppQuizzesQuizzesEditIdRoute
-  '/quizzes/view/$id': typeof AppQuizzesQuizzesViewIdRoute
-  '/quizzes/create': typeof AppQuizzesQuizzesCreateIndexRoute
+  '/quizzes/create': typeof AppQuizzesCreateIndexRoute
+  '/quizzes/$id/edit': typeof AppQuizzesIdEditIndexRoute
+  '/quizzes/$id/leads': typeof AppQuizzesIdLeadsIndexRoute
+  '/quizzes/$id/questions': typeof AppQuizzesIdQuestionsIndexRoute
+  '/quizzes/$id/result-pages': typeof AppQuizzesIdResultPagesIndexRoute
+  '/quizzes/$id/settings': typeof AppQuizzesIdSettingsIndexRoute
+  '/quizzes/$id/statistics': typeof AppQuizzesIdStatisticsIndexRoute
+  '/quizzes/$id/view': typeof AppQuizzesIdViewIndexRoute
+  '/quizzes/$id/result-pages/edit/$resultID': typeof AppQuizzesIdResultPagesEditResultIDRoute
+  '/quizzes/$id/result-pages/view/$resultID': typeof AppQuizzesIdResultPagesViewResultIDRoute
+  '/quizzes/$id/questions/create': typeof AppQuizzesIdQuestionsCreateIndexRoute
+  '/quizzes/$id/result-pages/create': typeof AppQuizzesIdResultPagesCreateIndexRoute
+  '/quizzes/$id/questions/$questionID/edit': typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_app/_quizzes/': typeof AppQuizzesIndexRoute
+  '/_app/': typeof AppIndexRoute
   '/_auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/reset-password/': typeof AuthResetPasswordIndexRoute
-  '/_app/_quizzes/quizzes/edit/$id': typeof AppQuizzesQuizzesEditIdRoute
-  '/_app/_quizzes/quizzes/view/$id': typeof AppQuizzesQuizzesViewIdRoute
-  '/_app/_quizzes/quizzes/create/': typeof AppQuizzesQuizzesCreateIndexRoute
+  '/_app/quizzes/create/': typeof AppQuizzesCreateIndexRoute
+  '/_app/quizzes/$id/edit/': typeof AppQuizzesIdEditIndexRoute
+  '/_app/quizzes/$id/leads/': typeof AppQuizzesIdLeadsIndexRoute
+  '/_app/quizzes/$id/questions/': typeof AppQuizzesIdQuestionsIndexRoute
+  '/_app/quizzes/$id/result-pages/': typeof AppQuizzesIdResultPagesIndexRoute
+  '/_app/quizzes/$id/settings/': typeof AppQuizzesIdSettingsIndexRoute
+  '/_app/quizzes/$id/statistics/': typeof AppQuizzesIdStatisticsIndexRoute
+  '/_app/quizzes/$id/view/': typeof AppQuizzesIdViewIndexRoute
+  '/_app/quizzes/$id/result-pages/edit/$resultID': typeof AppQuizzesIdResultPagesEditResultIDRoute
+  '/_app/quizzes/$id/result-pages/view/$resultID': typeof AppQuizzesIdResultPagesViewResultIDRoute
+  '/_app/quizzes/$id/questions/create/': typeof AppQuizzesIdQuestionsCreateIndexRoute
+  '/_app/quizzes/$id/result-pages/create/': typeof AppQuizzesIdResultPagesCreateIndexRoute
+  '/_app/quizzes/$id/questions/$questionID/edit/': typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,29 +199,59 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/reset-password'
-    | '/quizzes/edit/$id'
-    | '/quizzes/view/$id'
     | '/quizzes/create'
+    | '/quizzes/$id/edit'
+    | '/quizzes/$id/leads'
+    | '/quizzes/$id/questions'
+    | '/quizzes/$id/result-pages'
+    | '/quizzes/$id/settings'
+    | '/quizzes/$id/statistics'
+    | '/quizzes/$id/view'
+    | '/quizzes/$id/result-pages/edit/$resultID'
+    | '/quizzes/$id/result-pages/view/$resultID'
+    | '/quizzes/$id/questions/create'
+    | '/quizzes/$id/result-pages/create'
+    | '/quizzes/$id/questions/$questionID/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
-    | '/quizzes/edit/$id'
-    | '/quizzes/view/$id'
     | '/quizzes/create'
+    | '/quizzes/$id/edit'
+    | '/quizzes/$id/leads'
+    | '/quizzes/$id/questions'
+    | '/quizzes/$id/result-pages'
+    | '/quizzes/$id/settings'
+    | '/quizzes/$id/statistics'
+    | '/quizzes/$id/view'
+    | '/quizzes/$id/result-pages/edit/$resultID'
+    | '/quizzes/$id/result-pages/view/$resultID'
+    | '/quizzes/$id/questions/create'
+    | '/quizzes/$id/result-pages/create'
+    | '/quizzes/$id/questions/$questionID/edit'
   id:
     | '__root__'
     | '/_app'
     | '/_auth'
-    | '/_app/_quizzes/'
+    | '/_app/'
     | '/_auth/forgot-password/'
     | '/_auth/login/'
     | '/_auth/reset-password/'
-    | '/_app/_quizzes/quizzes/edit/$id'
-    | '/_app/_quizzes/quizzes/view/$id'
-    | '/_app/_quizzes/quizzes/create/'
+    | '/_app/quizzes/create/'
+    | '/_app/quizzes/$id/edit/'
+    | '/_app/quizzes/$id/leads/'
+    | '/_app/quizzes/$id/questions/'
+    | '/_app/quizzes/$id/result-pages/'
+    | '/_app/quizzes/$id/settings/'
+    | '/_app/quizzes/$id/statistics/'
+    | '/_app/quizzes/$id/view/'
+    | '/_app/quizzes/$id/result-pages/edit/$resultID'
+    | '/_app/quizzes/$id/result-pages/view/$resultID'
+    | '/_app/quizzes/$id/questions/create/'
+    | '/_app/quizzes/$id/result-pages/create/'
+    | '/_app/quizzes/$id/questions/$questionID/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -147,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_auth/reset-password/': {
       id: '/_auth/reset-password/'
       path: '/reset-password'
@@ -168,49 +303,136 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_app/_quizzes/': {
-      id: '/_app/_quizzes/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AppQuizzesIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/_app/_quizzes/quizzes/create/': {
-      id: '/_app/_quizzes/quizzes/create/'
+    '/_app/quizzes/create/': {
+      id: '/_app/quizzes/create/'
       path: '/quizzes/create'
       fullPath: '/quizzes/create'
-      preLoaderRoute: typeof AppQuizzesQuizzesCreateIndexRouteImport
+      preLoaderRoute: typeof AppQuizzesCreateIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/_quizzes/quizzes/view/$id': {
-      id: '/_app/_quizzes/quizzes/view/$id'
-      path: '/quizzes/view/$id'
-      fullPath: '/quizzes/view/$id'
-      preLoaderRoute: typeof AppQuizzesQuizzesViewIdRouteImport
+    '/_app/quizzes/$id/view/': {
+      id: '/_app/quizzes/$id/view/'
+      path: '/quizzes/$id/view'
+      fullPath: '/quizzes/$id/view'
+      preLoaderRoute: typeof AppQuizzesIdViewIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/_quizzes/quizzes/edit/$id': {
-      id: '/_app/_quizzes/quizzes/edit/$id'
-      path: '/quizzes/edit/$id'
-      fullPath: '/quizzes/edit/$id'
-      preLoaderRoute: typeof AppQuizzesQuizzesEditIdRouteImport
+    '/_app/quizzes/$id/statistics/': {
+      id: '/_app/quizzes/$id/statistics/'
+      path: '/quizzes/$id/statistics'
+      fullPath: '/quizzes/$id/statistics'
+      preLoaderRoute: typeof AppQuizzesIdStatisticsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/settings/': {
+      id: '/_app/quizzes/$id/settings/'
+      path: '/quizzes/$id/settings'
+      fullPath: '/quizzes/$id/settings'
+      preLoaderRoute: typeof AppQuizzesIdSettingsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/result-pages/': {
+      id: '/_app/quizzes/$id/result-pages/'
+      path: '/quizzes/$id/result-pages'
+      fullPath: '/quizzes/$id/result-pages'
+      preLoaderRoute: typeof AppQuizzesIdResultPagesIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/questions/': {
+      id: '/_app/quizzes/$id/questions/'
+      path: '/quizzes/$id/questions'
+      fullPath: '/quizzes/$id/questions'
+      preLoaderRoute: typeof AppQuizzesIdQuestionsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/leads/': {
+      id: '/_app/quizzes/$id/leads/'
+      path: '/quizzes/$id/leads'
+      fullPath: '/quizzes/$id/leads'
+      preLoaderRoute: typeof AppQuizzesIdLeadsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/edit/': {
+      id: '/_app/quizzes/$id/edit/'
+      path: '/quizzes/$id/edit'
+      fullPath: '/quizzes/$id/edit'
+      preLoaderRoute: typeof AppQuizzesIdEditIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/result-pages/create/': {
+      id: '/_app/quizzes/$id/result-pages/create/'
+      path: '/quizzes/$id/result-pages/create'
+      fullPath: '/quizzes/$id/result-pages/create'
+      preLoaderRoute: typeof AppQuizzesIdResultPagesCreateIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/questions/create/': {
+      id: '/_app/quizzes/$id/questions/create/'
+      path: '/quizzes/$id/questions/create'
+      fullPath: '/quizzes/$id/questions/create'
+      preLoaderRoute: typeof AppQuizzesIdQuestionsCreateIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/result-pages/view/$resultID': {
+      id: '/_app/quizzes/$id/result-pages/view/$resultID'
+      path: '/quizzes/$id/result-pages/view/$resultID'
+      fullPath: '/quizzes/$id/result-pages/view/$resultID'
+      preLoaderRoute: typeof AppQuizzesIdResultPagesViewResultIDRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/result-pages/edit/$resultID': {
+      id: '/_app/quizzes/$id/result-pages/edit/$resultID'
+      path: '/quizzes/$id/result-pages/edit/$resultID'
+      fullPath: '/quizzes/$id/result-pages/edit/$resultID'
+      preLoaderRoute: typeof AppQuizzesIdResultPagesEditResultIDRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/quizzes/$id/questions/$questionID/edit/': {
+      id: '/_app/quizzes/$id/questions/$questionID/edit/'
+      path: '/quizzes/$id/questions/$questionID/edit'
+      fullPath: '/quizzes/$id/questions/$questionID/edit'
+      preLoaderRoute: typeof AppQuizzesIdQuestionsQuestionIDEditIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
 }
 
 interface AppRouteRouteChildren {
-  AppQuizzesIndexRoute: typeof AppQuizzesIndexRoute
-  AppQuizzesQuizzesEditIdRoute: typeof AppQuizzesQuizzesEditIdRoute
-  AppQuizzesQuizzesViewIdRoute: typeof AppQuizzesQuizzesViewIdRoute
-  AppQuizzesQuizzesCreateIndexRoute: typeof AppQuizzesQuizzesCreateIndexRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppQuizzesCreateIndexRoute: typeof AppQuizzesCreateIndexRoute
+  AppQuizzesIdEditIndexRoute: typeof AppQuizzesIdEditIndexRoute
+  AppQuizzesIdLeadsIndexRoute: typeof AppQuizzesIdLeadsIndexRoute
+  AppQuizzesIdQuestionsIndexRoute: typeof AppQuizzesIdQuestionsIndexRoute
+  AppQuizzesIdResultPagesIndexRoute: typeof AppQuizzesIdResultPagesIndexRoute
+  AppQuizzesIdSettingsIndexRoute: typeof AppQuizzesIdSettingsIndexRoute
+  AppQuizzesIdStatisticsIndexRoute: typeof AppQuizzesIdStatisticsIndexRoute
+  AppQuizzesIdViewIndexRoute: typeof AppQuizzesIdViewIndexRoute
+  AppQuizzesIdResultPagesEditResultIDRoute: typeof AppQuizzesIdResultPagesEditResultIDRoute
+  AppQuizzesIdResultPagesViewResultIDRoute: typeof AppQuizzesIdResultPagesViewResultIDRoute
+  AppQuizzesIdQuestionsCreateIndexRoute: typeof AppQuizzesIdQuestionsCreateIndexRoute
+  AppQuizzesIdResultPagesCreateIndexRoute: typeof AppQuizzesIdResultPagesCreateIndexRoute
+  AppQuizzesIdQuestionsQuestionIDEditIndexRoute: typeof AppQuizzesIdQuestionsQuestionIDEditIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppQuizzesIndexRoute: AppQuizzesIndexRoute,
-  AppQuizzesQuizzesEditIdRoute: AppQuizzesQuizzesEditIdRoute,
-  AppQuizzesQuizzesViewIdRoute: AppQuizzesQuizzesViewIdRoute,
-  AppQuizzesQuizzesCreateIndexRoute: AppQuizzesQuizzesCreateIndexRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppQuizzesCreateIndexRoute: AppQuizzesCreateIndexRoute,
+  AppQuizzesIdEditIndexRoute: AppQuizzesIdEditIndexRoute,
+  AppQuizzesIdLeadsIndexRoute: AppQuizzesIdLeadsIndexRoute,
+  AppQuizzesIdQuestionsIndexRoute: AppQuizzesIdQuestionsIndexRoute,
+  AppQuizzesIdResultPagesIndexRoute: AppQuizzesIdResultPagesIndexRoute,
+  AppQuizzesIdSettingsIndexRoute: AppQuizzesIdSettingsIndexRoute,
+  AppQuizzesIdStatisticsIndexRoute: AppQuizzesIdStatisticsIndexRoute,
+  AppQuizzesIdViewIndexRoute: AppQuizzesIdViewIndexRoute,
+  AppQuizzesIdResultPagesEditResultIDRoute:
+    AppQuizzesIdResultPagesEditResultIDRoute,
+  AppQuizzesIdResultPagesViewResultIDRoute:
+    AppQuizzesIdResultPagesViewResultIDRoute,
+  AppQuizzesIdQuestionsCreateIndexRoute: AppQuizzesIdQuestionsCreateIndexRoute,
+  AppQuizzesIdResultPagesCreateIndexRoute:
+    AppQuizzesIdResultPagesCreateIndexRoute,
+  AppQuizzesIdQuestionsQuestionIDEditIndexRoute:
+    AppQuizzesIdQuestionsQuestionIDEditIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

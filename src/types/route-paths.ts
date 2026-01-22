@@ -1,12 +1,12 @@
 import type { router } from "@/main";
 import type { LucideIcon } from "lucide-react";
 
-export type TPtah = keyof typeof router.routesByPath;
+export type TPath = keyof typeof router.routesByPath;
 export type TRoute = {
   name: string;
-  url: TPtah;
+  url: TPath;
   icon: LucideIcon;
-  isActive: boolean;
+  // isActive: boolean;
   isVisible: boolean;
-  children?: TRoute[];
+  // children?: TRoute[];
 };

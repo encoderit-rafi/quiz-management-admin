@@ -1,6 +1,6 @@
-import type { TForm } from "@/types";
+import type { TFormState } from "@/types";
 
-export const FORM_DATA: TForm = {
+export const FORM_DATA: TFormState = {
   type: "default",
   title: "",
   description: "",

@@ -1,7 +1,8 @@
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 
+export type TFormType = "default" | "create" | "read" | "update" | "delete";
 export type TFormState = {
-  type: "default" | "create" | "read" | "update" | "delete";
+  type: TFormType;
   title: string;
   description: string;
   id: string | number;

@@ -60,7 +60,7 @@ export default function AppThemeToggle() {
     <DropdownMenu>
       {/* The button users click to open the dropdown */}
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Toggle theme">
+        <Button variant="outline" size="icon" aria-label="Toggle theme">
           {/* Sun icon for light mode */}
           <Sun className=" scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
           {/* Moon icon for dark mode */}
