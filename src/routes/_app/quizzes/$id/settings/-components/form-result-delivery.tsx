@@ -38,6 +38,10 @@ export default function FormResultDelivery({ quizId }: TProps) {
 
   useEffect(() => {
     if (settings) {
+      console.log(
+        "👉 ~ FormResultDelivery ~ settings:",
+        settings.result_page_position,
+      );
       reset({
         id: settings.id || "",
         quiz_id: quizId,

@@ -59,10 +59,10 @@ export default function FormQuiz({ form_data }: TProps) {
   const onSubmit = (data: TFormQuizSchema) => {
     if (type === "update") {
       updateQuiz(data, {
-        onSuccess: () => {
-          navigate({ to: "/quizzes/$id/view", params: { id: String(id) } });
-          reset(DEFAULT_QUIZ_DATA);
-        },
+        // onSuccess: () => {
+        //   navigate({ to: "/quizzes/$id/view", params: { id: String(id) } });
+        //   reset(DEFAULT_QUIZ_DATA);
+        // },
       });
     } else {
       createQuiz(data, {
