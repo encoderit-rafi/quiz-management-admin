@@ -116,7 +116,11 @@ export default function NavUser() {
               "bg-muted": path === "settings",
             })}
           >
-            <Link to="/quizzes/$id/settings" params={{ id }}>
+            <Link
+              to="/quizzes/$id/settings"
+              params={{ id }}
+              search={{ tab: "lead-form" }}
+            >
               <Settings />
               Settings
             </Link>

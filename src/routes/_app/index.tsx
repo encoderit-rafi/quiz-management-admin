@@ -178,7 +178,11 @@ export default function RouteComponent() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
-                <Link to="/quizzes/$id/settings" params={{ id: quizId }}>
+                <Link
+                  to="/quizzes/$id/settings"
+                  params={{ id: quizId }}
+                  search={{ tab: "lead-form" }}
+                >
                   <Settings />
                   Settings
                 </Link>
