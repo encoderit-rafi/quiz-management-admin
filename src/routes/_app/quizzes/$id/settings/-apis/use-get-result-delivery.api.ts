@@ -11,5 +11,7 @@ export const useGetResultDelivery = (quizId: string | number) => {
       return res.data?.data as TResultDeliveryResponse;
     },
     enabled: !!quizId,
+    refetchOnMount: true,
+    // refetchOnWindowFocus: true,
   });
 };

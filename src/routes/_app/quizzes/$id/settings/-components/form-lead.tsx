@@ -24,7 +24,11 @@ type TProps = {
 };
 
 export default function FormLead({ quizId }: TProps) {
-  const { data: settings, isLoading } = useQuery(useGetLeadSettings(quizId));
+  const {
+    data: settings,
+    isLoading,
+    isFetching,
+  } = useQuery(useGetLeadSettings(quizId));
   const { mutate: updateSettings, isPending } = useUpdateLeadSettings(quizId);
 
   const form = useForm<TFormLeadSchema>({
@@ -67,13 +71,13 @@ export default function FormLead({ quizId }: TProps) {
         fields,
       });
     }
-  }, [settings, reset, quizId]);
+  }, [settings, isLoading, isFetching, reset, quizId]);
 
   const onSubmit = (data: TFormLeadSchema) => {
     updateSettings(data);
   };
-
-  if (isLoading) return <AppLoading />;
+  const loading = isLoading || isFetching;
+  if (loading) return <AppLoading />;
 
   return (
     <div className="space-y-6">

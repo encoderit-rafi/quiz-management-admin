@@ -20,7 +20,11 @@ type TProps = {
 };
 
 export default function FormResultDelivery({ quizId }: TProps) {
-  const { data: settings, isLoading } = useQuery(useGetResultDelivery(quizId));
+  const {
+    data: settings,
+    isLoading,
+    isFetching,
+  } = useQuery(useGetResultDelivery(quizId));
   const { mutate: updateSettings, isPending } = useUpdateResultDelivery(quizId);
 
   const form = useForm<TFormResultDeliverySchema>({
@@ -51,13 +55,13 @@ export default function FormResultDelivery({ quizId }: TProps) {
         result_page_position: settings.result_page_position || "after",
       });
     }
-  }, [settings, reset, quizId]);
+  }, [settings, isLoading, isFetching, reset, quizId]);
 
   const onSubmit = (data: TFormResultDeliverySchema) => {
     updateSettings(data);
   };
-
-  if (isLoading) return <AppLoading />;
+  const loading = isLoading || isFetching;
+  if (loading) return <AppLoading />;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-5xl">

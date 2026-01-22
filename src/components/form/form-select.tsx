@@ -17,7 +17,6 @@ type TFormSelectProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
   TTransformedValues = TFieldValues,
 > = TFormController<TFieldValues, TName, TTransformedValues> & {
-  disabled?: boolean;
   label?: string;
   description?: string;
   placeholder?: string;
@@ -31,7 +30,6 @@ export const FormSelect = <
 >({
   name,
   control,
-  disabled = false,
   label = "",
   description = "",
   placeholder = "Select an option",
@@ -42,7 +40,8 @@ export const FormSelect = <
       control={control}
       name={name}
       render={({ field, fieldState }) => {
-        const { value, onChange, name: fieldName } = field;
+        const { onChange, name: fieldName } = field;
+        console.log("👉 ~ FormSelect ~ field:", field);
         const { invalid, error } = fieldState;
         return (
           <Field data-invalid={invalid}>
@@ -52,7 +51,7 @@ export const FormSelect = <
             {Boolean(description) && (
               <FieldDescription>{description}</FieldDescription>
             )}
-            <Select value={value} onValueChange={onChange} disabled={disabled}>
+            <Select {...field} onValueChange={onChange}>
               <SelectTrigger id={fieldName} aria-invalid={invalid}>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
