@@ -35,7 +35,13 @@ export const Image = () => {
         const res = await uploadImage.mutateAsync(file);
         const url = res?.url || res?.data?.url || res; // Flexible check for URL
         if (url && typeof url === "string") {
-          editor.chain().focus().setImage({ src: url }).run();
+          editor
+            .chain()
+            .focus()
+            .setImage({ src: url })
+            .createParagraphNear()
+            .focus("end")
+            .run();
         } else {
           console.error("No URL found in upload response:", res);
         }

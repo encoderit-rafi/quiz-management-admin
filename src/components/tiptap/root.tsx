@@ -66,7 +66,7 @@ export const Tiptap = ({
       }),
       HardBreak,
       ResizableImageExtension.configure({
-        inline: true,
+        inline: false,
         allowBase64: true,
       }),
       Table.configure({
@@ -137,7 +137,7 @@ export const Tiptap = ({
       <div
         className={cn(
           "border rounded-md transition-[color,box-shadow] outline-none focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
-          className
+          className,
         )}
       >
         {children}
