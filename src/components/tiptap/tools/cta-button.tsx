@@ -14,7 +14,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTiptap } from "../context";
-import { cn } from "@/utils";
 
 export const CTAButton = () => {
   const { editor } = useTiptap();

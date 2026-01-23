@@ -18,7 +18,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/utils";
 
 export const Columns = () => {
   const { editor } = useTiptap();
