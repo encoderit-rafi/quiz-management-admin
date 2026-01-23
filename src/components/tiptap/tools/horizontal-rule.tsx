@@ -30,9 +30,8 @@ export const HorizontalRule = () => {
           variant="ghost"
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="cursor-pointer size-8 p-0"
         >
-          <MinusIcon className="size-4" />
+          <MinusIcon />
         </Button>
       </TooltipTrigger>
       <TooltipContent>Horizontal Rule</TooltipContent>

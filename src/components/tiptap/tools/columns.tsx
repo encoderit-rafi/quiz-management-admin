@@ -18,6 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/utils";
 
 export const Columns = () => {
   const { editor } = useTiptap();
@@ -38,11 +39,14 @@ export const Columns = () => {
           <DropdownMenuTrigger asChild>
             <Button
               type="button"
-              variant={state.isActive ? "secondary" : "ghost"}
+              variant="ghost"
               size="sm"
-              className="size-8 p-0 cursor-pointer"
+              // className={cn("size-8 p-0 cursor-pointer", {
+              //   "bg-muted text-accent-foreground": state.isActive,
+              // })}
+              className="text-muted-foreground hover:text-accent-foreground"
             >
-              <ColumnsIcon className="size-4" />
+              <ColumnsIcon />
             </Button>
           </DropdownMenuTrigger>
         </TooltipTrigger>

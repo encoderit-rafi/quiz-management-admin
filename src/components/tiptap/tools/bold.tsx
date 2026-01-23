@@ -32,7 +32,7 @@ export const Bold = () => {
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <BoldIcon className="size-4" />

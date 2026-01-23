@@ -32,7 +32,7 @@ export const Italic = () => {
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <ItalicIcon className="size-4" />

@@ -36,7 +36,7 @@ export const Heading2 = () => {
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <Heading2Icon className="size-4" />

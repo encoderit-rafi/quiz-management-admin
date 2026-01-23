@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTiptap } from "../context";
+import { cn } from "@/utils";
 
 export const CTAButton = () => {
   const { editor } = useTiptap();
@@ -35,7 +36,7 @@ export const CTAButton = () => {
         setUrl(attrs.url || "");
       }
     },
-    [editor]
+    [editor],
   );
 
   const insertCTA = useCallback(() => {
@@ -52,11 +53,11 @@ export const CTAButton = () => {
           <PopoverTrigger asChild>
             <Button
               type="button"
-              variant={state.isActive ? "secondary" : "ghost"}
+              variant="ghost"
               size="sm"
-              className="size-8 p-0 cursor-pointer"
+              className="text-muted-foreground hover:text-accent-foreground"
             >
-              <MousePointer2Icon className="size-4" />
+              <MousePointer2Icon />
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>

@@ -39,7 +39,7 @@ export const Link = () => {
         setUrl("");
       }
     },
-    [state?.currentUrl]
+    [state?.currentUrl],
   );
 
   const setLink = useCallback(() => {
@@ -71,12 +71,9 @@ export const Link = () => {
             onClick={() =>
               editor.chain().focus().extendMarkRange("link").unsetLink().run()
             }
-            className={cn(
-              "cursor-pointer text-muted-foreground hover:text-destructive",
-              {
-                "bg-muted": state.isActive,
-              }
-            )}
+            className={cn("cursor-pointer text-muted-foreground", {
+              "bg-muted text-accent-foreground": state.isActive,
+            })}
           >
             <UnlinkIcon className="size-4" />
           </Toggle>
@@ -92,9 +89,11 @@ export const Link = () => {
           <PopoverTrigger asChild>
             <Button
               type="button"
-              variant={state.isActive ? "secondary" : "ghost"}
+              variant="ghost"
               size="sm"
-              className="size-8 p-0 cursor-pointer"
+              className={cn("size-8 p-0 cursor-pointer text-muted-foreground", {
+                "bg-muted text-accent-foreground": state.isActive,
+              })}
               disabled={!state.canDo && !state.isActive}
             >
               <LinkIcon className="size-4" />

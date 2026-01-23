@@ -33,7 +33,9 @@ export const FontSize = () => {
   return (
     <Select value={state} onValueChange={handleChange}>
       <SelectTrigger
-        className={cn("h-8 w-20 bg-transparent border-none shadow-none px-2")}
+        className={cn(
+          "h-8 w-20 bg-transparent border-none shadow-none px-2 cursor-pointer",
+        )}
       >
         <SelectValue placeholder="Size" />
       </SelectTrigger>

@@ -15,7 +15,7 @@ export const ClearFormatting = () => {
     <Button
       variant="ghost"
       size="sm"
-      className="h-8 w-8 p-0"
+      className="size-8 p-0 cursor-pointer"
       onClick={clear}
       title="Clear Formatting"
     >

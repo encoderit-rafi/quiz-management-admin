@@ -32,7 +32,7 @@ export const Code = () => {
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <CodeIcon className="size-4" />

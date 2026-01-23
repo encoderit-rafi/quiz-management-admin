@@ -28,7 +28,7 @@ export const HardBreak = () => {
           size="sm"
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().setHardBreak().run()}
-          className="cursor-pointer"
+          className="cursor-pointer size-8 p-0"
         >
           <CornerDownLeft className="size-4" />
         </Toggle>

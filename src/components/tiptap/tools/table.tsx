@@ -56,9 +56,9 @@ export const Table = () => {
               aria-label="Table options"
               size="sm"
               variant="ghost"
-              className="cursor-pointer size-8 p-0"
+              className="text-muted-foreground hover:text-accent-foreground"
             >
-              <TableIcon className="size-4" />
+              <TableIcon />
             </Button>
           </DropdownMenuTrigger>
         </TooltipTrigger>

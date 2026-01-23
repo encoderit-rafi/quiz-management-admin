@@ -64,9 +64,9 @@ export const Image = () => {
             variant="ghost"
             disabled={!state.canDo}
             onClick={addImage}
-            className="cursor-pointer size-8 p-0"
+            className="text-muted-foreground hover:text-accent-foreground"
           >
-            <ImageIcon className="size-4" />
+            <ImageIcon />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Insert Image</TooltipContent>

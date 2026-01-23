@@ -32,7 +32,7 @@ export const Underline = () => {
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <UnderlineIcon className="size-4" />

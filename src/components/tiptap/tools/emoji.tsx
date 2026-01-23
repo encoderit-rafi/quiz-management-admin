@@ -25,7 +25,7 @@ export const Emoji = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0"
+          className="size-8 p-0 cursor-pointer"
           title="Insert Emoji"
         >
           <SmileIcon className="size-4" />

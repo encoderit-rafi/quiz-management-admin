@@ -22,7 +22,9 @@ export const Script = () => {
         size="sm"
         pressed={state.sub}
         onClick={() => editor.chain().focus().toggleSubscript().run()}
-        className={cn("h-8 w-8 p-0", { "bg-muted": state.sub })}
+        className={cn("h-8 w-8 p-0 cursor-pointer", {
+          "bg-muted text-accent-foreground": state.sub,
+        })}
         aria-label="Subscript"
       >
         <SubscriptIcon className="size-4" />
@@ -31,7 +33,9 @@ export const Script = () => {
         size="sm"
         pressed={state.super}
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
-        className={cn("h-8 w-8 p-0", { "bg-muted": state.super })}
+        className={cn("h-8 w-8 p-0 cursor-pointer", {
+          "bg-muted text-accent-foreground": state.super,
+        })}
         aria-label="Superscript"
       >
         <SuperscriptIcon className="size-4" />

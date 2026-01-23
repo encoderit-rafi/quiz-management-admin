@@ -52,9 +52,9 @@ export const TextType = () => {
   return (
     <Select value={state} onValueChange={handleChange}>
       <SelectTrigger
-        className={cn("h-8 w-32 bg-transparent border-none shadow-none px-2", {
-          "text-muted-foreground": false,
-        })}
+        className={cn(
+          "h-8 w-32 bg-transparent border-none shadow-none px-2 cursor-pointer",
+        )}
       >
         <SelectValue placeholder="Text Type" />
       </SelectTrigger>

@@ -24,12 +24,14 @@ export const TextAlign = () => {
   if (!editor || !state) return null;
 
   return (
-    <div className="flex items-center gap-0.5 border rounded-md p-0.5 bg-background">
+    <div className="flex items-center gap-0.5 ">
       <Toggle
         size="sm"
         pressed={state.left}
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
-        className={cn("h-7 w-7 p-0", { "bg-muted": state.left })}
+        className={cn("h-7 w-7 p-0 cursor-pointer", {
+          "bg-muted text-accent-foreground": state.left,
+        })}
         aria-label="Align left"
       >
         <AlignLeftIcon className="size-3.5" />
@@ -38,7 +40,9 @@ export const TextAlign = () => {
         size="sm"
         pressed={state.center}
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
-        className={cn("h-7 w-7 p-0", { "bg-muted": state.center })}
+        className={cn("h-7 w-7 p-0 cursor-pointer", {
+          "bg-muted text-accent-foreground": state.center,
+        })}
         aria-label="Align center"
       >
         <AlignCenterIcon className="size-3.5" />
@@ -47,7 +51,9 @@ export const TextAlign = () => {
         size="sm"
         pressed={state.right}
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
-        className={cn("h-7 w-7 p-0", { "bg-muted": state.right })}
+        className={cn("h-7 w-7 p-0 cursor-pointer", {
+          "bg-muted text-accent-foreground": state.right,
+        })}
         aria-label="Align right"
       >
         <AlignRightIcon className="size-3.5" />
@@ -56,7 +62,9 @@ export const TextAlign = () => {
         size="sm"
         pressed={state.justify}
         onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-        className={cn("h-7 w-7 p-0", { "bg-muted": state.justify })}
+        className={cn("h-7 w-7 p-0 cursor-pointer", {
+          "bg-muted text-accent-foreground": state.justify,
+        })}
         aria-label="Align justify"
       >
         <AlignJustifyIcon className="size-3.5" />

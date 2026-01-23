@@ -33,7 +33,7 @@ export const BulletList = () => {
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <ListIcon className="size-4" />

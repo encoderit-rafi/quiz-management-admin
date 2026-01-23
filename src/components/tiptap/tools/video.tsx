@@ -30,10 +30,10 @@ export const Video = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0"
+          className="text-muted-foreground hover:text-accent-foreground"
           title="Insert Video"
         >
-          <YoutubeIcon className="size-4" />
+          <YoutubeIcon />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-3">

@@ -32,7 +32,7 @@ export const Strikethrough = () => {
           disabled={!state.canDo}
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={cn("cursor-pointer", {
-            "bg-muted text-muted-foreground": state.isActive,
+            "bg-muted text-accent-foreground": state.isActive,
           })}
         >
           <StrikethroughIcon className="size-4" />

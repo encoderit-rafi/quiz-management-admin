@@ -18,7 +18,9 @@ export const Blockquote = () => {
       size="sm"
       pressed={!!state}
       onClick={() => editor.chain().focus().toggleBlockquote().run()}
-      className={cn("h-8 w-8 p-0", { "bg-muted": state })}
+      className={cn("h-8 w-8 p-0 cursor-pointer", {
+        "bg-muted text-accent-foreground": state,
+      })}
       aria-label="Blockquote"
     >
       <QuoteIcon className="size-4" />
