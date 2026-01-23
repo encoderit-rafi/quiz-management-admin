@@ -8,10 +8,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useRef } from "react";
+import { useUploadImage } from "@/api/use-upload-image";
+import { Loader2 } from "lucide-react";
 
 export const Image = () => {
   const { editor } = useTiptap();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const uploadImage = useUploadImage();
 
   const state = useEditorState({
     editor,
@@ -23,17 +26,22 @@ export const Image = () => {
 
   if (!editor || !state) return null;
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const src = e.target?.result as string;
-        if (src) {
-          editor.chain().focus().setImage({ src }).run();
+      try {
+        const res = await uploadImage.mutateAsync(file);
+        const url = res?.url || res?.data?.url || res; // Flexible check for URL
+        if (url && typeof url === "string") {
+          editor.chain().focus().setImage({ src: url }).run();
+        } else {
+          console.error("No URL found in upload response:", res);
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error("Upload failed:", error);
+      }
     }
     // Reset input
     if (fileInputRef.current) {
@@ -62,11 +70,15 @@ export const Image = () => {
             aria-label="Insert image"
             size="sm"
             variant="ghost"
-            disabled={!state.canDo}
+            disabled={!state.canDo || uploadImage.isPending}
             onClick={addImage}
             className="text-muted-foreground hover:text-accent-foreground"
           >
-            <ImageIcon />
+            {uploadImage.isPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <ImageIcon />
+            )}
           </Button>
         </TooltipTrigger>
         <TooltipContent>Insert Image</TooltipContent>
