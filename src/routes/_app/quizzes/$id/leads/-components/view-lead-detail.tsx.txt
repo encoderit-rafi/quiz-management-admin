@@ -21,15 +21,19 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { TLeadResultSchema } from "../-types";
 import { format } from "date-fns";
+import { useGetLeadByID } from "../-apis";
+import { useQuery } from "@tanstack/react-query";
+import AppLoading from "@/components/base/app-loading";
 
 interface ViewLeadDetailProps {
-  lead: TLeadResultSchema;
+  id: string | number;
 }
 
-export const ViewLeadDetail = ({ lead }: ViewLeadDetailProps) => {
-  const { user_data, quiz, answers, total_score, completed_at, started_at } =
-    lead;
-
+export const ViewLeadDetail = ({ id }: ViewLeadDetailProps) => {
+  // const { user_data, quiz, answers, total_score, completed_at, started_at } =
+  //   lead;
+  const { data: lead, isLoading } = useQuery(useGetLeadByID(id));
+  console.log("👉 ~ ViewLeadDetail ~ lead:", lead);
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "N/A";
     try {
@@ -39,23 +43,12 @@ export const ViewLeadDetail = ({ lead }: ViewLeadDetailProps) => {
     }
   };
 
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Eye className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl font-bold">
-            <User className="h-5 w-5 text-primary" />
-            Lead Submission Details
-          </DialogTitle>
-        </DialogHeader>
+  if (isLoading) {
+    return <AppLoading />;
+  }
 
-        <div className="space-y-6 pt-4">
-          {/* User Information Section */}
+  return {
+    /* <div className="space-y-6 pt-4">
           <section className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -123,7 +116,7 @@ export const ViewLeadDetail = ({ lead }: ViewLeadDetailProps) => {
 
           <Separator />
 
-          {/* Quiz Section */}
+      
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
@@ -145,7 +138,6 @@ export const ViewLeadDetail = ({ lead }: ViewLeadDetailProps) => {
 
           <Separator />
 
-          {/* Answers Section */}
           <section className="space-y-4">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
               Response Details
@@ -179,8 +171,6 @@ export const ViewLeadDetail = ({ lead }: ViewLeadDetailProps) => {
               ))}
             </div>
           </section>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+        </div> */
+  };
 };

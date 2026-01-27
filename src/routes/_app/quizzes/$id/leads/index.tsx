@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Download } from "lucide-react";
+import { Download, Eye, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGetLeads, useExportLeads } from "./-apis";
 import type { TLeadResultSchema } from "./-types";
@@ -14,9 +14,17 @@ import AppButtonText from "@/components/base/app-button-text";
 import AppLoading from "@/components/base/app-loading";
 
 import { format } from "date-fns";
-import { ViewLeadDetail } from "./-components";
+// import { ViewLeadDetail } from "./-components";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { LeadCard } from "./-components";
 
 export const Route = createFileRoute("/_app/quizzes/$id/leads/")({
   component: LeadsListPage,
@@ -27,7 +35,8 @@ function LeadsListPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
-  // const [searchValue, setSearchValue] = useState(search.search || "");
+
+  const [leadID, setLeadID] = useState<string | number | null>(null);
 
   const { data: response = { data: [], meta: { total: 0 } }, isLoading } =
     useQuery(
@@ -79,35 +88,22 @@ function LeadsListPage() {
     {
       header: "Actions",
       id: "actions",
-      cell: ({ row }) => <ViewLeadDetail lead={row.original} />,
+      // cell: ({ row }) => <ViewLeadDetail id={row.original.id} />,
+      cell: ({ row }) => (
+        <Button
+          onClick={() => setLeadID(row.original.id)}
+          size={"icon"}
+          variant={"ghost"}
+        >
+          <Eye />
+        </Button>
+      ),
     },
   ];
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-end gap-4">
-        {/* <AppSearch
-          onSearch={() => {
-            navigate({
-              search: { ...search, search: searchValue, page: 1 },
-              replace: true,
-            });
-          }}
-          onClear={() => {
-            setSearchValue("");
-            navigate({
-              search: { ...search, search: "", page: 1 },
-              replace: true,
-            });
-          }}
-          props={{
-            input: {
-              placeholder: "Search by email...",
-              value: searchValue,
-              onChange: (e) => setSearchValue(e.target.value),
-            },
-          }}
-        /> */}
         <Button
           onClick={exportLeads}
           variant={"outline"}
@@ -144,6 +140,17 @@ function LeadsListPage() {
           }
         />
       </div>
+      <Dialog open={leadID !== null} onOpenChange={() => setLeadID(null)}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl font-bold">
+              <User className="h-5 w-5 text-primary" />
+              Lead Submission Details
+            </DialogTitle>
+          </DialogHeader>
+          <LeadCard id={leadID || ""} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
