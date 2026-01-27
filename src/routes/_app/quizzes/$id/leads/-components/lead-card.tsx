@@ -1,14 +1,10 @@
-import { Card } from "@/components/ui/card";
 import {
-  CheckCircle,
   FileQuestion,
-  Trophy,
   User,
   Phone,
   MapPin,
   Calendar,
   Clock,
-  BarChart,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useGetLeadByID } from "../-apis";
@@ -37,7 +33,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
     total_score,
     completed_at,
     started_at,
-    ip_address,
+    // ip_address,
   } = lead;
 
   const formatDate = (dateString: string | null) => {
