@@ -141,7 +141,7 @@ function LeadsListPage() {
         />
       </div>
       <Dialog open={leadID !== null} onOpenChange={() => setLeadID(null)}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto max-w-4xl!">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl font-bold">
               <User className="h-5 w-5 text-primary" />
