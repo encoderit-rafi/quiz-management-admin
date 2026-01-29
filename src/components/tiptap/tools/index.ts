@@ -32,3 +32,4 @@ export * from "./font-size";
 export * from "./blockquote";
 export * from "./clear-formatting";
 export * from "./emoji";
+export * from "./html-view";

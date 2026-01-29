@@ -3,6 +3,8 @@ import { Editor } from "@tiptap/react";
 
 type TiptapContextProps = {
   editor: Editor | null;
+  isHtmlView: boolean;
+  setIsHtmlView: (value: boolean) => void;
 };
 
 export const TiptapContext = createContext<TiptapContextProps | null>(null);
