@@ -7,7 +7,7 @@ import AppButtonText from "@/components/base/app-button-text";
 import AppLoading from "@/components/base/app-loading";
 
 export const Route = createFileRoute(
-  "/_app/quizzes/$id/result-pages/view/$resultID"
+  "/_app/quizzes/$id/result-pages/view/$resultID",
 )({
   component: ViewResultPage,
 });
@@ -46,7 +46,7 @@ function ViewResultPage() {
           <AppLoading />
         ) : (
           <div className="grid gap-6">
-            <section className="space-y-4">
+            {/* <section className="space-y-4">
               <h3 className="text-lg font-semibold border-b pb-2">
                 General Information
               </h3>
@@ -64,10 +64,10 @@ function ViewResultPage() {
                   </div>
                 </div>
               </div>
-            </section>
+            </section> */}
 
             <section className="space-y-4">
-              <h3 className="text-lg font-semibold border-b pb-2">Content</h3>
+              {/* <h3 className="text-lg font-semibold border-b pb-2">Content</h3> */}
               <div
                 className="prose prose-sm max-w-none dark:prose-invert"
                 dangerouslySetInnerHTML={{ __html: resultPage?.content || "" }}
