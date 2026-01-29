@@ -1,4 +1,5 @@
 import { CardContent } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 import {
   Accordion,
@@ -18,6 +19,7 @@ type TProps = {
 };
 
 export default function CardQuiz({ form_data }: TProps) {
+  const { t } = useTranslation();
   const { data: quiz, isLoading } = useQuery(useGetQuiz(form_data.id));
 
   if (isLoading) {
@@ -27,7 +29,7 @@ export default function CardQuiz({ form_data }: TProps) {
   if (!quiz) {
     return (
       <CardContent className="py-20 text-center text-muted-foreground">
-        No quiz data found.
+        {t("common.noDataFound")}
       </CardContent>
     );
   }
@@ -38,51 +40,67 @@ export default function CardQuiz({ form_data }: TProps) {
         <section className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <div className="text-sm font-medium">Name</div>
+              <div className="text-sm font-medium">
+                {t("quizzes.details.name")}
+              </div>
               <div className="text-sm text-muted-foreground">
-                {quiz.name || "N/A"}
+                {quiz.name || t("leads.notAvailable")}
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium">Title</div>
+              <div className="text-sm font-medium">
+                {t("quizzes.details.title")}
+              </div>
               <div className="text-sm text-muted-foreground">
-                {quiz.title || "N/A"}
+                {quiz.title || t("leads.notAvailable")}
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium">Heading</div>
+              <div className="text-sm font-medium">
+                {t("quizzes.details.heading")}
+              </div>
               <div className="text-sm text-muted-foreground">
-                {quiz.heading || "N/A"}
+                {quiz.heading || t("leads.notAvailable")}
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium">CTA Text</div>
+              <div className="text-sm font-medium">
+                {t("quizzes.details.ctaText")}
+              </div>
               <div className="text-sm text-muted-foreground">
-                {quiz.cta_text || "N/A"}
+                {quiz.cta_text || t("leads.notAvailable")}
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium">Submit Button Text</div>
+              <div className="text-sm font-medium">
+                {t("quizzes.details.submitButtonText")}
+              </div>
               <div className="text-sm text-muted-foreground">
-                {quiz?.submit_button_text || "N/A"}
+                {quiz?.submit_button_text || t("leads.notAvailable")}
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium">Result Button Text</div>
+              <div className="text-sm font-medium">
+                {t("quizzes.details.resultButtonText")}
+              </div>
               <div className="text-sm text-muted-foreground">
-                {quiz?.result_button_text || "N/A"}
+                {quiz?.result_button_text || t("leads.notAvailable")}
               </div>
             </div>
           </div>
           <div>
-            <div className="text-sm font-medium">Description</div>
+            <div className="text-sm font-medium">
+              {t("quizzes.tableDescription")}
+            </div>
             <div
               className="text-sm text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: quiz.description || "" }}
             />
           </div>
           <div>
-            <div className="text-sm font-medium">Footer Text</div>
+            <div className="text-sm font-medium">
+              {t("quizzes.details.footerText")}
+            </div>
             <div
               className="text-sm text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: quiz.landing_page_text || "" }}
@@ -91,10 +109,14 @@ export default function CardQuiz({ form_data }: TProps) {
         </section>
 
         <section className="space-y-4">
-          <h3 className="text-lg font-semibold border-b pb-2">Design</h3>
+          <h3 className="text-lg font-semibold border-b pb-2">
+            {t("quizzes.details.design")}
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <div className="text-sm font-medium mb-2">Logo</div>
+              <div className="text-sm font-medium mb-2">
+                {t("quizzes.details.logo")}
+              </div>
               {quiz.logo ? (
                 <img
                   src={getImageUrl(quiz.logo)}
@@ -103,12 +125,16 @@ export default function CardQuiz({ form_data }: TProps) {
                 />
               ) : (
                 <div className="w-full h-32 bg-muted rounded-md flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">No Logo</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("quizzes.details.noLogo")}
+                  </span>
                 </div>
               )}
             </div>
             <div>
-              <div className="text-sm font-medium mb-2">Background</div>
+              <div className="text-sm font-medium mb-2">
+                {t("quizzes.details.background")}
+              </div>
               {quiz.background_image ? (
                 <img
                   src={getImageUrl(quiz.background_image)}
@@ -118,7 +144,7 @@ export default function CardQuiz({ form_data }: TProps) {
               ) : (
                 <div className="w-full h-32 bg-muted rounded-md flex items-center justify-center">
                   <span className="text-xs text-muted-foreground">
-                    No Background
+                    {t("quizzes.details.noBackground")}
                   </span>
                 </div>
               )}
@@ -126,7 +152,9 @@ export default function CardQuiz({ form_data }: TProps) {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm font-medium mb-2">Primary Color</div>
+              <div className="text-sm font-medium mb-2">
+                {t("quizzes.details.primaryColor")}
+              </div>
               <div className="flex items-center gap-2">
                 <div
                   className="w-10 h-10 rounded-md border"
@@ -136,7 +164,9 @@ export default function CardQuiz({ form_data }: TProps) {
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium mb-2">Secondary Color</div>
+              <div className="text-sm font-medium mb-2">
+                {t("quizzes.details.secondaryColor")}
+              </div>
               <div className="flex items-center gap-2">
                 <div
                   className="w-10 h-10 rounded-md border"
@@ -150,9 +180,9 @@ export default function CardQuiz({ form_data }: TProps) {
 
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b pb-2">
-            <h3 className="text-lg font-semibold">Questions</h3>
+            <h3 className="text-lg font-semibold">{t("quizzes.questions")}</h3>
             <Badge variant="outline">
-              {quiz.questions?.length || 0} Questions
+              {quiz.questions?.length || 0} {t("quizzes.questions")}
             </Badge>
           </div>
 
@@ -179,7 +209,7 @@ export default function CardQuiz({ form_data }: TProps) {
                       )}
                       <div className="space-y-2">
                         <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          Answers & Points
+                          {t("quizzes.details.answersAndPoints")}
                         </div>
                         <div className="grid gap-2">
                           {question.answers?.map(
@@ -195,7 +225,7 @@ export default function CardQuiz({ form_data }: TProps) {
                                   variant="secondary"
                                   className="font-mono"
                                 >
-                                  {answer.points} pts
+                                  {answer.points} {t("quizzes.points")}
                                 </Badge>
                               </div>
                             ),
@@ -209,16 +239,18 @@ export default function CardQuiz({ form_data }: TProps) {
             </Accordion>
           ) : (
             <div className="text-center py-8 text-muted-foreground border rounded-lg border-dashed">
-              No questions added yet.
+              {t("quizzes.details.noQuestions")}
             </div>
           )}
         </section>
 
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b pb-2">
-            <h3 className="text-lg font-semibold">Result Pages</h3>
+            <h3 className="text-lg font-semibold">
+              {t("quizzes.resultPages")}
+            </h3>
             <Badge variant="outline">
-              {quiz.resultPages?.length || 0} Pages
+              {quiz.resultPages?.length || 0} {t("quizzes.pages")}
             </Badge>
           </div>
 
@@ -231,7 +263,8 @@ export default function CardQuiz({ form_data }: TProps) {
                       <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs">
                         {index + 1}
                       </span>
-                      {page.title} ({page.min_score} - {page.max_score} pts)
+                      {page.title} ({page.min_score} - {page.max_score}{" "}
+                      {t("quizzes.points")})
                     </span>
                   </AccordionTrigger>
                   <AccordionContent>
@@ -247,17 +280,21 @@ export default function CardQuiz({ form_data }: TProps) {
             </Accordion>
           ) : (
             <div className="text-center py-8 text-muted-foreground border rounded-lg border-dashed">
-              No result pages added yet.
+              {t("quizzes.details.noResultPages")}
             </div>
           )}
         </section>
 
         {(quiz.leadFormSetting || quiz.resultDeliverySetting) && (
           <section className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">Settings</h3>
+            <h3 className="text-lg font-semibold border-b pb-2">
+              {t("common.settings")}
+            </h3>
             {quiz.leadFormSetting && (
               <div className="space-y-2">
-                <div className="text-sm font-medium">Lead Form Fields</div>
+                <div className="text-sm font-medium">
+                  {t("quizzes.details.leadFormFields")}
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {quiz.leadFormSetting.fields
                     .filter((field: any) => field.enabled)
@@ -272,7 +309,9 @@ export default function CardQuiz({ form_data }: TProps) {
             {quiz.resultDeliverySetting && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <div className="text-sm font-medium">Email Result</div>
+                  <div className="text-sm font-medium">
+                    {t("quizzes.details.emailResult")}
+                  </div>
                   <Badge
                     variant={
                       quiz.resultDeliverySetting.enable_email_result
@@ -281,12 +320,14 @@ export default function CardQuiz({ form_data }: TProps) {
                     }
                   >
                     {quiz.resultDeliverySetting.enable_email_result
-                      ? "Enabled"
-                      : "Disabled"}
+                      ? t("common.enabled")
+                      : t("common.disabled")}
                   </Badge>
                 </div>
                 <div>
-                  <div className="text-sm font-medium">PDF Download</div>
+                  <div className="text-sm font-medium">
+                    {t("quizzes.details.pdfDownload")}
+                  </div>
                   <Badge
                     variant={
                       quiz.resultDeliverySetting.enable_pdf_download
@@ -295,12 +336,14 @@ export default function CardQuiz({ form_data }: TProps) {
                     }
                   >
                     {quiz.resultDeliverySetting.enable_pdf_download
-                      ? "Enabled"
-                      : "Disabled"}
+                      ? t("common.enabled")
+                      : t("common.disabled")}
                   </Badge>
                 </div>
                 <div>
-                  <div className="text-sm font-medium">Link Share</div>
+                  <div className="text-sm font-medium">
+                    {t("quizzes.details.linkShare")}
+                  </div>
                   <Badge
                     variant={
                       quiz.resultDeliverySetting.enable_link_share
@@ -309,8 +352,8 @@ export default function CardQuiz({ form_data }: TProps) {
                     }
                   >
                     {quiz.resultDeliverySetting.enable_link_share
-                      ? "Enabled"
-                      : "Disabled"}
+                      ? t("common.enabled")
+                      : t("common.disabled")}
                   </Badge>
                 </div>
               </div>

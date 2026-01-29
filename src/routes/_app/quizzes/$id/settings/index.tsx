@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormLead, FormResultDelivery } from "./-components";
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/_app/quizzes/$id/settings/")({
 });
 
 function QuizSettingsPage() {
+  const { t } = useTranslation();
   const navigate = Route.useNavigate();
   const { id } = Route.useParams();
   const { tab } = Route.useSearch();
@@ -28,8 +30,12 @@ function QuizSettingsPage() {
         }}
       >
         <TabsList className="w-fit">
-          <TabsTrigger value="lead-form">Lead Form</TabsTrigger>
-          <TabsTrigger value="result-delivery">Result Delivery</TabsTrigger>
+          <TabsTrigger value="lead-form">
+            {t("quizzes.settings.leadForm")}
+          </TabsTrigger>
+          <TabsTrigger value="result-delivery">
+            {t("quizzes.settings.resultDelivery")}
+          </TabsTrigger>
         </TabsList>
         <div className="flex-1 overflow-y-auto mt-6">
           <TabsContent value="lead-form">

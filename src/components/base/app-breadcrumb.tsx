@@ -10,8 +10,10 @@ import {
 import { DEFAULT_PAGINATION } from "@/consts";
 import { AudioWaveform } from "lucide-react";
 import { useActiveQuiz } from "@/store";
+import { useTranslation } from "react-i18next";
 
 export default function AppBreadcrumb() {
+  const { t } = useTranslation();
   const { activeQuiz } = useActiveQuiz();
   const { quiz } = activeQuiz;
   return (
@@ -25,7 +27,7 @@ export default function AppBreadcrumb() {
               className="flex items-center gap-2"
             >
               <AudioWaveform />
-              Quiz Management
+              {t("common.appTitle")}
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>

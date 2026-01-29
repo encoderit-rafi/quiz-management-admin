@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   PenSquare,
   Trash2,
@@ -55,6 +56,7 @@ export const Route = createFileRoute("/_app/")({
 // Demo data (fallback)
 
 export default function RouteComponent() {
+  const { t } = useTranslation();
   const { setActiveQuiz } = useActiveQuiz();
   useEffect(() => {
     setActiveQuiz({ quiz: { id: "", name: "" } });
@@ -97,15 +99,15 @@ export default function RouteComponent() {
   // Column definitions
   const columns: ColumnDef<TQuizSchema>[] = [
     {
-      header: "Quiz Name",
+      header: t("quizzes.tableName"),
       accessorKey: "name",
     },
     {
-      header: "Title",
+      header: t("quizzes.tableTitle"),
       accessorKey: "title",
     },
     {
-      header: "Description",
+      header: t("quizzes.tableDescription"),
       accessorKey: "description",
       cell: ({ row }) => {
         const description = row.getValue("description") as string;
@@ -117,11 +119,11 @@ export default function RouteComponent() {
       },
     },
     {
-      header: "Views",
+      header: t("quizzes.tableViews"),
       accessorKey: "views",
     },
     {
-      header: "URL",
+      header: t("quizzes.tableUrl"),
       accessorKey: "uuid",
       cell: ({ row }) => {
         const data = row.getValue("uuid") as string;
@@ -144,7 +146,7 @@ export default function RouteComponent() {
     },
 
     {
-      header: "Tools",
+      header: t("quizzes.tableTools"),
       accessorKey: "tools",
       cell: ({ row }) => {
         const quiz = row.original;
@@ -162,19 +164,19 @@ export default function RouteComponent() {
               >
                 <div className="flex items-center gap-2">
                   <Code2 />
-                  Embed
+                  {t("common.embed")}
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/view" params={{ id: quizId }}>
                   <Eye />
-                  View
+                  {t("common.view")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/edit" params={{ id: quizId }}>
                   <PenSquare />
-                  Edit
+                  {t("common.edit")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
@@ -184,7 +186,7 @@ export default function RouteComponent() {
                   search={{ tab: "lead-form" }}
                 >
                   <Settings />
-                  Settings
+                  {t("common.settings")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
@@ -194,7 +196,7 @@ export default function RouteComponent() {
                   search={DEFAULT_PAGINATION}
                 >
                   <FileQuestionMark />
-                  Questions
+                  {t("quizzes.questions")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
@@ -204,7 +206,7 @@ export default function RouteComponent() {
                   search={DEFAULT_PAGINATION}
                 >
                   <FileText />
-                  Result Pages
+                  {t("quizzes.resultPages")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
@@ -214,13 +216,13 @@ export default function RouteComponent() {
                   search={DEFAULT_PAGINATION}
                 >
                   <Users />
-                  Leads & Results
+                  {t("quizzes.leadsAndResults")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild onClick={() => setActiveQuiz({ quiz })}>
                 <Link to="/quizzes/$id/statistics" params={{ id: quizId }}>
                   <BarChart />
-                  Statistics
+                  {t("quizzes.statistics")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -235,7 +237,7 @@ export default function RouteComponent() {
                 }
               >
                 <Trash2 />
-                Delete
+                {t("common.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -264,7 +266,7 @@ export default function RouteComponent() {
           }}
           props={{
             input: {
-              placeholder: "Search quiz...",
+              placeholder: t("quizzes.searchPlaceholder"),
               value: searchValue,
               onChange: (e) => setSearchValue(e.target.value),
             },
@@ -273,7 +275,7 @@ export default function RouteComponent() {
         <Button asChild variant={"outline"}>
           <Link to="/quizzes/create" className="flex items-center">
             <Plus className="" />
-            <AppButtonText>Add Quiz</AppButtonText>
+            <AppButtonText>{t("quizzes.addQuiz")}</AppButtonText>
           </Link>
         </Button>
       </CardHeader>
@@ -320,10 +322,10 @@ export default function RouteComponent() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Code2 />
-              Embed Code
+              {t("quizzes.embedTitle")}
             </DialogTitle>
             <DialogDescription>
-              Copy the code below and paste it into your website.
+              {t("quizzes.embedDescription")}
             </DialogDescription>
           </DialogHeader>
           {embedLoading ? (

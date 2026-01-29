@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ type TProps = {
 };
 
 export default function FormQuiz({ form_data }: TProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const navigate = useNavigate();
   const { id, type } = form_data;
@@ -92,53 +94,53 @@ export default function FormQuiz({ form_data }: TProps) {
               <FormInput
                 name="name"
                 control={control}
-                label="Quiz Name"
-                placeholder="Enter quiz name"
+                label={t("quizzes.tableName")}
+                placeholder={t("quizzes.form.quizNamePlaceholder")}
               />
               <FormInput
                 name="title"
                 control={control}
-                label="Title"
-                placeholder="Enter quiz title"
+                label={t("quizzes.tableTitle")}
+                placeholder={t("quizzes.form.titlePlaceholder")}
               />
 
               <FormInput
                 name="heading"
                 control={control}
-                label="Heading"
-                placeholder="Enter heading"
+                label={t("quizzes.details.heading")}
+                placeholder={t("quizzes.form.headingPlaceholder")}
               />
 
               <FormInput
                 name="cta_text"
                 control={control}
-                label="CTA Text"
-                placeholder="Enter CTA text"
+                label={t("quizzes.details.ctaText")}
+                placeholder={t("quizzes.form.ctaTextPlaceholder")}
               />
               <FormInput
                 name="submit_button_text"
                 control={control}
-                label="Submit Button Text"
-                placeholder="Enter submit button text"
+                label={t("quizzes.details.submitButtonText")}
+                placeholder={t("quizzes.form.submitButtonTextPlaceholder")}
               />
               <FormInput
                 name="result_button_text"
                 control={control}
-                label="Result Button Text"
-                placeholder="Enter result button text"
+                label={t("quizzes.details.resultButtonText")}
+                placeholder={t("quizzes.form.resultButtonTextPlaceholder")}
               />
               <FormImageUpload
                 name="logo"
                 control={control}
-                label="Logo"
-                description="Upload logo here."
+                label={t("quizzes.details.logo")}
+                description={t("quizzes.form.logoDescription")}
               />
 
               <FormImageUpload
                 name="background_image"
                 control={control}
-                label="Background Image"
-                description="Upload background image here."
+                label={t("quizzes.details.background")}
+                description={t("quizzes.form.backgroundDescription")}
               />
             </div>
 
@@ -146,14 +148,14 @@ export default function FormQuiz({ form_data }: TProps) {
               <FormColorPicker
                 control={control}
                 name="primary_color"
-                label="Primary Color"
+                label={t("quizzes.details.primaryColor")}
                 placeholder="#3b82f6"
                 defaultColor="#3b82f6"
               />
               <FormColorPicker
                 name="secondary_color"
                 control={control}
-                label="Secondary Color"
+                label={t("quizzes.details.secondaryColor")}
                 placeholder="#8b5cf6"
                 defaultColor="#8b5cf6"
               />
@@ -161,14 +163,14 @@ export default function FormQuiz({ form_data }: TProps) {
             <FormTextarea
               name="description"
               control={control}
-              label="Description"
-              placeholder="Enter description"
+              label={t("quizzes.tableDescription")}
+              placeholder={t("quizzes.form.descriptionPlaceholder")}
             />
 
             <FormTiptap
               name="landing_page_text"
               control={control}
-              label="Footer Text"
+              label={t("quizzes.details.footerText")}
             />
           </div>
         )}
@@ -182,7 +184,7 @@ export default function FormQuiz({ form_data }: TProps) {
           disabled={isPendingCreate || isPendingUpdate}
           onClick={handelCancel}
         >
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button
           form="create-quiz-form"
@@ -190,7 +192,7 @@ export default function FormQuiz({ form_data }: TProps) {
           className="min-w-36"
           loading={isPendingCreate || isPendingUpdate}
         >
-          {type === "update" ? "Update" : "Create"}
+          {type === "update" ? t("common.update") : t("common.create")}
         </Button>
       </CardAction>
     </CardContent>

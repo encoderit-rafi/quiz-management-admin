@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { Plus, Trash2, MoreHorizontal, Eye, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent } from "@/components/ui/card";
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
 });
 
 export default function RouteComponent() {
+  const { t } = useTranslation();
   const { id } = Route.useParams();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
@@ -48,11 +50,11 @@ export default function RouteComponent() {
   // Column definitions
   const columns: ColumnDef<TResultPageSchema>[] = [
     {
-      header: "Title",
+      header: t("quizzes.tableTitle"),
       accessorKey: "title",
     },
     {
-      header: "Score Range",
+      header: t("quizzes.scoreRange"),
       accessorKey: "min_score",
       cell: ({ row }) =>
         `${row.original.min_score} - ${row.original.max_score}`,
@@ -75,7 +77,7 @@ export default function RouteComponent() {
                   to="/quizzes/$id/result-pages/view/$resultID"
                   params={{ id, resultID: String(page.id) }}
                 >
-                  <Eye /> View
+                  <Eye /> {t("common.view")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -83,14 +85,14 @@ export default function RouteComponent() {
                   to="/quizzes/$id/result-pages/edit/$resultID"
                   params={{ id, resultID: String(page.id) }}
                 >
-                  <PenSquare /> Edit
+                  <PenSquare /> {t("common.edit")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => setDeleteId(page.id!)} // Just setting ID for now
               >
-                <Trash2 /> Delete
+                <Trash2 /> {t("common.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -131,7 +133,7 @@ export default function RouteComponent() {
             className="flex items-center"
           >
             <Plus className="" />
-            <AppButtonText>Add Result Page</AppButtonText>
+            <AppButtonText>{t("quizzes.addResultPage")}</AppButtonText>
           </Link>
         </Button>
       </CardHeader>
@@ -164,7 +166,7 @@ export default function RouteComponent() {
       <AppDeleteDialog
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        item_name="Result Page"
+        item_name={t("quizzes.resultPage")}
         loading={deleteMutation.isPending}
         onConfirm={handleDelete}
       />

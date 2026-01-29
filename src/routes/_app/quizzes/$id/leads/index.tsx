@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Download, Eye, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/_app/quizzes/$id/leads/")({
 });
 
 function LeadsListPage() {
+  const { t } = useTranslation();
   const { id } = Route.useParams();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
@@ -54,39 +56,41 @@ function LeadsListPage() {
   // Column definitions
   const columns: ColumnDef<TLeadResultSchema>[] = [
     {
-      header: "Name",
+      header: t("leads.tableName"),
       accessorKey: "user_data.name",
-      cell: ({ row }) => row.original.user_data.name || "Anonymous",
+      cell: ({ row }) => row.original.user_data.name || t("leads.anonymous"),
     },
     {
-      header: "Email",
+      header: t("leads.tableEmail"),
       accessorKey: "user_data.email",
-      cell: ({ row }) => row.original.user_data.email || "N/A",
+      cell: ({ row }) =>
+        row.original.user_data.email || t("leads.notAvailable"),
     },
     {
-      header: "Score",
+      header: t("leads.tableScore"),
       accessorKey: "total_score",
       cell: ({ row }) => (
         <Badge variant="outline" className="font-mono">
-          {row.original.total_score} pts
+          {row.original.total_score} {t("quizzes.points")}
         </Badge>
       ),
     },
     {
-      header: "Result Page",
+      header: t("leads.tableResultPage"),
       accessorKey: "resultPage.title",
-      cell: ({ row }) => row.original.resultPage?.title || "N/A",
+      cell: ({ row }) =>
+        row.original.resultPage?.title || t("leads.notAvailable"),
     },
     {
-      header: "Date",
+      header: t("leads.tableDate"),
       accessorKey: "completed_at",
       cell: ({ row }) => {
-        if (!row.original.completed_at) return "N/A";
+        if (!row.original.completed_at) return t("leads.notAvailable");
         return format(new Date(row.original.completed_at), "PPP p");
       },
     },
     {
-      header: "Actions",
+      header: t("leads.tableActions"),
       id: "actions",
       // cell: ({ row }) => <ViewLeadDetail id={row.original.id} />,
       cell: ({ row }) => (
@@ -110,7 +114,7 @@ function LeadsListPage() {
           className="flex items-center"
         >
           <Download className="" />
-          <AppButtonText>Export CSV</AppButtonText>
+          <AppButtonText>{t("leads.exportCsv")}</AppButtonText>
         </Button>
       </CardHeader>
 
@@ -145,7 +149,7 @@ function LeadsListPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl font-bold">
               <User className="h-5 w-5 text-primary" />
-              Lead Submission Details
+              {t("leads.detailsTitle")}
             </DialogTitle>
           </DialogHeader>
           <LeadCard id={leadID || ""} />

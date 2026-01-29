@@ -22,6 +22,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
 import { cn } from "@/utils";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +35,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function NavUser() {
+  const { t } = useTranslation();
   const theme = localStorage.getItem("theme");
   const {
     activeQuiz: { quiz },
@@ -69,19 +71,21 @@ export default function NavUser() {
         <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>
+                {t("navigation.logoutConfirmation")}
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                You will be logged out of your account.
+                {t("navigation.logoutDescription")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={confirmLogout}
                 className="bg-destructive hover:bg-destructive/80 text-white"
               >
                 <LogOut />
-                Log out
+                {t("common.logout")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -107,7 +111,7 @@ export default function NavUser() {
           >
             <Link to="/quizzes/$id/edit" params={{ id }}>
               <Edit />
-              Edit Quiz
+              {t("navigation.editQuiz")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -122,7 +126,7 @@ export default function NavUser() {
               search={{ tab: "lead-form" }}
             >
               <Settings />
-              Settings
+              {t("common.settings")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -137,7 +141,7 @@ export default function NavUser() {
               search={DEFAULT_PAGINATION}
             >
               <FileQuestionMark />
-              Questions
+              {t("quizzes.questions")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -152,7 +156,7 @@ export default function NavUser() {
               search={DEFAULT_PAGINATION}
             >
               <FileText />
-              Result Pages
+              {t("quizzes.resultPages")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -167,7 +171,7 @@ export default function NavUser() {
               search={DEFAULT_PAGINATION}
             >
               <Users />
-              Leads & Results
+              {t("quizzes.leadsAndResults")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -178,7 +182,7 @@ export default function NavUser() {
           >
             <Link to="/quizzes/$id/statistics" params={{ id }}>
               <BarChart />
-              Statistics
+              {t("quizzes.statistics")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -187,7 +191,7 @@ export default function NavUser() {
             onClick={() => setShowLogoutDialog(true)}
           >
             <LogOut />
-            Log out
+            {t("common.logout")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -195,19 +199,21 @@ export default function NavUser() {
       <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t("navigation.logoutConfirmation")}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              You will be logged out of your account.
+              {t("navigation.logoutDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmLogout}
               className="bg-destructive hover:bg-destructive/80 text-white"
             >
               <LogOut />
-              Log out
+              {t("common.logout")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

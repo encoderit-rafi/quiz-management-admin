@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -51,13 +52,14 @@ export const Route = createFileRoute("/_app/quizzes/$id/questions/")({
 });
 
 function QuizQuestionsPage() {
+  const { t } = useTranslation();
   const { id } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const [searchValue, setSearchValue] = useState(search.search || "");
 
   const { data, isLoading, refetch } = useQuery(
-    useGetQuizQuestions(id, search)
+    useGetQuizQuestions(id, search),
   );
 
   const [localQuestions, setLocalQuestions] = useState<TQuizQuestion[]>([]);
@@ -137,7 +139,7 @@ function QuizQuestionsPage() {
         </button>
         <span className="text-sm flex-1">{option.answer_text}</span>
         <Badge variant="outline" className="font-mono text-xs">
-          {option.points} pts
+          {option.points} {t("quizzes.points")}
         </Badge>
       </div>
     );
@@ -173,8 +175,8 @@ function QuizQuestionsPage() {
       // Local update for immediate feedback
       setLocalQuestions((prev) =>
         prev.map((q) =>
-          q.id === question.id ? { ...q, answers: newAnswers } : q
-        )
+          q.id === question.id ? { ...q, answers: newAnswers } : q,
+        ),
       );
     };
 
@@ -210,7 +212,7 @@ function QuizQuestionsPage() {
 
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="mr-2">
-              {question.answers.length} Options
+              {question.answers.length} {t("quizzes.options")}
             </Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -225,7 +227,7 @@ function QuizQuestionsPage() {
                     params={{ id, questionID: String(question.id) }}
                   >
                     <PenSquare className="mr-2 h-4 w-4" />
-                    Edit
+                    {t("common.edit")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -238,7 +240,7 @@ function QuizQuestionsPage() {
                     });
                   }}
                 >
-                  <Trash2 className="mr-2 h-4 w-4" /> Delete
+                  <Trash2 className="mr-2 h-4 w-4" /> {t("common.delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -286,7 +288,7 @@ function QuizQuestionsPage() {
           }}
           props={{
             input: {
-              placeholder: "Search question...",
+              placeholder: t("quizzes.questionsSearchPlaceholder"),
               value: searchValue,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 setSearchValue(e.target.value);
@@ -301,7 +303,7 @@ function QuizQuestionsPage() {
             className="flex items-center"
           >
             <Plus className="" />
-            <AppButtonText>Add Question</AppButtonText>
+            <AppButtonText>{t("quizzes.addQuestion")}</AppButtonText>
           </Link>
         </Button>
       </CardHeader>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -9,6 +10,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/form";
 import { FormPasswordInput } from "@/components/form/form-password-input";
 export const FormLogin = () => {
+  const { t } = useTranslation();
   //^ APIS
   const { mutate: login, isPending } = useLogin();
 
@@ -30,18 +32,18 @@ export const FormLogin = () => {
           control={control}
           type="email"
           name="email"
-          label="Email"
-          placeholder="m@example.com"
+          label={t("auth.email")}
+          placeholder={t("auth.emailPlaceholder")}
         />
         <FormPasswordInput
           control={control}
           name="password"
-          label="Password"
-          placeholder="* * * * *"
+          label={t("auth.password")}
+          placeholder={t("auth.passwordPlaceholder")}
         />
 
         <Button type="submit" className="w-full" loading={isPending}>
-          Login
+          {t("auth.login")}
         </Button>
       </FieldGroup>
     </form>

@@ -6,6 +6,7 @@ import {
   Calendar,
   Clock,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { useGetLeadByID } from "../-apis";
 import { useQuery } from "@tanstack/react-query";
@@ -18,6 +19,7 @@ interface LeadCardProps {
 }
 
 export const LeadCard = ({ id }: LeadCardProps) => {
+  const { t } = useTranslation();
   const { data: lead, isLoading } = useQuery(useGetLeadByID(id));
 
   console.log("👉 ~ ViewLeadDetail ~ lead:", lead);
@@ -37,7 +39,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
   } = lead;
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return "N/A";
+    if (!dateString) return t("leads.notAvailable");
     try {
       return format(new Date(dateString), "PPP p");
     } catch (e) {
@@ -51,18 +53,20 @@ export const LeadCard = ({ id }: LeadCardProps) => {
       <section className="grid sm:grid-cols-2 gap-6">
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            User Information
+            {t("leads.userInformation")}
           </h3>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <User className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium">
-                {user_data.name || "Anonymous"}
+                {user_data.name || t("leads.anonymous")}
               </span>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{user_data.phone || "N/A"}</span>
+              <span className="text-sm">
+                {user_data.phone || t("leads.notAvailable")}
+              </span>
             </div>
             {user_data.address && (
               <div className="flex items-center gap-3">
@@ -75,14 +79,14 @@ export const LeadCard = ({ id }: LeadCardProps) => {
 
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            Submission Meta
+            {t("leads.submissionMeta")}
           </h3>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <Calendar className="h-4 w-4 text-muted-foreground" />
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground">
-                  Completed At
+                  {t("leads.completedAt")}
                 </span>
                 <span className="text-sm">{formatDate(completed_at)}</span>
               </div>
@@ -91,7 +95,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
               <Clock className="h-4 w-4 text-muted-foreground" />
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground">
-                  Started At
+                  {t("leads.startedAt")}
                 </span>
                 <span className="text-sm">{formatDate(started_at)}</span>
               </div>
@@ -115,13 +119,13 @@ export const LeadCard = ({ id }: LeadCardProps) => {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              Quiz Performance
+              {t("leads.quizPerformance")}
             </h3>
             <p className="text-lg font-bold mt-1">{quiz.name}</p>
           </div>
           <div className="text-right">
             <span className="text-sm text-muted-foreground block">
-              Total Score
+              {t("leads.tableScore")}
             </span>
             <Badge variant="default" className="text-sm font-mono">
               {total_score}
@@ -134,7 +138,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
 
       <section className="space-y-4">
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-          Response Details
+          {t("leads.responseDetails")}
         </h3>
         <div className="space-y-4">
           {quiz.questions.map((question, index) => {
@@ -174,7 +178,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
                             className="rounded-md bg-background/50 p-3 border border-border/50"
                           >
                             <p className="text-xs text-muted-foreground mb-1 font-medium">
-                              Selected Answer{" "}
+                              {t("leads.selectedAnswer")}{" "}
                               {selectedAnswers.length > 1 ? ansIdx + 1 : ""}:
                             </p>
                             <p className="text-sm">{ans?.answer_text}</p>
@@ -183,7 +187,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
                       ) : (
                         <div className="rounded-md bg-background/50 p-3 border border-border/50 border-dashed">
                           <p className="text-sm text-muted-foreground italic">
-                            No response
+                            {t("leads.noResponse")}
                           </p>
                         </div>
                       )}
@@ -192,7 +196,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
                     <div className="flex items-center justify-between pt-1">
                       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <FileQuestion className="size-3.5" />
-                        <span>Points Earned</span>
+                        <span>{t("leads.pointsEarned")}</span>
                       </div>
                       <Badge variant="secondary" className="font-mono text-xs">
                         +
@@ -200,7 +204,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
                           (acc, curr) => acc + curr.points_earned,
                           0,
                         )}{" "}
-                        pts
+                        {t("quizzes.points")}
                       </Badge>
                     </div>
                   </div>
