@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEditor, textblockTypeInputRule } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Heading from "@tiptap/extension-heading";
@@ -46,6 +46,7 @@ export const Tiptap = ({
   onChange,
   className,
 }: TiptapProps) => {
+  const [isHtmlView, setIsHtmlView] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -133,7 +134,7 @@ export const Tiptap = ({
   }, [value, editor]);
 
   return (
-    <TiptapContext.Provider value={{ editor }}>
+    <TiptapContext.Provider value={{ editor, isHtmlView, setIsHtmlView }}>
       <div
         className={cn(
           "border rounded-md transition-[color,box-shadow] outline-none focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",

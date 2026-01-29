@@ -33,6 +33,7 @@ import {
   Code,
   CodeBlock,
   // FontSize,
+  HtmlView,
 } from "../tiptap";
 // ... existing imports ...
 
@@ -99,6 +100,8 @@ export const FormTiptap = <
                   <Script />
                   <Code />
                   <CodeBlock />
+                  <HtmlView />
+
                   {/* <FontSize /> */}
                 </div>
 
