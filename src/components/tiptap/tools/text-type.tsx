@@ -15,6 +15,7 @@ export const TextType = () => {
     editor,
     selector: (ctx) => {
       if (ctx.editor?.isActive("paragraph")) return "paragraph";
+      if (ctx.editor?.isActive("heading", { level: 1 })) return "h1";
       if (ctx.editor?.isActive("heading", { level: 2 })) return "h2";
       if (ctx.editor?.isActive("heading", { level: 3 })) return "h3";
       if (ctx.editor?.isActive("heading", { level: 4 })) return "h4";
