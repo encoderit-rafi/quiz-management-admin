@@ -26,9 +26,13 @@ Follow these instructions to get the project up and running.
 Create a `.env` file in the root directory and add the following environment variables:
 
 ```env
-VITE_BASE_URL="your-url"
-VITE_FRONTEND_URL="your-url"
+VITE_BASE_URL="your-api-url"
+VITE_FRONTEND_URL="your-user-panel-url"
 ```
+
+### Embed Code
+
+Copy the embed code from the quiz table. Paste it any HTML page. It will work.
 
 ### Development
 
