@@ -21,10 +21,10 @@
 //   DropdownMenuTrigger,
 // } from "../ui/dropdown-menu";
 // import { Link } from "@tanstack/react-router";
-import type { TRoute } from "@/types";
-type TProps = { routes: TRoute[] };
-export function NavMain({ routes }: TProps) {
-  console.log("👉 ~ NavMain ~ routes:", routes);
+// import type { TRoute } from "@/types";
+// type TProps = { routes: TRoute[] };
+export function NavMain() {
+  // console.log("👉 ~ NavMain ~ routes:", routes);
   // const { open, openMobile } = useSidebar();
 
   return (

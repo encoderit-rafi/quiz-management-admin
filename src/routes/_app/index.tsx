@@ -77,7 +77,7 @@ export default function RouteComponent() {
   );
 
   const quizzes = response?.data ?? [];
-  console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
+  // console.log("👉 ~ RouteComponent ~ quizzes:", quizzes);
   const meta = response?.meta;
 
   const { mutate: deleteQuiz, isPending: isDeletePending } = useDeleteQuiz();

@@ -120,12 +120,12 @@ export default function FormQuizQuestion({ form_data }: TProps) {
     reset,
     control,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = form;
-  console.log("👉 ~ FormQuizQuestion ~ errors:", errors);
+  // console.log("👉 ~ FormQuizQuestion ~ errors:", errors);
   useEffect(() => {
     if (type === "update" && question) {
-      console.log("👉 ~ FormQuizQuestion ~ question:", question);
+      // console.log("👉 ~ FormQuizQuestion ~ question:", question);
       reset({
         question_text: question.question_text || question.name || "",
         image: question.image || null,
@@ -174,7 +174,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
       })),
       // is_active: true,
     };
-    console.log("👉 ~ onSubmit ~ payload:", payload);
+    // console.log("👉 ~ onSubmit ~ payload:", payload);
     if (type === "update" && id) {
       updateQuestion(
         { ...payload, id },

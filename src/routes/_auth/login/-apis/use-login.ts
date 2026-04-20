@@ -27,7 +27,7 @@ export const useLogin = () => {
       toast.success("Logged in successfully!");
     },
     onError: (err) => {
-      console.error("👉 ~ useLogin ~ err:", err);
+      // console.error("👉 ~ useLogin ~ err:", err);
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data.message);
       } else {

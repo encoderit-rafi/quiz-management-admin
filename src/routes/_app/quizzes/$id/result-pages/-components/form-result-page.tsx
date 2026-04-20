@@ -33,7 +33,7 @@ type TProps = {
 };
 
 export const FormResultPage = ({ form_data }: TProps) => {
-  console.log("👉 ~ FormResultPage ~ form_data:", form_data);
+  // console.log("👉 ~ FormResultPage ~ form_data:", form_data);
   const router = useRouter();
   const navigate = useNavigate();
   const { id, type, quizId } = form_data;
@@ -59,9 +59,9 @@ export const FormResultPage = ({ form_data }: TProps) => {
     reset,
     control,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = form;
-  console.log("👉 ~ FormResultPage ~ errors:::", errors);
+  // console.log("👉 ~ FormResultPage ~ errors:::", errors);
 
   useEffect(() => {
     if (type === "update" && resultPage) {

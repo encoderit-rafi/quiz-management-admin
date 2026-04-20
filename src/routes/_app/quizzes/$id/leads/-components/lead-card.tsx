@@ -22,7 +22,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
   const { t } = useTranslation();
   const { data: lead, isLoading } = useQuery(useGetLeadByID(id));
 
-  console.log("👉 ~ ViewLeadDetail ~ lead:", lead);
+  // console.log("👉 ~ ViewLeadDetail ~ lead:", lead);
 
   if (isLoading || !lead) {
     return <AppLoading />;

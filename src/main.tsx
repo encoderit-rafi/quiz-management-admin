@@ -11,11 +11,10 @@ import { routeTree } from "./routeTree.gen";
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
     onError(error, _variables, _onMutateResult, _mutation, context) {
-      console.log("👉 ~ error:", {
-        error,
-
-        context,
-      });
+      // console.log("👉 ~ error:", {
+      //   error,
+      //   context,
+      // });
     },
   }),
 });
@@ -33,5 +32,5 @@ ReactDOM.createRoot(root).render(
   <QueryClientProvider client={queryClient}>
     <RouterProvider router={router} />
     <Toaster richColors position="top-right" />
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );
