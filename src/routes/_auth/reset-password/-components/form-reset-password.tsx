@@ -42,7 +42,7 @@ export default function FormResetPassword({ email, token }: TProps) {
         />
         <FormPasswordInput
           control={control}
-          name="password"
+          name="password_confirmation"
           label="Confirm Password"
           placeholder="* * * * *"
         />

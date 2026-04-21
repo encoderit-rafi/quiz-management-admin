@@ -11,6 +11,7 @@ export default function AppLoading({
 }: AppLoadingProps) {
   return (
     <div
+      data-testid="app-loading"
       className={`flex flex-col items-center justify-center min-h-[400px] w-full gap-4 ${className}`}
     >
       <Loader2 className="h-10 w-10 animate-spin text-primary" />

@@ -40,7 +40,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
-        <NavMain routes={routes} />
+        <NavMain {...({ routes } as any)} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

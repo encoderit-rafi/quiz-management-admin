@@ -10,7 +10,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
-    onError(error, _variables, _onMutateResult, _mutation, context) {
+    onError(_error, _variables, _onMutateResult, _mutation, _context) {
       // console.log("👉 ~ error:", {
       //   error,
       //   context,
