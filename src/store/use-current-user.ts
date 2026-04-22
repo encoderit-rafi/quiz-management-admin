@@ -15,8 +15,8 @@ export const useCurrentUser = create<TProps>()(
       clearUser: () => set({ user: null }),
     }),
     {
-      name: "auth-user", // storage key
-      partialize: (state) => ({ user: state.user }), // persist only token
-    }
-  )
+      name: "auth-user",
+      partialize: (state) => ({ user: state.user }),
+    },
+  ),
 );
