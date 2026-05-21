@@ -13,6 +13,7 @@ import {
   FormImageUpload,
   FormColorPicker,
   FormTextarea,
+  FormSelect,
 } from "@/components/form";
 import { CardAction, CardContent } from "@/components/ui/card";
 import AppLoading from "@/components/base/app-loading";
@@ -37,7 +38,7 @@ export default function FormQuiz({ form_data }: TProps) {
 
   // Form Setup
   const form = useForm<TFormQuizSchema>({
-    resolver: zodResolver(FormQuizSchema),
+    resolver: zodResolver(FormQuizSchema) as any,
     defaultValues: DEFAULT_QUIZ_DATA,
   });
 
@@ -58,7 +59,7 @@ export default function FormQuiz({ form_data }: TProps) {
     router.history.back();
   };
   // Submit
-  const onSubmit = (data: TFormQuizSchema) => {
+  const onSubmit = (data: any) => {
     if (type === "update") {
       updateQuiz(data, {
         // onSuccess: () => {
@@ -141,6 +142,18 @@ export default function FormQuiz({ form_data }: TProps) {
                 control={control}
                 label={t("quizzes.details.background")}
                 description={t("quizzes.form.backgroundDescription")}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/5">
+              <FormSelect
+                name="scoring_mode"
+                control={control}
+                label="Scoring Mode"
+                options={[
+                  { value: "total", label: "Total Score (default)" },
+                  { value: "category", label: "Category-Based" },
+                ]}
               />
             </div>
 

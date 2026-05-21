@@ -17,4 +17,6 @@ export const QUERY_KEYS = {
     params,
   ],
   GET_EMBED_CODE: (quizId: string | number) => ["get-embed-code", quizId],
+  GET_QUIZ_CATEGORIES: (quizId: string | number) => ["get-quiz-categories", quizId],
+  GET_RESULT_PAGE_RULES: (resultPageId: string | number) => ["get-result-page-rules", resultPageId],
 };

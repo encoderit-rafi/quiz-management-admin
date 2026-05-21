@@ -27,6 +27,7 @@ export const FormQuizSchema = z.object({
   result_button_text: z
     .string()
     .min(1, { message: "Result button text is required" }),
+  scoring_mode: z.enum(["total", "category"]).default("total"),
 });
 
 export type TFormQuizSchema = z.infer<typeof FormQuizSchema>;

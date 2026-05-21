@@ -8,19 +8,148 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Plus, Trash2, Pencil } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 import { useQuery } from "@tanstack/react-query";
 import { useGetQuiz } from "../-apis";
 import AppLoading from "@/components/base/app-loading";
 import { getImageUrl } from "@/utils";
+import AppDeleteDialog from "@/components/base/app-delete-dialog";
+import { FormInput } from "@/components/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
+import {
+  useGetQuizCategories,
+  useCreateCategory,
+  useUpdateCategory,
+  useDeleteCategory,
+} from "../quizzes/$id/categories/-apis";
+import {
+  QuizCategoryFormSchema,
+  type TQuizCategoryFormSchema,
+} from "../quizzes/$id/categories/-types";
+import type { TQuizCategorySchema } from "../-types/quiz.type";
 
 type TProps = {
   form_data: { id: string | number; type: string };
 };
 
+type CategoryDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  quizId: string | number;
+  category?: TQuizCategorySchema | null;
+};
+
+function CategoryDialog({
+  open,
+  onOpenChange,
+  quizId,
+  category,
+}: CategoryDialogProps) {
+  const isEditing = !!category;
+  const createMutation = useCreateCategory(quizId);
+  const updateMutation = useUpdateCategory(quizId);
+
+  const form = useForm<TQuizCategoryFormSchema>({
+    resolver: zodResolver(QuizCategoryFormSchema) as any,
+    defaultValues: { name: "", slug: "", order: 0 },
+  });
+
+  const { control, handleSubmit, reset } = form;
+
+  useEffect(() => {
+    if (open) {
+      reset(
+        category
+          ? { name: category.name, slug: category.slug, order: category.order }
+          : { name: "", slug: "", order: 0 },
+      );
+    }
+  }, [open, category, reset]);
+
+  const onSubmit = (data: any) => {
+    if (isEditing && category) {
+      updateMutation.mutate(
+        { id: category.id, data },
+        { onSuccess: () => onOpenChange(false) },
+      );
+    } else {
+      createMutation.mutate(data, { onSuccess: () => onOpenChange(false) });
+    }
+  };
+
+  const isPending = createMutation.isPending || updateMutation.isPending;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>{isEditing ? "Edit Category" : "Add Category"}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <FormInput
+            name="name"
+            control={control}
+            label="Name"
+            placeholder="e.g. Interior"
+          />
+          <FormInput
+            name="slug"
+            control={control}
+            label="Slug"
+            placeholder="e.g. interior"
+          />
+          <FormInput
+            name="order"
+            control={control}
+            label="Order"
+            type="number"
+            placeholder="0"
+          />
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" loading={isPending}>
+              {isEditing ? "Update" : "Add"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function CardQuiz({ form_data }: TProps) {
   const { t } = useTranslation();
   const { data: quiz, isLoading } = useQuery(useGetQuiz(form_data.id));
+  const isCategoryMode = quiz?.scoring_mode === "category";
+
+  const { data: categories = [], isLoading: isCategoriesLoading } = useQuery({
+    ...useGetQuizCategories(form_data.id),
+    enabled: isCategoryMode,
+  });
+
+  const deleteCategoryMutation = useDeleteCategory(form_data.id);
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [editingCategory, setEditingCategory] =
+    useState<TQuizCategorySchema | null>(null);
+  const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
 
   if (isLoading) {
     return <AppLoading />;
@@ -85,6 +214,16 @@ export default function CardQuiz({ form_data }: TProps) {
               </div>
               <div className="text-sm text-muted-foreground">
                 {quiz?.result_button_text || t("leads.notAvailable")}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium">Scoring Mode</div>
+              <div className="mt-1">
+                <Badge
+                  variant={isCategoryMode ? "default" : "secondary"}
+                >
+                  {isCategoryMode ? "Category-Based" : "Total Score"}
+                </Badge>
               </div>
             </div>
           </div>
@@ -178,6 +317,76 @@ export default function CardQuiz({ form_data }: TProps) {
           </div>
         </section>
 
+        {isCategoryMode && (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between border-b pb-2">
+              <h3 className="text-lg font-semibold">Categories</h3>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setEditingCategory(null);
+                  setCategoryDialogOpen(true);
+                }}
+              >
+                <Plus className="h-3 w-3 mr-1" /> Add Category
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Categories define the scoring axes for this quiz. Each answer
+              can award points to one or more categories.
+            </p>
+
+            {isCategoriesLoading ? (
+              <AppLoading />
+            ) : categories.length === 0 ? (
+              <div className="text-center py-6 border rounded-lg border-dashed text-muted-foreground text-sm">
+                No categories yet. Add categories to enable category-based scoring.
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {categories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="flex items-center justify-between p-3 rounded-md border bg-muted/20"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium">{cat.name}</span>
+                      <Badge variant="outline" className="text-xs font-mono">
+                        {cat.slug}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        order: {cat.order}
+                      </span>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-7 w-7"
+                        onClick={() => {
+                          setEditingCategory(cat);
+                          setCategoryDialogOpen(true);
+                        }}
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => setDeleteCategoryId(cat.id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b pb-2">
             <h3 className="text-lg font-semibold">{t("quizzes.questions")}</h3>
@@ -221,12 +430,35 @@ export default function CardQuiz({ form_data }: TProps) {
                                 <span className="text-sm">
                                   {answer.answer_text}
                                 </span>
-                                <Badge
-                                  variant="secondary"
-                                  className="font-mono"
-                                >
-                                  {answer.points} {t("quizzes.points")}
-                                </Badge>
+                                {isCategoryMode &&
+                                answer.category_scores?.length > 0 ? (
+                                  <div className="flex gap-1 flex-wrap justify-end">
+                                    {answer.category_scores.map(
+                                      (cs: any, csIdx: number) => {
+                                        const cat = categories.find(
+                                          (c) => c.id === cs.category_id,
+                                        );
+                                        return (
+                                          <Badge
+                                            key={csIdx}
+                                            variant="secondary"
+                                            className="font-mono text-xs"
+                                          >
+                                            {cat?.name ?? cs.category_id}:{" "}
+                                            {cs.points}
+                                          </Badge>
+                                        );
+                                      },
+                                    )}
+                                  </div>
+                                ) : (
+                                  <Badge
+                                    variant="secondary"
+                                    className="font-mono"
+                                  >
+                                    {answer.points} {t("quizzes.points")}
+                                  </Badge>
+                                )}
                               </div>
                             ),
                           )}
@@ -263,8 +495,13 @@ export default function CardQuiz({ form_data }: TProps) {
                       <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs">
                         {index + 1}
                       </span>
-                      {page.title} ({page.min_score} - {page.max_score}{" "}
-                      {t("quizzes.points")})
+                      {page.title}
+                      {!isCategoryMode && (
+                        <span className="text-xs text-muted-foreground">
+                          ({page.min_score} - {page.max_score}{" "}
+                          {t("quizzes.points")})
+                        </span>
+                      )}
                     </span>
                   </AccordionTrigger>
                   <AccordionContent>
@@ -361,6 +598,30 @@ export default function CardQuiz({ form_data }: TProps) {
           </section>
         )}
       </div>
+
+      <CategoryDialog
+        open={categoryDialogOpen}
+        onOpenChange={(open) => {
+          setCategoryDialogOpen(open);
+          if (!open) setEditingCategory(null);
+        }}
+        quizId={form_data.id}
+        category={editingCategory}
+      />
+
+      <AppDeleteDialog
+        open={!!deleteCategoryId}
+        onOpenChange={(open) => !open && setDeleteCategoryId(null)}
+        item_name="this category"
+        loading={deleteCategoryMutation.isPending}
+        onConfirm={() => {
+          if (deleteCategoryId !== null) {
+            deleteCategoryMutation.mutate(deleteCategoryId, {
+              onSuccess: () => setDeleteCategoryId(null),
+            });
+          }
+        }}
+      />
     </CardContent>
   );
 }

@@ -3,3 +3,7 @@ export * from "./use-get-result-page.api";
 export * from "./use-create-result-page.api";
 export * from "./use-update-result-page.api";
 export * from "./use-delete-result-page.api";
+export * from "./use-get-rules.api";
+export * from "./use-create-rule.api";
+export * from "./use-update-rule.api";
+export * from "./use-delete-rule.api";

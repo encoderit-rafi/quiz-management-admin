@@ -14,6 +14,5 @@ export const DEFAULT_QUIZ_DATA: TFormQuizSchema = {
   secondary_color: "#ffffff",
   submit_button_text: "Submit",
   result_button_text: "Speak To An Advisor",
-  // is_active: true,
-  // embed_code: null,
+  scoring_mode: "total",
 };
