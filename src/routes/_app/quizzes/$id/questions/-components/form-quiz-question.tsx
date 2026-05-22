@@ -159,7 +159,6 @@ export default function FormQuizQuestion({ form_data }: TProps) {
     reset,
     control,
     handleSubmit,
-    formState: { errors },
   } = form;
   useEffect(() => {
     if (type === "update" && question) {

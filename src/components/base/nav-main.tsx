@@ -23,7 +23,7 @@
 // import { Link } from "@tanstack/react-router";
 import type { TRoute } from "@/types";
 type TProps = { routes: TRoute[] };
-export function NavMain({ routes }: TProps) {
+export function NavMain({ routes: _routes }: TProps) {
   // const { open, openMobile } = useSidebar();
 
   return (

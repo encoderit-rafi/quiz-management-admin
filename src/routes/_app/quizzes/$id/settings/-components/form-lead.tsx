@@ -42,7 +42,6 @@ export default function FormLead({ quizId }: TProps) {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
   } = form;
   const { fields: formFields } = useFieldArray({
     control,

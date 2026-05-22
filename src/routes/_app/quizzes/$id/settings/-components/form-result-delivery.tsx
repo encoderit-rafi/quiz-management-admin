@@ -36,7 +36,6 @@ export default function FormResultDelivery({ quizId }: TProps) {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
   } = form;
   useEffect(() => {
     if (settings) {
