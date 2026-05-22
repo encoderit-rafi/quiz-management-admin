@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Plus, Trash2, MoreHorizontal, Eye, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -14,6 +15,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import AppTable from "@/components/base/app-table";
 import { useQuery } from "@tanstack/react-query";
 import { useGetResultPages, useDeleteResultPage } from "./-apis";
+import { useGetQuiz } from "@/routes/_app/-apis";
 import type { TResultPageSchema } from "./-types";
 import { ResultPageSearchSchema } from "./-types";
 import { useState } from "react";
@@ -39,6 +41,9 @@ export default function RouteComponent() {
   const { data: resultPages = { data: [], meta: { total: 0 } }, isLoading } =
     useQuery(useGetResultPages({ ...search, quiz_id: id }));
 
+  const { data: quiz } = useQuery(useGetQuiz(id));
+  const isCategoryMode = quiz?.scoring_mode === "category";
+
   const deleteMutation = useDeleteResultPage();
 
   const handleDelete = () => {
@@ -53,12 +58,28 @@ export default function RouteComponent() {
       header: t("quizzes.tableTitle"),
       accessorKey: "title",
     },
-    {
-      header: t("quizzes.scoreRange"),
-      accessorKey: "min_score",
-      cell: ({ row }) =>
-        `${row.original.min_score} - ${row.original.max_score}`,
-    },
+    isCategoryMode
+      ? {
+          header: "Rules",
+          accessorKey: "rules_count",
+          cell: ({ row }) => {
+            const count = row.original.rules_count ?? 0;
+            return (
+              <Badge variant={count > 0 ? "default" : "outline"}>
+                {count} {count === 1 ? "rule" : "rules"}
+              </Badge>
+            );
+          },
+        }
+      : {
+          header: t("quizzes.scoreRange"),
+          accessorKey: "min_score",
+          cell: ({ row }) => {
+            const { min_score, max_score } = row.original;
+            if (min_score == null && max_score == null) return "—";
+            return `${min_score ?? "?"} – ${max_score ?? "∞"}`;
+          },
+        },
     {
       id: "actions",
       cell: ({ row }) => {

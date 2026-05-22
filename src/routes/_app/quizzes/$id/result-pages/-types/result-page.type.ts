@@ -7,6 +7,7 @@ export const ResultPageSchema = z.object({
   min_score: z.number().min(0, "Min score must be 0 or greater").optional(),
   max_score: z.number().min(0, "Max score must be 0 or greater").optional(),
   content: z.string().optional(),
+  rules_count: z.number().optional(),
 });
 
 export type TResultPageSchema = z.infer<typeof ResultPageSchema>;
