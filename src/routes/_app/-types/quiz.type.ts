@@ -6,6 +6,7 @@ export const QuizCategorySchema = z.object({
   quiz_id: z.number(),
   name: z.string(),
   slug: z.string(),
+  description: z.string().nullable().optional(),
   order: z.number(),
 });
 
