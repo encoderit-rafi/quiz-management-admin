@@ -36,16 +36,10 @@ export default function FormResultDelivery({ quizId }: TProps) {
     control,
     handleSubmit,
     reset,
-    // formState: { errors },
+    formState: { errors },
   } = form;
-  // console.log("👉 ~ FormResultDelivery ~ errors:", errors);
-
   useEffect(() => {
     if (settings) {
-      // console.log(
-      //   "👉 ~ FormResultDelivery ~ settings:",
-      //   settings.result_page_position,
-      // );
       reset({
         id: settings.id || "",
         quiz_id: quizId,

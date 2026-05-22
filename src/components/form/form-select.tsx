@@ -41,7 +41,6 @@ export const FormSelect = <
       name={name}
       render={({ field, fieldState }) => {
         const { onChange, name: fieldName } = field;
-        // console.log("👉 ~ FormSelect ~ field:", field);
         const { invalid, error } = fieldState;
         return (
           <Field data-invalid={invalid}>

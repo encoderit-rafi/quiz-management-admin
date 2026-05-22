@@ -8,10 +8,6 @@ export const useGetLeadByID = (id: string | number, params?: any) => {
     enabled: !!id,
     queryFn: async (): Promise<TLeadResultSchema> => {
       const response = await api.get(`/quiz-submissions/${id}`, { params });
-      // console.log(
-      //   "👉 ~ useGetLeadByID ~ response.data?.data:",
-      //   response.data?.data,
-      // );
       return response.data?.data;
     },
   });

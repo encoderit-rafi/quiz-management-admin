@@ -19,7 +19,6 @@ export const Route = createFileRoute("/_app")({
 function RouteComponent() {
   const { setUser } = useCurrentUser();
   const { data: user } = useQuery(getAuthProfile());
-  // console.log("👉 ~ RouteComponent ~ user:", user);
   useEffect(() => {
     if (user) {
       setUser(user);

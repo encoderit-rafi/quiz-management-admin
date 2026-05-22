@@ -27,7 +27,6 @@ export default function FormResetPassword({ email, token }: TProps) {
   }, [email, token, setValue]);
 
   function onSubmit(values: TFormSchema) {
-    // console.log("Form submitted:", values);
     resetPassword(values);
   }
 

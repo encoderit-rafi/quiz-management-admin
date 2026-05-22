@@ -6,6 +6,7 @@ import {
   Calendar,
   Clock,
   BarChart,
+  Trophy,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +25,6 @@ export const LeadCard = ({ id }: LeadCardProps) => {
   const { t } = useTranslation();
   const { data: lead, isLoading } = useQuery(useGetLeadByID(id));
 
-  // console.log("👉 ~ ViewLeadDetail ~ lead:", lead);
-
   if (isLoading || !lead) {
     return <AppLoading />;
   }
@@ -36,6 +35,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
     answers,
     total_score,
     category_scores,
+    ranked_results,
     completed_at,
     started_at,
     // ip_address,
@@ -161,10 +161,42 @@ export const LeadCard = ({ id }: LeadCardProps) => {
                       {cs.score} / {cs.max_possible} ({cs.match_percentage}%)
                     </Badge>
                   </div>
-                  <Progress
-                    value={cs.match_percentage}
-                    className="h-2"
-                  />
+                  <Progress value={cs.match_percentage} className="h-2" />
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+
+      {ranked_results && ranked_results.length > 0 && (
+        <>
+          <Separator />
+          <section className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Result Match Rankings
+            </h3>
+            <div className="grid gap-2">
+              {ranked_results.map((rr, idx) => (
+                <div
+                  key={rr.result_page_id}
+                  className="p-3 rounded-lg bg-muted/30 border border-muted/50"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Trophy
+                        className={`h-4 w-4 ${idx === 0 ? "text-yellow-500" : "text-muted-foreground"}`}
+                      />
+                      <span className="text-sm font-medium">{rr.title}</span>
+                    </div>
+                    <Badge
+                      variant={idx === 0 ? "default" : "secondary"}
+                      className="font-mono text-xs"
+                    >
+                      {rr.match_pct}%
+                    </Badge>
+                  </div>
+                  <Progress value={rr.match_pct} className="h-2" />
                 </div>
               ))}
             </div>
