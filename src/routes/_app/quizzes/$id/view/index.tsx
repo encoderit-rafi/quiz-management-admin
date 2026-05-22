@@ -7,5 +7,9 @@ export const Route = createFileRoute("/_app/quizzes/$id/view/")({
 function ViewQuizPage() {
   const { id } = Route.useParams();
 
-  return <CardQuiz form_data={{ id: id, type: "read" }} />;
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden p-6">
+      <CardQuiz form_data={{ id: id, type: "read" }} />
+    </div>
+  );
 }

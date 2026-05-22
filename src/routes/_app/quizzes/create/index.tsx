@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_app/quizzes/create/")({
 
 function CreateQuizPage() {
   return (
-    <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden p-6">
       <FormQuiz form_data={{ id: "", type: "create" }} />
     </div>
   );

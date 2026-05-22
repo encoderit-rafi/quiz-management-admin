@@ -14,6 +14,7 @@ type TFormColorPickerProps<
   placeholder?: string;
   description?: string;
   defaultColor?: string;
+  required?: boolean;
 };
 
 export const FormColorPicker = <
@@ -27,6 +28,7 @@ export const FormColorPicker = <
   placeholder = "#000000",
   description = "",
   defaultColor = "#000000",
+  required = false,
 }: TFormColorPickerProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -39,7 +41,7 @@ export const FormColorPicker = <
 
         return (
           <Field data-invalid={invalid}>
-            {Boolean(label) && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+            {Boolean(label) && <FieldLabel htmlFor={name} required={required}>{label}</FieldLabel>}
             <div className="flex items-center gap-2">
               <input
                 type="color"

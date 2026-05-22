@@ -48,6 +48,7 @@ type TFormTiptapProps<
   description?: string;
   defaultValue?: string;
   variant?: "simple" | "advance";
+  required?: boolean;
 };
 
 export const FormTiptap = <
@@ -61,6 +62,7 @@ export const FormTiptap = <
   description = "",
   defaultValue = "",
   variant = "simple",
+  required = false,
 }: TFormTiptapProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -73,7 +75,7 @@ export const FormTiptap = <
         return (
           <Field data-invalid={invalid}>
             {Boolean(label) && (
-              <FieldLabel htmlFor={fieldName}>{label}</FieldLabel>
+              <FieldLabel htmlFor={fieldName} required={required}>{label}</FieldLabel>
             )}
             <Tiptap
               value={value}

@@ -130,7 +130,9 @@ export default function RouteComponent() {
 
         return (
           <div className="flex items-center gap-3 whitespace-nowrap">
-            <span className="font-medium text-foreground">{uuid}</span>
+            <span className="font-medium text-foreground" title={uuid}>
+              {uuid.length > 20 ? uuid.slice(0, 20) + "…" : uuid}
+            </span>
             <Copy
               className="size-4 cursor-pointer"
               onClick={() => {
@@ -141,9 +143,7 @@ export default function RouteComponent() {
           </div>
         );
       },
-      size: 180,
     },
-
     {
       header: t("quizzes.tableTools"),
       accessorKey: "tools",

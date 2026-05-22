@@ -14,6 +14,7 @@ type TFormTextareaProps<
   label?: string;
   placeholder?: string;
   description?: string;
+  required?: boolean;
 };
 
 export const FormTextarea = <
@@ -26,6 +27,7 @@ export const FormTextarea = <
   label = "",
   placeholder = "",
   description = "",
+  required = false,
 }: TFormTextareaProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -36,7 +38,7 @@ export const FormTextarea = <
         const { invalid, error } = fieldState;
         return (
           <Field data-invalid={invalid}>
-            {Boolean(label) && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+            {Boolean(label) && <FieldLabel htmlFor={name} required={required}>{label}</FieldLabel>}
             <Textarea
               id={name}
               {...field}

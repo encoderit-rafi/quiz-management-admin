@@ -17,6 +17,7 @@ type TFormInputProps<
   description?: string;
   type?: HTMLInputTypeAttribute;
   className?: string;
+  required?: boolean;
 };
 
 export const FormInput = <
@@ -31,6 +32,7 @@ export const FormInput = <
   placeholder = "",
   description = "",
   className = "",
+  required = false,
 }: TFormInputProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -41,7 +43,7 @@ export const FormInput = <
         const { invalid, error } = fieldState;
         return (
           <Field data-invalid={invalid}>
-            {Boolean(label) && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+            {Boolean(label) && <FieldLabel htmlFor={name} required={required}>{label}</FieldLabel>}
             <Input
               {...field}
               type={type}

@@ -9,7 +9,7 @@ function EditQuizPage() {
   const { id } = Route.useParams();
 
   return (
-    <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden p-6">
       <FormQuiz form_data={{ id: id, type: "update" }} />
     </div>
   );

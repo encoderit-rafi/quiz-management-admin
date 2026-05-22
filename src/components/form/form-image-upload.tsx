@@ -16,6 +16,7 @@ type TFormImageUploadProps<
 > = TFormController<TFieldValues, TName, TTransformedValues> & {
   label?: string;
   description?: string;
+  required?: boolean;
 };
 
 export const FormImageUpload = <
@@ -27,6 +28,7 @@ export const FormImageUpload = <
   control,
   label = "",
   description = "upload image here.",
+  required = false,
 }: TFormImageUploadProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -51,7 +53,7 @@ export const FormImageUpload = <
 
         return (
           <Field data-invalid={invalid}>
-            {Boolean(label) && <FieldLabel>{label}</FieldLabel>}
+            {Boolean(label) && <FieldLabel required={required}>{label}</FieldLabel>}
 
             <div className="space-y-2 h-full">
               <label

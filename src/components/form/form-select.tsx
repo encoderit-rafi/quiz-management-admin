@@ -21,6 +21,7 @@ type TFormSelectProps<
   description?: string;
   placeholder?: string;
   options: { value: string; label: string }[];
+  required?: boolean;
 };
 
 export const FormSelect = <
@@ -34,6 +35,7 @@ export const FormSelect = <
   description = "",
   placeholder = "Select an option",
   options,
+  required = false,
 }: TFormSelectProps<TFieldValues, TName, TTransformedValues>) => {
   return (
     <Controller
@@ -45,7 +47,7 @@ export const FormSelect = <
         return (
           <Field data-invalid={invalid}>
             {Boolean(label) && (
-              <FieldLabel htmlFor={fieldName}>{label}</FieldLabel>
+              <FieldLabel htmlFor={fieldName} required={required}>{label}</FieldLabel>
             )}
             {Boolean(description) && (
               <FieldDescription>{description}</FieldDescription>
