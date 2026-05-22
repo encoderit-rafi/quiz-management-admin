@@ -38,15 +38,12 @@ export default function FormLead({ quizId }: TProps) {
       fields: DEFAULT_LEAD_OPTIONS,
     },
   });
-  console.log("👉 ~ FormLead ~ DEFAULT_LEAD_OPTIONS:", DEFAULT_LEAD_OPTIONS);
-
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
   } = form;
-  console.log("👉 ~ FormLead ~ errors:", errors);
   const { fields: formFields } = useFieldArray({
     control,
     name: "fields",

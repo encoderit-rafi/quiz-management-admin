@@ -16,6 +16,14 @@ const CategoryScoreSchema = z.object({
     .optional(),
 });
 
+const RankedResultSchema = z.object({
+  result_page_id: z.number(),
+  title: z.string(),
+  match_pct: z.number(),
+});
+
+export type TRankedResult = z.infer<typeof RankedResultSchema>;
+
 export const LeadResultSchema = z.object({
   id: z.number(),
   quiz_id: z.string(),
@@ -27,6 +35,7 @@ export const LeadResultSchema = z.object({
   }),
   total_score: z.number(),
   category_scores: z.array(CategoryScoreSchema).optional(),
+  ranked_results: z.array(RankedResultSchema).nullable().optional(),
   result_page_id: z.string().nullable(),
   share_link: z.string().nullable(),
   ip_address: z.string().nullable(),
