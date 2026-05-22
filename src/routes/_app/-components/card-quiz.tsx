@@ -62,7 +62,7 @@ function CategoryDialog({
 
   const form = useForm<TQuizCategoryFormSchema>({
     resolver: zodResolver(QuizCategoryFormSchema) as any,
-    defaultValues: { name: "", slug: "", order: 0 },
+    defaultValues: { name: "", slug: "", description: "", order: 0 },
   });
 
   const { control, handleSubmit, reset } = form;
@@ -71,8 +71,8 @@ function CategoryDialog({
     if (open) {
       reset(
         category
-          ? { name: category.name, slug: category.slug, order: category.order }
-          : { name: "", slug: "", order: 0 },
+          ? { name: category.name, slug: category.slug, description: category.description ?? "", order: category.order }
+          : { name: "", slug: "", description: "", order: 0 },
       );
     }
   }, [open, category, reset]);
@@ -108,6 +108,12 @@ function CategoryDialog({
             control={control}
             label="Slug"
             placeholder="e.g. interior"
+          />
+          <FormInput
+            name="description"
+            control={control}
+            label="Description"
+            placeholder="Optional description"
           />
           <FormInput
             name="order"
@@ -352,6 +358,11 @@ export default function CardQuiz({ form_data }: TProps) {
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium">{cat.name}</span>
+                      {cat.description && (
+                        <span className="text-xs text-muted-foreground max-w-[200px] truncate">
+                          {cat.description}
+                        </span>
+                      )}
                       <Badge variant="outline" className="text-xs font-mono">
                         {cat.slug}
                       </Badge>

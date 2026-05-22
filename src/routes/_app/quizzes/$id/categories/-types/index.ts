@@ -9,6 +9,7 @@ export const QuizCategoryFormSchema = z.object({
       /^[a-z0-9_-]+$/,
       "Slug must contain only lowercase letters, numbers, dashes, or underscores",
     ),
+  description: z.string().optional(),
   order: z.coerce.number().min(0).optional(),
 });
 

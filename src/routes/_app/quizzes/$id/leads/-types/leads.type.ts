@@ -1,5 +1,21 @@
 import { z } from "zod";
 
+const CategoryScoreSchema = z.object({
+  id: z.number(),
+  category_id: z.number(),
+  score: z.number(),
+  max_possible: z.number(),
+  match_percentage: z.number(),
+  category: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      slug: z.string(),
+    })
+    .nullable()
+    .optional(),
+});
+
 export const LeadResultSchema = z.object({
   id: z.number(),
   quiz_id: z.string(),
@@ -10,6 +26,7 @@ export const LeadResultSchema = z.object({
     address: z.string().nullable(),
   }),
   total_score: z.number(),
+  category_scores: z.array(CategoryScoreSchema).optional(),
   result_page_id: z.string().nullable(),
   share_link: z.string().nullable(),
   ip_address: z.string().nullable(),
@@ -38,6 +55,7 @@ export const LeadResultSchema = z.object({
     cta_text: z.string().nullable(),
     submit_button_text: z.string().nullable(),
     result_button_text: z.string().nullable(),
+    scoring_mode: z.string().optional(),
     questions: z.array(
       z.object({
         id: z.number(),

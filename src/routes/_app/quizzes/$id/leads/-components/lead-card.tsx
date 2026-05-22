@@ -5,6 +5,7 @@ import {
   MapPin,
   Calendar,
   Clock,
+  BarChart,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { useGetLeadByID } from "../-apis";
 import { useQuery } from "@tanstack/react-query";
 import AppLoading from "@/components/base/app-loading";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 import { format } from "date-fns";
 
 interface LeadCardProps {
@@ -33,6 +35,7 @@ export const LeadCard = ({ id }: LeadCardProps) => {
     quiz,
     answers,
     total_score,
+    category_scores,
     completed_at,
     started_at,
     // ip_address,
@@ -133,6 +136,41 @@ export const LeadCard = ({ id }: LeadCardProps) => {
           </div>
         </div>
       </section>
+
+      {category_scores && category_scores.length > 0 && (
+        <>
+          <Separator />
+          <section className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Category Scores
+            </h3>
+            <div className="grid gap-3">
+              {category_scores.map((cs) => (
+                <div
+                  key={cs.category_id}
+                  className="p-3 rounded-lg bg-muted/30 border border-muted/50"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <BarChart className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium">
+                        {cs.category?.name ?? `Category #${cs.category_id}`}
+                      </span>
+                    </div>
+                    <Badge variant="secondary" className="font-mono text-xs">
+                      {cs.score} / {cs.max_possible} ({cs.match_percentage}%)
+                    </Badge>
+                  </div>
+                  <Progress
+                    value={cs.match_percentage}
+                    className="h-2"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
 
       <Separator />
 
