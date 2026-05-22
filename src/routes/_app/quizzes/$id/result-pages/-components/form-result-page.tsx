@@ -17,13 +17,11 @@ import AppLoading from "@/components/base/app-loading";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { DEFAULT_PAGINATION } from "@/consts";
 import type { TFormType } from "@/types";
+import { useGetQuiz } from "@/routes/_app/-apis";
 
 const ResultPageFormSchema = ResultPageSchema.extend({
   min_score: z.coerce.number().min(0, "Min score must be 0 or greater"),
   max_score: z.coerce.number().min(0, "Max score must be 0 or greater"),
-}).refine((data) => data.max_score > data.min_score, {
-  message: "Max score must be greater than min score",
-  path: ["max_score"],
 });
 
 type TResultPageFormSchema = z.infer<typeof ResultPageFormSchema>;
@@ -33,12 +31,13 @@ type TProps = {
 };
 
 export const FormResultPage = ({ form_data }: TProps) => {
-  // console.log("👉 ~ FormResultPage ~ form_data:", form_data);
   const router = useRouter();
   const navigate = useNavigate();
   const { id, type, quizId } = form_data;
 
-  // Fetch existing result page
+  const { data: quiz } = useQuery(useGetQuiz(quizId));
+  const isCategoryMode = quiz?.scoring_mode === "category";
+
   const { data: resultPage, isLoading: isFetchLoading } = useQuery({
     ...useGetResultPage(id as string | number),
     enabled: !!id && type === "update",
@@ -59,9 +58,7 @@ export const FormResultPage = ({ form_data }: TProps) => {
     reset,
     control,
     handleSubmit,
-    // formState: { errors },
   } = form;
-  // console.log("👉 ~ FormResultPage ~ errors:::", errors);
 
   useEffect(() => {
     if (type === "update" && resultPage) {
@@ -141,29 +138,39 @@ export const FormResultPage = ({ form_data }: TProps) => {
               placeholder="e.g. High Score Result"
             />
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Score Range</label>
-              <div className="flex">
-                <FormInput
-                  name="min_score"
-                  control={control}
-                  type="number"
-                  placeholder="From"
-                  className="rounded-e-none focus:z-10 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                />
-                <FormInput
-                  name="max_score"
-                  control={control}
-                  type="number"
-                  placeholder="To"
-                  className="-ms-px rounded-s-none focus:z-10 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                />
+            {!isCategoryMode && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Score Range</label>
+                <div className="flex">
+                  <FormInput
+                    name="min_score"
+                    control={control}
+                    type="number"
+                    placeholder="From"
+                    className="rounded-e-none focus:z-10 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                  <FormInput
+                    name="max_score"
+                    control={control}
+                    type="number"
+                    placeholder="To"
+                    className="-ms-px rounded-s-none focus:z-10 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Define the percentage range (0-100) for which this result page
+                  should be shown.
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Define the percentage range (0-100) for which this result page
-                should be shown.
+            )}
+
+            {isCategoryMode && (
+              <p className="text-sm text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded p-3">
+                This quiz uses category-based scoring. After saving, open the
+                result page view to add matching rules that determine when this
+                page is shown.
               </p>
-            </div>
+            )}
 
             <FormTiptap
               name="content"

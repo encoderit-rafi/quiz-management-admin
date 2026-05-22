@@ -1,5 +1,22 @@
 import { z } from "zod";
 
+// Quiz Category Schema
+export const QuizCategorySchema = z.object({
+  id: z.number(),
+  quiz_id: z.number(),
+  name: z.string(),
+  slug: z.string(),
+  order: z.number(),
+});
+
+export type TQuizCategorySchema = z.infer<typeof QuizCategorySchema>;
+
+// Answer Category Score Schema
+export const AnswerCategoryScoreSchema = z.object({
+  category_id: z.number(),
+  points: z.number(),
+});
+
 // Answer Schema
 export const AnswerSchema = z.object({
   id: z.number(),
@@ -7,6 +24,7 @@ export const AnswerSchema = z.object({
   answer_text: z.string(),
   points: z.number(),
   order: z.number(),
+  category_scores: z.array(AnswerCategoryScoreSchema).optional(),
 });
 
 // Question Schema
@@ -85,11 +103,13 @@ export const QuizSchema = z.object({
 
   client_id: z.number().nullable().optional(),
   embed_code: z.string().nullable(),
+  scoring_mode: z.enum(["total", "category"]).default("total"),
 
   questions: z.array(QuestionSchema).optional(),
   resultPages: z.array(ResultPageSchema).optional(),
   leadFormSetting: LeadFormSettingSchema.nullable().optional(),
   resultDeliverySetting: ResultDeliverySettingSchema.nullable().optional(),
+  categories: z.array(QuizCategorySchema).optional(),
 });
 
 // Type inference
@@ -102,3 +122,4 @@ export type TLeadFormSetting = z.infer<typeof LeadFormSettingSchema>;
 export type TResultDeliverySetting = z.infer<
   typeof ResultDeliverySettingSchema
 >;
+export type TAnswerCategoryScore = z.infer<typeof AnswerCategoryScoreSchema>;
