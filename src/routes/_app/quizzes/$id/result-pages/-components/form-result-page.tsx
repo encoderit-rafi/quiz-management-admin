@@ -82,9 +82,11 @@ export const FormResultPage = ({ form_data }: TProps) => {
   };
 
   const onSubmit = (data: TResultPageFormSchema) => {
+    const { min_score, max_score, ...rest } = data;
     const payload: TResultPageSchema = {
-      ...data,
+      ...rest,
       quiz_id: quizId,
+      ...(isCategoryMode ? {} : { min_score, max_score }),
     } as TResultPageSchema;
 
     if (type === "update" && id) {

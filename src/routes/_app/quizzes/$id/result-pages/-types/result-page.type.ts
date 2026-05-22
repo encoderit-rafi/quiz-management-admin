@@ -4,8 +4,8 @@ export const ResultPageSchema = z.object({
   id: z.union([z.string(), z.number()]).optional(),
   quiz_id: z.union([z.string(), z.number()]),
   title: z.string().min(1, "Title is required"),
-  min_score: z.number().min(0, "Min score must be 0 or greater"),
-  max_score: z.number().min(0, "Max score must be 0 or greater"),
+  min_score: z.number().min(0, "Min score must be 0 or greater").optional(),
+  max_score: z.number().min(0, "Max score must be 0 or greater").optional(),
   content: z.string().optional(),
 });
 
