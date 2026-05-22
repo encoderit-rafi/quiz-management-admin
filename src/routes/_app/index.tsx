@@ -16,6 +16,7 @@ import {
   Loader2,
   Code2,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent } from "@/components/ui/card";
 import { FORM_DATA } from "@/data/form";
@@ -120,6 +121,18 @@ export default function RouteComponent() {
     {
       header: t("quizzes.tableViews"),
       accessorKey: "views",
+    },
+    {
+      header: "Scoring Mode",
+      accessorKey: "scoring_mode",
+      cell: ({ row }) => {
+        const mode = row.getValue("scoring_mode") as string;
+        return (
+          <Badge variant={mode === "category" ? "default" : "secondary"}>
+            {mode === "category" ? "Category-Based" : "Total Score"}
+          </Badge>
+        );
+      },
     },
     {
       header: t("quizzes.tableUrl"),
