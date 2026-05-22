@@ -65,7 +65,7 @@ function CategoryDialog({
     defaultValues: { name: "", slug: "", description: "", order: 0 },
   });
 
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit, reset, watch, setValue } = form;
 
   useEffect(() => {
     if (open) {
@@ -76,6 +76,17 @@ function CategoryDialog({
       );
     }
   }, [open, category, reset]);
+
+  const nameValue = watch("name");
+  useEffect(() => {
+    const slug = nameValue
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s_-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+    setValue("slug", slug, { shouldValidate: true });
+  }, [nameValue, setValue]);
 
   const onSubmit = (data: any) => {
     if (isEditing && category) {
@@ -103,12 +114,11 @@ function CategoryDialog({
             label="Name"
             placeholder="e.g. Interior"
           />
-          <FormInput
-            name="slug"
-            control={control}
-            label="Slug"
-            placeholder="e.g. interior"
-          />
+          {watch("slug") && (
+            <p className="text-xs text-muted-foreground -mt-2">
+              Slug: <span className="font-mono">{watch("slug")}</span>
+            </p>
+          )}
           <FormInput
             name="description"
             control={control}
