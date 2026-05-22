@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -134,10 +134,11 @@ export default function FormQuizQuestion({ form_data }: TProps) {
   const { data: quiz } = useQuery({ ...useGetQuiz(quizId), enabled: !!quizId });
   const isCategoryMode = quiz?.scoring_mode === "category";
 
-  const { data: categories = [] } = useQuery({
+  const { data: categoriesData } = useQuery({
     ...useGetQuizCategories(quizId),
     enabled: isCategoryMode,
   });
+  const categories = useMemo(() => categoriesData ?? [], [categoriesData]);
 
   const { data: question, isLoading: isFetchLoading } = useQuery({
     ...useGetQuestion(id as string | number),
