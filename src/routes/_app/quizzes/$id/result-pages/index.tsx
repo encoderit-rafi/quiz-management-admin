@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Plus, Trash2, MoreHorizontal, Eye, PenSquare } from "lucide-react";
+import { GripVertical, Plus, Trash2, MoreHorizontal, Eye, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent } from "@/components/ui/card";
@@ -10,17 +10,33 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { closestCorners, DndContext } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-import type { ColumnDef } from "@tanstack/react-table";
-import AppTable from "@/components/base/app-table";
 import { useQuery } from "@tanstack/react-query";
-import { useGetResultPages, useDeleteResultPage } from "./-apis";
+import {
+  useGetResultPages,
+  useDeleteResultPage,
+  useArrangeResultPageOrder,
+} from "./-apis";
 import { useGetQuiz } from "@/routes/_app/-apis";
 import type { TResultPageSchema } from "./-types";
 import { ResultPageSearchSchema } from "./-types";
-import { useState } from "react";
-// import AppSearch from "@/components/base/app-search";
-import AppPagination from "@/components/base/app-pagination";
+import { useEffect, useState } from "react";
 import AppButtonText from "@/components/base/app-button-text";
 import AppDeleteDialog from "@/components/base/app-delete-dialog";
 import AppLoading from "@/components/base/app-loading";
@@ -30,21 +46,118 @@ export const Route = createFileRoute("/_app/quizzes/$id/result-pages/")({
   validateSearch: ResultPageSearchSchema,
 });
 
+function SortableRow({
+  page,
+  isCategoryMode,
+  onDelete,
+}: {
+  page: TResultPageSchema;
+  isCategoryMode: boolean;
+  onDelete: (id: number | string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: page.id! });
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+
+  return (
+    <TableRow
+      ref={setNodeRef}
+      style={style}
+      className={isDragging ? "opacity-50" : ""}
+    >
+      <TableCell className="w-10">
+        <button
+          type="button"
+          className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-muted rounded"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="h-4 w-4 text-muted-foreground" />
+        </button>
+      </TableCell>
+      <TableCell className="font-medium">{page.title}</TableCell>
+      {isCategoryMode ? (
+        <TableCell>
+          <Badge variant={(page.rules_count ?? 0) > 0 ? "default" : "outline"}>
+            {page.rules_count ?? 0} {(page.rules_count ?? 0) === 1 ? "rule" : "rules"}
+          </Badge>
+        </TableCell>
+      ) : (
+        <TableCell>
+          {page.min_score != null || page.max_score != null
+            ? `${page.min_score ?? "?"} – ${page.max_score ?? "∞"}`
+            : "—"}
+        </TableCell>
+      )}
+      <TableCell>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link
+                to="/quizzes/$id/result-pages/view/$resultID"
+                params={{ id: String(page.quiz_id), resultID: String(page.id) }}
+              >
+                <Eye /> View
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                to="/quizzes/$id/result-pages/edit/$resultID"
+                params={{ id: String(page.quiz_id), resultID: String(page.id) }}
+              >
+                <PenSquare /> Edit
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => onDelete(page.id!)}
+            >
+              <Trash2 /> Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export default function RouteComponent() {
   const { t } = useTranslation();
   const { id } = Route.useParams();
-  const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
-  // const [searchValue, setSearchValue] = useState(search.search || "");
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
+  const [localPages, setLocalPages] = useState<TResultPageSchema[]>([]);
 
   const { data: resultPages = { data: [], meta: { total: 0 } }, isLoading } =
-    useQuery(useGetResultPages({ ...search, quiz_id: id }));
+    useQuery(useGetResultPages({ ...search, quiz_id: id, per_page: 0 }));
 
   const { data: quiz } = useQuery(useGetQuiz(id));
   const isCategoryMode = quiz?.scoring_mode === "category";
 
   const deleteMutation = useDeleteResultPage();
+  const arrangeMutation = useArrangeResultPageOrder();
+
+  useEffect(() => {
+    if (resultPages?.data) {
+      setLocalPages(resultPages.data);
+    }
+  }, [resultPages.data]);
 
   const handleDelete = () => {
     if (deleteId !== null) {
@@ -52,108 +165,32 @@ export default function RouteComponent() {
       setDeleteId(null);
     }
   };
-  // Column definitions
-  const columns: ColumnDef<TResultPageSchema>[] = [
-    {
-      header: t("quizzes.tableTitle"),
-      accessorKey: "title",
-    },
-    isCategoryMode
-      ? {
-          header: "Rules",
-          accessorKey: "rules_count",
-          cell: ({ row }) => {
-            const count = row.original.rules_count ?? 0;
-            return (
-              <Badge variant={count > 0 ? "default" : "outline"}>
-                {count} {count === 1 ? "rule" : "rules"}
-              </Badge>
-            );
-          },
-        }
-      : {
-          header: t("quizzes.scoreRange"),
-          accessorKey: "min_score",
-          cell: ({ row }) => {
-            const { min_score, max_score } = row.original;
-            if (min_score == null && max_score == null) return "—";
-            return `${min_score ?? "?"} – ${max_score ?? "∞"}`;
-          },
-        },
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        const page = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/quizzes/$id/result-pages/view/$resultID"
-                  params={{ id, resultID: String(page.id) }}
-                >
-                  <Eye /> {t("common.view")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/quizzes/$id/result-pages/edit/$resultID"
-                  params={{ id, resultID: String(page.id) }}
-                >
-                  <PenSquare /> {t("common.edit")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setDeleteId(page.id!)} // Just setting ID for now
-              >
-                <Trash2 /> {t("common.delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-  ];
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setLocalPages((items) => {
+      const oldIndex = items.findIndex((i) => i.id === active.id);
+      const newIndex = items.findIndex((i) => i.id === over.id);
+      const newItems = arrayMove(items, oldIndex, newIndex);
+
+      arrangeMutation.mutate(newItems.map((i) => i.id!));
+
+      return newItems;
+    });
+  };
 
   return (
     <div className="flex-1 flex flex-col gap-6 overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-end gap-4">
-        {/* <AppSearch
-          onSearch={() => {
-            navigate({
-              search: { ...search, search: searchValue, page: 1 },
-              replace: true,
-            });
-          }}
-          onClear={() => {
-            setSearchValue("");
-            navigate({
-              search: { ...search, search: "", page: 1 },
-              replace: true,
-            });
-          }}
-          props={{
-            input: {
-              placeholder: "Search quiz...",
-              value: searchValue,
-              onChange: (e) => setSearchValue(e.target.value),
-            },
-          }}
-        /> */}
-        <Button asChild variant={"outline"}>
+        <Button asChild variant="outline">
           <Link
             to="/quizzes/$id/result-pages/create"
             params={{ id: String(id) }}
             className="flex items-center"
           >
-            <Plus className="" />
+            <Plus />
             <AppButtonText>{t("quizzes.addResultPage")}</AppButtonText>
           </Link>
         </Button>
@@ -163,26 +200,52 @@ export default function RouteComponent() {
         {isLoading ? (
           <AppLoading />
         ) : (
-          <AppTable data={resultPages?.data} columns={columns} />
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-10" />
+                  <TableHead>{t("quizzes.tableTitle")}</TableHead>
+                  <TableHead>
+                    {isCategoryMode ? "Rules" : t("quizzes.scoreRange")}
+                  </TableHead>
+                  <TableHead className="w-20" />
+                </TableRow>
+              </TableHeader>
+              {localPages.length === 0 ? (
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center">
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              ) : (
+                <DndContext
+                  onDragEnd={handleDragEnd}
+                  collisionDetection={closestCorners}
+                >
+                  <SortableContext
+                    items={localPages}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <TableBody>
+                      {localPages.map((page) => (
+                        <SortableRow
+                          key={page.id}
+                          page={page}
+                          isCategoryMode={isCategoryMode}
+                          onDelete={(pid) => setDeleteId(pid)}
+                        />
+                      ))}
+                    </TableBody>
+                  </SortableContext>
+                </DndContext>
+              )}
+            </Table>
+          </div>
         )}
       </CardContent>
-
-      <div className="p-4 border-t">
-        <AppPagination
-          total={resultPages?.meta?.total || 0}
-          perPage={search.per_page}
-          page={search.page}
-          onPageChange={(page) =>
-            navigate({ search: { ...search, page }, replace: true })
-          }
-          onPerPageChange={(per_page) =>
-            navigate({
-              search: { ...search, per_page: Number(per_page), page: 1 },
-              replace: true,
-            })
-          }
-        />
-      </div>
 
       <AppDeleteDialog
         open={!!deleteId}

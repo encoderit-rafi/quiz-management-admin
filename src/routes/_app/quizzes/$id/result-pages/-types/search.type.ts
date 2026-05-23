@@ -1,9 +1,8 @@
-import { DEFAULT_PAGINATION } from "@/consts";
 import { z } from "zod";
 
 export const ResultPageSearchSchema = z.object({
-  page: z.number().catch(DEFAULT_PAGINATION.page),
-  per_page: z.number().catch(DEFAULT_PAGINATION.per_page),
+  page: z.number().optional().catch(undefined),
+  per_page: z.number().optional().catch(undefined),
   search: z.string().optional().catch(""),
   quiz_id: z.string().optional().catch(""),
 });

@@ -7,3 +7,4 @@ export * from "./use-get-rules.api";
 export * from "./use-create-rule.api";
 export * from "./use-update-rule.api";
 export * from "./use-delete-rule.api";
+export * from "./use-arrange-result-page-order.api";
