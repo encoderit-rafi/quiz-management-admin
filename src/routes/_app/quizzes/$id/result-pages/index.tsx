@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { GripVertical, Plus, Trash2, MoreHorizontal, Eye, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -226,7 +226,7 @@ export default function RouteComponent() {
                   collisionDetection={closestCorners}
                 >
                   <SortableContext
-                    items={localPages}
+                    items={localPages.map((p) => p.id!)}
                     strategy={verticalListSortingStrategy}
                   >
                     <TableBody>
