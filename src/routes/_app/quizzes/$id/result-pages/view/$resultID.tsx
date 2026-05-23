@@ -15,7 +15,7 @@ import {
 import type { TResultPageRule, TResultPageRuleForm } from "../-apis";
 import { useGetQuiz } from "@/routes/_app/-apis";
 import { useGetQuizCategories } from "@/routes/_app/quizzes/$id/categories/-apis";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -111,6 +111,19 @@ function RuleDialog({
 
   const { control, handleSubmit, watch, reset } = form;
   const ruleType = watch("rule_type");
+
+  useEffect(() => {
+    if (rule) {
+      reset({
+        priority: rule.priority,
+        rule_type: rule.rule_type,
+        category_id: rule.category_id ?? undefined,
+        threshold: rule.threshold ?? undefined,
+      });
+    } else {
+      reset({ priority: 0, rule_type: "", category_id: undefined, threshold: undefined });
+    }
+  }, [rule, reset]);
   const needsCategory = RULES_NEEDING_CATEGORY.includes(ruleType);
   const needsThreshold = RULES_NEEDING_THRESHOLD.includes(ruleType);
 
