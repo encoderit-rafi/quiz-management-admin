@@ -267,7 +267,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
           <AppLoading />
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="max-w-sm">
               <FormImageUpload
                 name="image"
                 control={control}
