@@ -226,7 +226,7 @@ export default function RouteComponent() {
                   collisionDetection={closestCorners}
                 >
                   <SortableContext
-                    items={localPages.map((p) => p.id!)}
+                    items={localPages.map((p) => p.id as string | number)}
                     strategy={verticalListSortingStrategy}
                   >
                     <TableBody>
