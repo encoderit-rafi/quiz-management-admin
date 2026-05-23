@@ -172,7 +172,7 @@ export default function FormQuizQuestion({ form_data }: TProps) {
           points: opt.points ?? 0,
           category_scores: categories.map((cat) => {
             const existing = (opt.category_scores || []).find(
-              (cs: any) => cs.category_id === cat.id,
+              (cs: any) => Number(cs.category_id) === Number(cat.id),
             );
             return { category_id: cat.id, points: existing?.points ?? 0 };
           }),
